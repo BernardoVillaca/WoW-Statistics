@@ -1,4 +1,5 @@
 import { sql } from "drizzle-orm";
+import { char } from "drizzle-orm/mysql-core";
 import {
   index,
   pgTableCreator,
@@ -12,11 +13,13 @@ import {
 export const createTable = pgTableCreator((name) => `wowstats_${name}`);
 
 export const leaderboard = createTable(
-  "leaderboard2",
+  "leaderboard",
   {
     id: serial("id").primaryKey(),
     character_name: varchar("character_name", { length: 256 }).unique(),
     character_id: integer("character_id"),
+    character_class: varchar("character_class", { length: 256 }).default(''),
+    character_spec: varchar("character_spec", { length: 256 }).default(''),
     realm_id: integer("realm_id"),
     realm_slug: varchar("realm_slug", { length: 256 }),
     faction_name: varchar("faction_name", { length: 256 }),
@@ -37,6 +40,8 @@ export const leaderboard = createTable(
   (leaderboard) => ({
     characterNameIndex: index("character_name_idx").on(leaderboard.character_name),
     characterIdIndex: index("character_id_idx").on(leaderboard.character_id),
+    characterClassIndex: index("character_class_idx").on(leaderboard.character_class),
+    characterSpecIndex: index("character_spec_idx").on(leaderboard.character_spec),
     factionNameIndex: index("faction_name_idx").on(leaderboard.faction_name),
     rankIndex: index("rank_idx").on(leaderboard.rank),
     ratingIndex: index("rating_idx").on(leaderboard.rating),

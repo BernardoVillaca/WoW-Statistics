@@ -1,5 +1,5 @@
 import axios from "axios";
-import { db } from '~/server/db'; 
+import { db } from '~/server/db';
 import { authToken } from '~/server/db/schema';
 
 // Refreshes the token and updates the database
@@ -15,25 +15,16 @@ const refreshToken = async () => {
     });
 
     // Upsert the token into the database
-    await db.insert(authToken).values({
+    await db.update(authToken).set({
         access_token: response.data.access_token,
         token_type: response.data.token_type,
         expires_in: response.data.expires_in,
-        sub: 'blizzard', // Assuming 'sub' is used to identify the token owner or type
-        created_at: new Date(),
         updated_at: new Date()
-    }).onConflictDoUpdate({
-        target: [authToken.access_token],
-        set: {
-            expires_in: response.data.expires_in,
-            updated_at: new Date(),
-        }
-    });
-    
+    })
     return response.data.access_token;
 }
 
-// Fetches or refreshes the token based on expiration status
+// Fetches or refreshes the token based request being unauthorized
 export const getAuthToken = async (tokenHasExpired: boolean) => {
     const tokenData = await db.query.authToken.findFirst();
     if (!tokenData || tokenHasExpired) {

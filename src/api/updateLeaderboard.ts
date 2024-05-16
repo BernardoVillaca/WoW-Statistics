@@ -3,10 +3,10 @@ import { db } from '~/server/db';
 import { leaderboard } from '~/server/db/schema';
 import { getAuthToken } from './getAuthToken';
 
-export const getLeaderboardData = async (): Promise<void> => {
-    let authToken;
+export const updateLeaderboard = async (): Promise<void> => {
+    let requests = [];
     try {
-        authToken = await getAuthToken(false);
+        const authToken = await getAuthToken(false);
         const response = await axios.get('https://us.api.blizzard.com/data/wow/pvp-season/37/pvp-leaderboard/3v3', {
             params: {
                 namespace: 'dynamic-us',
@@ -32,22 +32,21 @@ export const getLeaderboardData = async (): Promise<void> => {
                 created_at: new Date(),
                 updated_at: new Date()
             }));
-            console.log(response.data.entries.splice(0, 2))
+            console.log('Leaderboard data fetched starting to insert on db')
             // Handling upsert logic
             for (let data of formattedData) {
-                await db.insert(leaderboard).values(data)
-                    .onConflictDoUpdate({
-                        target: [leaderboard.character_name],
-                        set: {
-                            rank: data.rank,
-                            rating: data.rating,
-                            played: data.played,
-                            won: data.won,
-                            lost: data.lost,
-                            updated_at: new Date(),
-                        }
-                    });
+                requests.push(handleDataInsert(data));
+                // Check if we've collected enough requests to batch
+                if (requests.length >= 20) {
+                    await Promise.all(requests);
+                    requests.length = 0; // Reset the array after processing
+                }
             }
+            // Process any remaining requests
+            if (requests.length > 0) {
+                await Promise.all(requests);
+            }
+
             console.log('Leaderboard data updated successfully');
         } else {
             console.log('No entries found in the response');
@@ -57,7 +56,24 @@ export const getLeaderboardData = async (): Promise<void> => {
         if (error.response && error.response.status === 401) {
             console.log('Token expired, refreshing token and retrying the request...');
             await getAuthToken(true);
-            return getLeaderboardData(); // Retry the request recursively after refreshing the token
+            return updateLeaderboard(); // Retry the request recursively after refreshing the token
         }
     }
+}
+
+
+const handleDataInsert = async (data: any) => {
+    console.log('Inserting data for:', data.character_name);
+    await db.insert(leaderboard).values(data)
+        .onConflictDoUpdate({
+            target: [leaderboard.character_name],
+            set: {
+                rank: data.rank,
+                rating: data.rating,
+                played: data.played,
+                won: data.won,
+                lost: data.lost,
+                updated_at: new Date(),
+            }
+        });
 }
