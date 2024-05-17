@@ -63,7 +63,7 @@ export const updateLeaderboard = async (): Promise<void> => {
 
 
 const handleDataInsert = async (data: any) => {
-    console.log('Inserting data for:', data.character_name);
+    // console.log('Inserting data for:', data.character_name);
     await db.insert(leaderboard).values(data)
         .onConflictDoUpdate({
             target: [leaderboard.character_name],
