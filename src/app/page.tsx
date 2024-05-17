@@ -4,16 +4,16 @@ import { leaderboard } from "~/server/db/schema";
 import LeaderboardRow from "~/components/leaderboardRow";
 
 const searchTabs = [
-  { tab: 'rank', label: 'Rank', width: 'w-96' },
-  { tab: 'character_name', label: 'Name', width: '' },
-  { tab: 'rating', label: 'Rating', width: '' },
-  { tab: 'realm_slug', label: 'Realm', width: '' },
-  { tab: 'character_class', label: 'Class', width: '' },
-  { tab: 'character_spec', label: 'Spec', width: '' },
-  { tab: 'faction_name', label: 'Faction', width: '' },
-  { tab: 'played', label: 'Played', width: '' },
-  { tab: 'won', label: 'Won', width: '' },
-  { tab: 'lost', label: 'Lost', width: 'w' },
+  { name: 'rank', label: 'Rank', width: '' },
+  { name: 'character_name', label: 'Name', width: '' },
+  { name: 'rating', label: 'Rating', width: '' },
+  { name: 'realm_slug', label: 'Realm', width: '' },
+  { name: 'character_class', label: 'Class', width: '' },
+  { name: 'character_spec', label: 'Spec', width: '' },
+  { name: 'faction_name', label: 'Faction', width: '' },
+  { name: 'played', label: 'Played', width: '' },
+  { name: 'won', label: 'Won', width: '' },
+  { name: 'lost', label: 'Lost', width: 'w' },
 ]
 
 export default async function HomePage() {
@@ -27,24 +27,18 @@ export default async function HomePage() {
       <div className="flex flex-col  bg-gradient-to-b w-full from-[#2e026d] to-[#15162c]">
         {/* Area for statistics for the chosen pvp bracket */}
         <div className="flex h-96  bg-white"></div>
-        <div className="flex h-16 bg-black justify-between">
-          {searchTabs.map((tab) => (
-            <div className={`flex items-center justify-left text-white text-center h-full w-full p-l-2 ${tab.width}`}>{tab.label}</div>
+        <div className="flex h-16 bg-black justify-between ">
+          {searchTabs.map((tab, index) => (
+            <div className={`flex items-center justify-center text-white text-center h-full w-full ${index == 0 ? '' : 'border-l-[1px]'} ${tab.width}`}>{tab.label}</div>
           ))}
         </div>
-        <div className="flex flex-col">
-          {lb.map((leaderboard: { [key: string]: any }) => (
-            <div key={leaderboard.id} className="bg-gray-800 ">
-              <div className="flex justify-between">
-                {searchTabs.map((tab) => (
-                  <LeaderboardRow keyToBeUsed={tab.tab} width={tab.width}>
-                    {leaderboard[tab.tab]}
-                  </LeaderboardRow>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
+        {lb.map((leaderboard: { [key: string]: any }) => (
+          <div key={leaderboard.id} className="bg-gray-800 flex justify-between w-full">
+            {searchTabs.map((tab, index) => (
+              <LeaderboardRow keyToBeUsed={tab.name} width={tab.width} index={index} text={leaderboard[tab.name]} />
+            ))}
+          </div>
+        ))}
       </div>
     </main >
   );
