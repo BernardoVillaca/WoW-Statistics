@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { db } from '~/server/db';
-import { getAuthToken } from './getAuthToken';
+import { getAuthToken } from '~/server/getAuthToken';
 import { leaderboard } from '~/server/db/schema';
 import { eq } from 'drizzle-orm';
 

@@ -1,6 +1,6 @@
 
 
-export const TopNav = () => {
+const TopNav = () => {
     return (
         <nav className="bg-black h-16 flex items-center justify-center gap-12">
             <div className="text-white">Home</div>
@@ -9,3 +9,4 @@ export const TopNav = () => {
         </nav>
     );
 }
+export default TopNav;

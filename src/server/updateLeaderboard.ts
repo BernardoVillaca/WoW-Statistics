@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { db } from '~/server/db';
 import { leaderboard } from '~/server/db/schema';
-import { getAuthToken } from './getAuthToken';
+import { getAuthToken } from '~/server/getAuthToken';
 
 export const updateLeaderboard = async (): Promise<void> => {
     let requests = [];
