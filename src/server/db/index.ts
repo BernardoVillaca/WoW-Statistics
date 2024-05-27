@@ -10,7 +10,8 @@ let firstRun = true;
 
 const doFirstRun = async () => {
   if (firstRun) {
-
+    // await updateLeaderboard();
+    await getExtraDataForEachPlayer()
 
     firstRun = false;
 
@@ -18,9 +19,8 @@ const doFirstRun = async () => {
 }
 doFirstRun();
 
-
-// setInterval(async () => {
-//   console.log('Updating db');
-//   await updateLeaderboard();
-//   await getExtraDataForEachPlayer()
-// }, 1800000); // 1800000 ms = 30 min
+setInterval(async () => {
+  console.log('Updating db');
+  await updateLeaderboard();
+  await getExtraDataForEachPlayer()
+}, 1800000); // 1800000 ms = 30 min
