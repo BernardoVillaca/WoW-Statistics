@@ -40,30 +40,29 @@ const ScrollTab = ({ currentPage, resultsCount, setCurrentPage, resultsPerPage }
 
     return (
         <div className="flex h-8 bg-gray-600 justify-between items-center">
-            <div className="flex justify-between w-1/2">
-
-                {resultsCount !== 0 && currentPage !== 0 && (
-                    <div>{`Page ${currentPage} from ${resultsCount} characters`}</div>
-                )}
-                <div className="flex gap-2 items-center">
-                    <span>Go to page:</span>
-                    <input
-                        type="number"
-                        min={1}
-                        max={totalPages}
-                        value={inputValue}
-                        onChange={handleInputChange}
-                        className="w-12 h-8 px-2 text-center text-black border-none focus:outline-none"
-                    />
+            {resultsCount !== 0 && currentPage !== 0 && (
+                <div className="flex justify-between w-1/2">
+                   <div>{`Page ${currentPage} from ${resultsCount} characters`}</div>
+                    <div className="flex gap-2 items-center">
+                        <span>Go to page:</span>
+                        <input
+                            type="number"
+                            min={1}
+                            max={totalPages}
+                            value={inputValue}
+                            onChange={handleInputChange}
+                            className="w-12 h-8 px-2 text-center text-black border-none focus:outline-none"
+                        />
+                    </div>
                 </div>
-            </div>
+            )}
             <div className="flex gap-1">
                 <div className="flex items-center justify-center w-8 h-8">
                     {currentPage > 1 && (
                         <FiChevronsLeft
                             color="black"
                             size={25}
-                            onClick={() => handlePageChange (currentPage - 1)}
+                            onClick={() => handlePageChange(currentPage - 1)}
                             className="cursor-pointer"
                         />
                     )}
@@ -72,7 +71,7 @@ const ScrollTab = ({ currentPage, resultsCount, setCurrentPage, resultsPerPage }
                     <div
                         key={index}
                         className={`w-8 h-8 flex items-center justify-center cursor-pointer select-none ${page === currentPage ? 'bg-black text-white' : 'bg-white text-black'}`}
-                        onClick={() => handlePageChange (page)}
+                        onClick={() => handlePageChange(page)}
                     >
                         {page}
                     </div>
@@ -82,7 +81,7 @@ const ScrollTab = ({ currentPage, resultsCount, setCurrentPage, resultsPerPage }
                         <FiChevronsRight
                             color="black"
                             size={25}
-                            onClick={() => handlePageChange (currentPage + 1)}
+                            onClick={() => handlePageChange(currentPage + 1)}
                             className="cursor-pointer"
                         />
                     )}

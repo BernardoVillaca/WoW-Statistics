@@ -22,7 +22,6 @@ const searchTabs = [
 export default function HomePage() {
   const resultsPerPage = 50;
   const rowHeight = 40;
-  const totalHeight = resultsPerPage * rowHeight;
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [resultsCount, setResultsCount] = useState(0);

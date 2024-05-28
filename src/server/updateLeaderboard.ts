@@ -62,18 +62,29 @@ export const updateLeaderboard = async (): Promise<void> => {
 }
 
 
+import { eq } from 'drizzle-orm/expressions';
+
 const handleDataInsert = async (data: any) => {
-    // console.log('Inserting data for:', data.character_name);
-    await db.insert(leaderboard).values(data)
-        .onConflictDoUpdate({
-            target: [leaderboard.character_name],
-            set: {
-                rank: data.rank,
-                rating: data.rating,
-                played: data.played,
-                won: data.won,
-                lost: data.lost,
-                updated_at: new Date(),
-            }
-        });
+    // Fetch the existing record
+    const existingRecord = await db
+        .select()
+        .from(leaderboard)
+        .where(eq(leaderboard.character_name, data.character_name))
+        .limit(1)
+    // Determine if the played value has changed
+    if (existingRecord.length > 0 && existingRecord[0]?.played !== data.played) {
+        await db.insert(leaderboard).values(data)
+            .onConflictDoUpdate({
+                target: [leaderboard.character_name],
+                set: {
+                    rank: data.rank,
+                    rating: data.rating,
+                    played: data.played,
+                    won: data.won,
+                    lost: data.lost,
+                    updated_at: new Date()
+                }
+            });
+    }
 }
+
