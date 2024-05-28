@@ -39,10 +39,10 @@ const ScrollTab = ({ currentPage, resultsCount, setCurrentPage, resultsPerPage }
     }, [debouncedInputValue, totalPages, setCurrentPage]);
 
     return (
-        <div className="flex h-8 bg-gray-600 justify-between items-center">
+        <div className="flex h-10 bg-gray-800 justify-between items-center text-sm rounded-xl text-gray-300">
             {resultsCount !== 0 && currentPage !== 0 && (
                 <div className="flex justify-between w-1/2">
-                   <div>{`Page ${currentPage} from ${resultsCount} characters`}</div>
+                   <div className="items-center flex pl-3">{`Page ${currentPage} from ${resultsCount} characters`}</div>
                     <div className="flex gap-2 items-center">
                         <span>Go to page:</span>
                         <input
@@ -51,7 +51,7 @@ const ScrollTab = ({ currentPage, resultsCount, setCurrentPage, resultsPerPage }
                             max={totalPages}
                             value={inputValue}
                             onChange={handleInputChange}
-                            className="w-12 h-8 px-2 text-center text-black border-none focus:outline-none"
+                            className="w-10 h-6 px-2 text-center text-gray-300 bg-gray-300 border-none rounded-lg focus:outline-none"
                         />
                     </div>
                 </div>
@@ -60,7 +60,7 @@ const ScrollTab = ({ currentPage, resultsCount, setCurrentPage, resultsPerPage }
                 <div className="flex items-center justify-center w-8 h-8">
                     {currentPage > 1 && (
                         <FiChevronsLeft
-                            color="black"
+                            color="gray-300"
                             size={25}
                             onClick={() => handlePageChange(currentPage - 1)}
                             className="cursor-pointer"
@@ -70,7 +70,7 @@ const ScrollTab = ({ currentPage, resultsCount, setCurrentPage, resultsPerPage }
                 {getDisplayedPages().map((page, index) => (
                     <div
                         key={index}
-                        className={`w-8 h-8 flex items-center justify-center cursor-pointer select-none ${page === currentPage ? 'bg-black text-white' : 'bg-white text-black'}`}
+                        className={`w-8 h-8 flex items-center justify-center cursor-pointer rounded-full select-none ${page === currentPage ? 'bg-gray-600 text-white' : 'bg-gray-300 text-black'}`}
                         onClick={() => handlePageChange(page)}
                     >
                         {page}
@@ -79,7 +79,7 @@ const ScrollTab = ({ currentPage, resultsCount, setCurrentPage, resultsPerPage }
                 <div className="flex items-center justify-center w-8 h-8">
                     {currentPage < totalPages && (
                         <FiChevronsRight
-                            color="black"
+                            color="gray-300"
                             size={25}
                             onClick={() => handlePageChange(currentPage + 1)}
                             className="cursor-pointer"

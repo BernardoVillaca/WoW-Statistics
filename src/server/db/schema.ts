@@ -1,5 +1,4 @@
 import { sql } from "drizzle-orm";
-import { char } from "drizzle-orm/mysql-core";
 import {
   index,
   pgTableCreator,
@@ -20,7 +19,6 @@ export const leaderboard = createTable(
     character_id: integer("character_id"),
     character_class: varchar("character_class", { length: 256 }).default(''),
     character_spec: varchar("character_spec", { length: 256 }).default(''),
-    spec_class: varchar("spec_class", { length: 256 }).default(''),
     realm_id: integer("realm_id"),
     realm_slug: varchar("realm_slug", { length: 256 }),
     faction_name: varchar("faction_name", { length: 256 }),

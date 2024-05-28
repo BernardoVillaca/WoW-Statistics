@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
     db.select({ count: count() }).from(leaderboard)
   ]);
 
-  const total = totalResult[0].count;
+  const total = totalResult[0]?.count ?? 0;
 
   return NextResponse.json({ results, total });
 }
