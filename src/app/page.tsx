@@ -1,9 +1,9 @@
 'use client'
 import { useState, useEffect } from "react";
-import LeaderboardCell from "~/components/LeaderboardCell";
 import ScrollTab from "~/components/ScrollTab";
 import axios from "axios";
 import { FiLoader } from "react-icons/fi";  // Import spinner icon from react-icons
+import LeaderboardRow from "~/components/LeaderBoardRow";
 
 
 const searchTabs = [
@@ -59,12 +59,8 @@ export default function HomePage() {
               <FiLoader className="animate-spin text-white" size={50} />
             </div>
           )}
-          {!loading && data.map((leaderboardCell: { [key: string]: any }) => (
-            <div key={leaderboardCell.id} className="bg-gray-800 flex justify-between w-full" style={{ height: `${rowHeight}px` }}> {/* Set a fixed height for each Cell */}
-              {searchTabs.map((tab, index) => (
-                <LeaderboardCell key={`${leaderboardCell.id}-${tab.name}`} height={rowHeight} index={index} text={leaderboardCell[tab.name]} />
-              ))}
-            </div>
+          {!loading && data.map((characterData: { [key: string]: any }) => (
+            <LeaderboardRow key={characterData.id} characterData={characterData} searchTabs={searchTabs} rowHeight={rowHeight} />
           ))}
         </div>
         <ScrollTab setCurrentPage={setCurrentPage} currentPage={currentPage} resultsCount={resultsCount} resultsPerPage={resultsPerPage} />
