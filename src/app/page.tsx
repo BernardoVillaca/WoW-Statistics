@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect } from "react";
-import LeaderboardRow from "~/components/LeaderboardRow";
+import LeaderboardCell from "~/components/LeaderboardCell";
 import ScrollTab from "~/components/ScrollTab";
 import axios from "axios";
 import { FiLoader } from "react-icons/fi";  // Import spinner icon from react-icons
@@ -11,8 +11,7 @@ const searchTabs = [
   { name: 'character_name', label: 'Name', width: '' },
   { name: 'rating', label: 'Rating', width: '' },
   { name: 'realm_slug', label: 'Realm', width: '' },
-  { name: 'character_class', label: 'Class', width: '' },
-  { name: 'character_spec', label: 'Spec', width: '' },
+  { name: 'spec_class', label: 'Spec', width: '' },
   { name: 'faction_name', label: 'Faction', width: '' },
   { name: 'played', label: 'Played', width: '' },
   { name: 'won', label: 'Won', width: '' },
@@ -60,10 +59,10 @@ export default function HomePage() {
               <FiLoader className="animate-spin text-white" size={50} />
             </div>
           )}
-          {!loading && data.map((leaderboardRow: { [key: string]: any }) => (
-            <div key={leaderboardRow.id} className="bg-gray-800 flex justify-between w-full" style={{ height: `${rowHeight}px` }}> {/* Set a fixed height for each row */}
+          {!loading && data.map((leaderboardCell: { [key: string]: any }) => (
+            <div key={leaderboardCell.id} className="bg-gray-800 flex justify-between w-full" style={{ height: `${rowHeight}px` }}> {/* Set a fixed height for each Cell */}
               {searchTabs.map((tab, index) => (
-                <LeaderboardRow key={`${leaderboardRow.id}-${tab.name}`} height={rowHeight} index={index} text={leaderboardRow[tab.name]} />
+                <LeaderboardCell key={`${leaderboardCell.id}-${tab.name}`} height={rowHeight} index={index} text={leaderboardCell[tab.name]} />
               ))}
             </div>
           ))}

@@ -37,7 +37,7 @@ export const updateLeaderboard = async (): Promise<void> => {
             for (let data of formattedData) {
                 requests.push(handleDataInsert(data));
                 // Check if we've collected enough requests to batch
-                if (requests.length >= 20) {
+                if (requests.length >= 30) {
                     await Promise.all(requests);
                     requests.length = 0; // Reset the array after processing
                 }
@@ -71,7 +71,7 @@ const handleDataInsert = async (data: any) => {
         .from(leaderboard)
         .where(eq(leaderboard.character_name, data.character_name))
         .limit(1)
-    // Determine if the played value has changed
+    
     if (existingRecord.length > 0 && existingRecord[0]?.played !== data.played) {
         await db.insert(leaderboard).values(data)
             .onConflictDoUpdate({

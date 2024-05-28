@@ -10,7 +10,7 @@ let firstRun = true;
 
 const doFirstRun = async () => {
   if (firstRun) {
-    await updateLeaderboard();
+    // await updateLeaderboard();
     await getExtraDataForEachPlayer()
 
     firstRun = false;

@@ -7,10 +7,11 @@ import { eq } from 'drizzle-orm';
 export const getExtraDataForEachPlayer = async () => {
     const requests = [];
     console.log('Updating extra data for each player')
-    // Retrieve all leaderboard entries without a character class
+    // Retrieve all leaderboard entries without a class_spec
     const leaderboardData = await db.query.leaderboard.findMany({
-        where: eq(leaderboard.character_class, '')
+        where: eq(leaderboard.spec_class, '')
     });
+  
 
     for (const character of leaderboardData) {
         const { character_name: characterName, realm_slug: realmSlug } = character;
@@ -39,8 +40,7 @@ const updateCharacterData = async (characterName: string, realmSlug: string) => 
             console.log(`Updating database for ${characterName}`);
             await db.update(leaderboard)
                 .set({
-                    character_class: characterData.character_class.name,
-                    character_spec: characterData.active_spec.name,
+                    spec_class: `${characterData.active_spec.name} ${characterData.character_class.name}`,
                 })
                 .where(eq(leaderboard.character_name, characterName))
         }
@@ -62,6 +62,7 @@ const getPlayerData = async (characterName: string, realmSlug: string): Promise<
         return response.data;
     } catch (error: any) {
         if (error.response && error.response.status === 404) {
+            console.log(`Character ${characterName} not found`);
             // If the character is not found, delete the entry from the leaderboard
             await db.delete(leaderboard)
                 .where(eq(leaderboard.character_name, characterName))
