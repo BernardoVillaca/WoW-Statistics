@@ -44,9 +44,9 @@ const LeaderboardCell = ({ text, height, index, tab, characterClass, characterSp
   return (
     <div className={`flex items-center justify-center h-[${height}px] w-full ${index === 0 ? '' : 'border-l-[1px] border-gray-700'}`}>
       {factionIcon ? (
-        <Image src={factionIcon} alt={text} height={height / 1.5} className='rounded-lg overflow-hidden' />
+        <Image src={factionIcon} alt={text} height={height / 1.5} width={height /1.5} className='rounded-lg overflow-hidden' />
       ) : tab === 'character_spec' ? (
-        <Image src={specIcon} alt={text} height={height / 1.8} className='rounded-lg overflow-none' />
+        <Image src={specIcon} alt={text} height={height / 1.8} width={height /1.8} className='rounded-lg overflow-none' />
       ) : tab === 'character_name' ? (
         <span style={{ color: classColor }}>
           {text}

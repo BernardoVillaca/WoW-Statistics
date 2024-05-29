@@ -11,8 +11,8 @@ import {
 
 export const createTable = pgTableCreator((name) => `wowstats_${name}`);
 
-export const leaderboard = createTable(
-  "leaderboard",
+export const us3v3Leaderboard = createTable(
+  "us_3v3_leaderboard",
   {
     id: serial("id").primaryKey(),
     character_name: varchar("character_name", { length: 256 }),

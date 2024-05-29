@@ -36,9 +36,10 @@ import fury_warrior from '../assets/WoWClasses/Warrior/fury_warrior_spec.jpg';
 import protection_warrior from '../assets/WoWClasses/Warrior/protection_warrior_spec.jpg';
 import preservation_evoker from '../assets/WoWClasses/Evoker/preservation_evoker_spec.jpg';
 import devastation_evoker from '../assets/WoWClasses/Evoker/devastation_evoker_spec.jpg';
+import { StaticImageData } from 'next/image';
 
 
-const specIconsMap = {
+const specIconsMap: { [key: string]: StaticImageData } = {
     'Blood Death Knight': blood_deathknight,
     'Frost Death Knight': frost_deathknight,
     'Unholy Death Knight': unholy_deathknight,

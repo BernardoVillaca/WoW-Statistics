@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { db } from '~/server/db';
-import { leaderboard } from '~/server/db/schema';
+import { us3v3Leaderboard } from '~/server/db/schema';
 import { getAuthToken } from '~/server/actions/getAuthToken';
 import { and, eq } from 'drizzle-orm/expressions';
 
@@ -39,7 +39,7 @@ export const updateLeaderboard = async (): Promise<void> => {
                 // handleDataInsert(data);
                 requests.push(handleDataInsert(data));
                 // Check if we've collected enough requests to batch
-                if (requests.length >= 30) {
+                if (requests.length >= 100) {
                     await Promise.all(requests);
                     requests.length = 0; // Reset the array after processing
                 }
@@ -64,33 +64,33 @@ export const updateLeaderboard = async (): Promise<void> => {
 }
 
 
-
-
 const handleDataInsert = async (data: any) => {
     // Fetch the existing record
     const existingRecord = await db
         .select()
-        .from(leaderboard)
+        .from(us3v3Leaderboard)
         .where(and(
-            eq(leaderboard.character_name, data.character_name),
-            eq(leaderboard.realm_slug, data.realm_slug)
+            eq(us3v3Leaderboard.character_name, data.character_name),
+            eq(us3v3Leaderboard.realm_slug, data.realm_slug)
         ))
     if (existingRecord.length === 0) {
         console.log(`Inserting new record for ${data.character_name} with ${data.rating}`);
-        return await db.insert(leaderboard).values(data)
-    } 
+        return await db.insert(us3v3Leaderboard).values(data)
+    }
 
     if (existingRecord.length > 0 && existingRecord[0]?.played !== data.played) {
-        console.log(`Updating record for ${data.character_name} with ${data.rating} from ${existingRecord[0]?.played} games played to ${data.played} games played`);
-        await db.update(leaderboard).set({
-            rank: data.rank,
-            rating: data.rating,
-            played: data.played,
-            won: data.won,
-            lost: data.lost,
-            updated_at: new Date()
-        })
-
+    console.log(`Updating record for ${data.character_name} with ${data.rating} from ${existingRecord[0]?.played} games played to ${data.played} games played`);
+    await db.update(us3v3Leaderboard).set({
+        rank: data.rank,
+        rating: data.rating,
+        played: data.played,
+        won: data.won,
+        lost: data.lost,
+        updated_at: new Date()
+    }).where(and(
+        eq(us3v3Leaderboard.character_name, data.character_name),
+        eq(us3v3Leaderboard.realm_slug, data.realm_slug)
+    ))
     }
 }
 

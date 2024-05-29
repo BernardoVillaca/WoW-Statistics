@@ -1,15 +1,15 @@
 import axios from 'axios';
 import { db } from '~/server/db';
 import { getAuthToken } from '~/server/actions/getAuthToken';
-import { leaderboard } from '~/server/db/schema';
+import { us3v3Leaderboard } from '~/server/db/schema';
 import { eq } from 'drizzle-orm';
 
 export const getExtraDataForEachPlayer = async () => {
-    const requests = [];
+    let requests = [];
     console.log('Updating extra data for each player')
     // Retrieve all leaderboard entries without a class_spec
-    const leaderboardData = await db.query.leaderboard.findMany({
-        where: eq(leaderboard.character_class, '')
+    const leaderboardData = await db.query.us3v3Leaderboard.findMany({
+        where: eq(us3v3Leaderboard.character_class, '')
     });
 
 
@@ -37,12 +37,12 @@ const updateCharacterData = async (characterName: string, realmSlug: string) => 
     try {
         const characterData = await getPlayerData(characterName, realmSlug);
         if (characterData) {
-            await db.update(leaderboard)
+            await db.update(us3v3Leaderboard)
                 .set({
                     character_spec: characterData.active_spec.name,
                     character_class: characterData.character_class.name,
                 })
-                .where(eq(leaderboard.character_name, characterName))
+                .where(eq(us3v3Leaderboard.character_name, characterName))
         }
     } catch (error: any) {
         console.error(`Failed to update for ${characterName}: ${error.message}`);
@@ -63,10 +63,8 @@ const getPlayerData = async (characterName: string, realmSlug: string): Promise<
     } catch (error: any) {
         if (error.response && error.response.status === 404) {
             console.log(`Character ${characterName}-${realmSlug} not found`);
-            // If the character is not found, delete the entry from the leaderboard
-        //     await db.delete(leaderboard)
-        //         .where(eq(leaderboard.character_name, characterName))
-        // }
+            
+        }
         if (error.response && error.response.status === 401) {
             console.log('Token expired, refreshing token and retrying the request...');
             await getAuthToken(true);

@@ -4,7 +4,8 @@ import ScrollTab from "~/components/ScrollTab";
 import axios from "axios";
 import { FiLoader } from "react-icons/fi";  // Import spinner icon from react-icons
 import LeaderboardRow from "~/components/LeaderBoardRow";
-
+import SearchTab from "~/components/SearchTab";
+import { useRouter } from 'next/navigation'
 
 const searchTabs = [
   { name: 'rank', label: 'Rank' },
@@ -27,12 +28,17 @@ export default function HomePage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [resultsCount, setResultsCount] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [selectedSpecs, setSelectedSpecs] = useState<string[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
     const getData = async () => {
+      const classSpecSearch = selectedSpecs.length > 0 ? `?search=${selectedSpecs}` : '';
       setLoading(true);
+      // router.push(`/?page=${currentPage}/${selectedSpecs}`)
+
       try {
-        const response = await axios.get(`/api/get50Results?page=${currentPage}`);
+        const response = await axios.get(`/api/get50Results?page=${currentPage}&search=${selectedSpecs}`);
         setResultsCount(response.data.total);
         setData(response.data.results);
       } finally {
@@ -40,13 +46,15 @@ export default function HomePage() {
       }
     };
     getData();
-  }, [currentPage]);
+  }, [currentPage, selectedSpecs]);
+
+
+
 
   return (
     <main className="flex min-h-screen bg-gradient-to-b from-[#000080] to-black text-white relative">
-      <div className="flex flex-col w-full gap-4">
-        {/* Area for statistics for the chosen pvp bracket */}
-        <div className="flex h-96 bg-white rounded-xl"></div>
+      <div className="flex flex-col w-full gap-4 pt-4">
+        <SearchTab selectedSpecs={selectedSpecs} setSelectedSpecs={setSelectedSpecs} />
         <ScrollTab setCurrentPage={setCurrentPage} currentPage={currentPage} resultsCount={resultsCount} resultsPerPage={resultsPerPage} />
         <div className="flex h-16 bg-black justify-between rounded-xl">
           {searchTabs.map((tab, index) => (
@@ -61,16 +69,16 @@ export default function HomePage() {
               <FiLoader className="animate-spin text-white" size={50} />
             </div>
           )}
-          {!loading && data.map((characterData: {[key: string]: any }) => (
-          characterData.character_class !== '' ? (
-          <LeaderboardRow
-            key={characterData.id}
-            characterData={characterData}
-            searchTabs={searchTabs}
-            rowHeight={rowHeight}
-          />
-          ) : null
-))}
+          {!loading && data.map((characterData: { [key: string]: any }) => (
+            characterData.character_class !== '' ? (
+              <LeaderboardRow
+                key={characterData.id}
+                characterData={characterData}
+                searchTabs={searchTabs}
+                rowHeight={rowHeight}
+              />
+            ) : null
+          ))}
         </div>
         <ScrollTab setCurrentPage={setCurrentPage} currentPage={currentPage} resultsCount={resultsCount} resultsPerPage={resultsPerPage} />
       </div>
