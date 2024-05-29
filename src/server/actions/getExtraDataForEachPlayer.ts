@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { db } from '~/server/db';
-import { getAuthToken } from '~/server/getAuthToken';
+import { getAuthToken } from '~/server/actions/getAuthToken';
 import { leaderboard } from '~/server/db/schema';
 import { eq } from 'drizzle-orm';
 
@@ -9,9 +9,9 @@ export const getExtraDataForEachPlayer = async () => {
     console.log('Updating extra data for each player')
     // Retrieve all leaderboard entries without a class_spec
     const leaderboardData = await db.query.leaderboard.findMany({
-        where: eq(leaderboard.spec_class, '')
+        where: eq(leaderboard.character_class, '')
     });
-  
+
 
     for (const character of leaderboardData) {
         const { character_name: characterName, realm_slug: realmSlug } = character;
@@ -37,10 +37,10 @@ const updateCharacterData = async (characterName: string, realmSlug: string) => 
     try {
         const characterData = await getPlayerData(characterName, realmSlug);
         if (characterData) {
-            console.log(`Updating database for ${characterName}`);
             await db.update(leaderboard)
                 .set({
-                    spec_class: `${characterData.active_spec.name} ${characterData.character_class.name}`,
+                    character_spec: characterData.active_spec.name,
+                    character_class: characterData.character_class.name,
                 })
                 .where(eq(leaderboard.character_name, characterName))
         }
@@ -62,11 +62,11 @@ const getPlayerData = async (characterName: string, realmSlug: string): Promise<
         return response.data;
     } catch (error: any) {
         if (error.response && error.response.status === 404) {
-            console.log(`Character ${characterName} not found`);
+            console.log(`Character ${characterName}-${realmSlug} not found`);
             // If the character is not found, delete the entry from the leaderboard
-            await db.delete(leaderboard)
-                .where(eq(leaderboard.character_name, characterName))
-        }
+        //     await db.delete(leaderboard)
+        //         .where(eq(leaderboard.character_name, characterName))
+        // }
         if (error.response && error.response.status === 401) {
             console.log('Token expired, refreshing token and retrying the request...');
             await getAuthToken(true);

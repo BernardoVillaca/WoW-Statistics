@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { db } from '~/server/db';
 import { leaderboard } from '~/server/db/schema';
-import { getAuthToken } from '~/server/getAuthToken';
+import { getAuthToken } from '~/server/actions/getAuthToken';
+import { and, eq } from 'drizzle-orm/expressions';
 
 export const updateLeaderboard = async (): Promise<void> => {
     let requests = [];
@@ -35,6 +36,7 @@ export const updateLeaderboard = async (): Promise<void> => {
             console.log('Leaderboard data fetched starting to insert on db')
             // Handling upsert logic
             for (let data of formattedData) {
+                // handleDataInsert(data);
                 requests.push(handleDataInsert(data));
                 // Check if we've collected enough requests to batch
                 if (requests.length >= 30) {
@@ -62,29 +64,33 @@ export const updateLeaderboard = async (): Promise<void> => {
 }
 
 
-import { eq } from 'drizzle-orm/expressions';
+
 
 const handleDataInsert = async (data: any) => {
     // Fetch the existing record
     const existingRecord = await db
         .select()
         .from(leaderboard)
-        .where(eq(leaderboard.character_name, data.character_name))
-        .limit(1)
-    
+        .where(and(
+            eq(leaderboard.character_name, data.character_name),
+            eq(leaderboard.realm_slug, data.realm_slug)
+        ))
+    if (existingRecord.length === 0) {
+        console.log(`Inserting new record for ${data.character_name} with ${data.rating}`);
+        return await db.insert(leaderboard).values(data)
+    } 
+
     if (existingRecord.length > 0 && existingRecord[0]?.played !== data.played) {
-        await db.insert(leaderboard).values(data)
-            .onConflictDoUpdate({
-                target: [leaderboard.character_name],
-                set: {
-                    rank: data.rank,
-                    rating: data.rating,
-                    played: data.played,
-                    won: data.won,
-                    lost: data.lost,
-                    updated_at: new Date()
-                }
-            });
+        console.log(`Updating record for ${data.character_name} with ${data.rating} from ${existingRecord[0]?.played} games played to ${data.played} games played`);
+        await db.update(leaderboard).set({
+            rank: data.rank,
+            rating: data.rating,
+            played: data.played,
+            won: data.won,
+            lost: data.lost,
+            updated_at: new Date()
+        })
+
     }
 }
 

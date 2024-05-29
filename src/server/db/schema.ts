@@ -15,7 +15,7 @@ export const leaderboard = createTable(
   "leaderboard",
   {
     id: serial("id").primaryKey(),
-    character_name: varchar("character_name", { length: 256 }).unique(),
+    character_name: varchar("character_name", { length: 256 }),
     character_id: integer("character_id"),
     character_class: varchar("character_class", { length: 256 }).default(''),
     character_spec: varchar("character_spec", { length: 256 }).default(''),

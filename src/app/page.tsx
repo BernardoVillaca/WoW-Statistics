@@ -7,16 +7,16 @@ import LeaderboardRow from "~/components/LeaderBoardRow";
 
 
 const searchTabs = [
-  { name: 'rank', label: 'Rank'},
-  { name: 'character_spec', label: 'Spec'},
-  { name: 'character_name', label: 'Name'},
-  { name: 'rating', label: 'Rating'},
-  { name: 'realm_slug', label: 'Realm'},
-  { name: 'faction_name', label: 'Faction'},
-  { name: 'played', label: 'Played'},
-  { name: 'won', label: 'Won'},
-  { name: 'lost', label: 'Lost'},
-  { name: 'updated_at', label: 'Last Played'},
+  { name: 'rank', label: 'Rank' },
+  { name: 'character_spec', label: 'Spec' },
+  { name: 'character_name', label: 'Name' },
+  { name: 'rating', label: 'Rating' },
+  { name: 'realm_slug', label: 'Realm' },
+  { name: 'faction_name', label: 'Faction' },
+  { name: 'played', label: 'Played' },
+  { name: 'won', label: 'Won' },
+  { name: 'lost', label: 'Lost' },
+  { name: 'updated_at', label: 'Last Played' },
 ];
 
 export default function HomePage() {
@@ -61,9 +61,16 @@ export default function HomePage() {
               <FiLoader className="animate-spin text-white" size={50} />
             </div>
           )}
-          {!loading && data.map((characterData: { [key: string]: any }) => (
-            <LeaderboardRow key={characterData.id} characterData={characterData} searchTabs={searchTabs} rowHeight={rowHeight} />
-          ))}
+          {!loading && data.map((characterData: {[key: string]: any }) => (
+          characterData.character_class !== '' ? (
+          <LeaderboardRow
+            key={characterData.id}
+            characterData={characterData}
+            searchTabs={searchTabs}
+            rowHeight={rowHeight}
+          />
+          ) : null
+))}
         </div>
         <ScrollTab setCurrentPage={setCurrentPage} currentPage={currentPage} resultsCount={resultsCount} resultsPerPage={resultsPerPage} />
       </div>

@@ -51,7 +51,7 @@ const ScrollTab = ({ currentPage, resultsCount, setCurrentPage, resultsPerPage }
                             max={totalPages}
                             value={inputValue}
                             onChange={handleInputChange}
-                            className="w-10 h-6 px-2 text-center text-gray-300 bg-gray-300 border-none rounded-lg focus:outline-none"
+                            className="w-10 h-6 px-2 text-center text-black bg-gray-300 border-none rounded-lg focus:outline-none"
                         />
                     </div>
                 </div>
