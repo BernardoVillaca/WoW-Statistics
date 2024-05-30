@@ -33,17 +33,22 @@ export default function HomePage() {
 
   useEffect(() => {
     const getData = async () => {
-      const classSpecSearch = selectedSpecs.length > 0 ? `?search=${selectedSpecs}` : '';
+      const formattedSpecs = encodeURIComponent(selectedSpecs.join(','));
+      const classSpecSearch = formattedSpecs.length > 0 ? `?search=${formattedSpecs}` : '';
+      
+      // Reset the data and results count to prevent bottom scrolltab to appear on the refresh
+      setData([]) 
+      setResultsCount(0);
+      
       setLoading(true);
-      // router.push(`/?page=${currentPage}/${selectedSpecs}`)
+      
+      router.push(`/?page=${currentPage}/${classSpecSearch}`);
+      const response = await axios.get(`/api/get50Results?page=${currentPage}&search=${formattedSpecs}`);
+      setResultsCount(response.data.total);
+      setData(response.data.results);
 
-      try {
-        const response = await axios.get(`/api/get50Results?page=${currentPage}&search=${selectedSpecs}`);
-        setResultsCount(response.data.total);
-        setData(response.data.results);
-      } finally {
-        setLoading(false);
-      }
+      setLoading(false);
+
     };
     getData();
   }, [currentPage, selectedSpecs]);
@@ -61,9 +66,9 @@ export default function HomePage() {
             <div key={tab.name} className={`flex items-center justify-center text-white text-center h-full w-full '} `}>{tab.label}</div>
           ))}
         </div>
-        <div className={`relative flex flex-col w-full  h-[2000px]`}>
+        <div className={`relative flex flex-col w-full ${resultsCount === 0 ? 'h-[2000px]' : ''}`}>
           {loading && (
-            <div className="absolute inset-0 flex flex-col py-48 justify-between items-center bg-black bg-opacity-50 z-50">
+            <div className="absolute h-[2000px] inset-0 flex flex-col py-48 justify-between items-center bg-black bg-opacity-50 z-50">
               <FiLoader className="animate-spin text-white" size={50} />
               <FiLoader className="animate-spin text-white" size={50} />
               <FiLoader className="animate-spin text-white" size={50} />
@@ -80,7 +85,9 @@ export default function HomePage() {
             ) : null
           ))}
         </div>
-        <ScrollTab setCurrentPage={setCurrentPage} currentPage={currentPage} resultsCount={resultsCount} resultsPerPage={resultsPerPage} />
+        {resultsCount > 0 &&
+          <ScrollTab setCurrentPage={setCurrentPage} currentPage={currentPage} resultsCount={resultsCount} resultsPerPage={resultsPerPage} />
+        }
       </div>
 
     </main>
