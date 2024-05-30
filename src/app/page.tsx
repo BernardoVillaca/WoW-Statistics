@@ -6,6 +6,7 @@ import { FiLoader } from "react-icons/fi";  // Import spinner icon from react-ic
 import LeaderboardRow from "~/components/LeaderBoardRow";
 import SearchTab from "~/components/SearchTab";
 import { useRouter } from 'next/navigation'
+import { SearchProvider, useSearch } from "~/components/Context/SearchContext";
 
 const searchTabs = [
   { name: 'rank', label: 'Rank' },
@@ -20,28 +21,29 @@ const searchTabs = [
   { name: 'updated_at', label: 'Last Played' },
 ];
 
-export default function HomePage() {
-
+const HomePage = () => {
+  
+  const { currentPage, resultsCount, setResultsCount, selectedSpecs, setSelectedSpecs } = useSearch();
+  
   const resultsPerPage = 50;
   const rowHeight = 40;
-  const [data, setData] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [resultsCount, setResultsCount] = useState(0);
+  
   const [loading, setLoading] = useState(false);
-  const [selectedSpecs, setSelectedSpecs] = useState<string[]>([]);
+  const [data, setData] = useState([]);
+
   const router = useRouter();
 
   useEffect(() => {
     const getData = async () => {
       const formattedSpecs = encodeURIComponent(selectedSpecs.join(','));
       const classSpecSearch = formattedSpecs.length > 0 ? `?search=${formattedSpecs}` : '';
-      
+
       // Reset the data and results count to prevent bottom scrolltab to appear on the refresh
-      setData([]) 
+      setData([])
       setResultsCount(0);
-      
+
       setLoading(true);
-      
+
       router.push(`/?page=${currentPage}/${classSpecSearch}`);
       const response = await axios.get(`/api/get50Results?page=${currentPage}&search=${formattedSpecs}`);
       setResultsCount(response.data.total);
@@ -59,8 +61,8 @@ export default function HomePage() {
   return (
     <main className="flex min-h-screen bg-gradient-to-b from-[#000080] to-black text-white relative">
       <div className="flex flex-col w-full gap-4 pt-4">
-        <SearchTab selectedSpecs={selectedSpecs} setSelectedSpecs={setSelectedSpecs} />
-        <ScrollTab setCurrentPage={setCurrentPage} currentPage={currentPage} resultsCount={resultsCount} resultsPerPage={resultsPerPage} />
+        <SearchTab/>
+        <ScrollTab resultsPerPage={resultsPerPage} />
         <div className="flex h-16 bg-black justify-between rounded-xl">
           {searchTabs.map((tab, index) => (
             <div key={tab.name} className={`flex items-center justify-center text-white text-center h-full w-full '} `}>{tab.label}</div>
@@ -86,10 +88,19 @@ export default function HomePage() {
           ))}
         </div>
         {resultsCount > 0 &&
-          <ScrollTab setCurrentPage={setCurrentPage} currentPage={currentPage} resultsCount={resultsCount} resultsPerPage={resultsPerPage} />
-        }
+            <ScrollTab resultsPerPage={resultsPerPage} />
+          }
       </div>
 
     </main>
+
   );
 }
+
+const HomePageWrapper = () => (
+  <SearchProvider>
+    <HomePage />
+  </SearchProvider>
+);
+
+export default HomePageWrapper;

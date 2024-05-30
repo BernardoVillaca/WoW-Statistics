@@ -2,6 +2,7 @@ import React, { Dispatch, SetStateAction } from 'react';
 import Image from 'next/image';
 import specIconsMap from '~/helper/specIconsMap';
 import classIconsMap from '~/helper/classIconsMap';
+import { useSearch } from '../Context/SearchContext';
 
 const classSpecs: { [key: string]: string[] } = {
     'Evoker': ['Preservation Evoker', 'Devastation Evoker'],
@@ -20,8 +21,9 @@ const classSpecs: { [key: string]: string[] } = {
 };
 
 
-const ClassSearch = ({ selectedSpecs, setSelectedSpecs }) => {
+const ClassSearch = () => {
 
+    const {selectedSpecs, setSelectedSpecs} = useSearch()
     const toggleClassSelection = (className: string) => {
         const specs = classSpecs[className];
         if (specs) {

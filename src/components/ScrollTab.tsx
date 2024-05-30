@@ -3,10 +3,15 @@
 import { useState, useEffect } from "react";
 import { FiChevronsRight, FiChevronsLeft } from "react-icons/fi";
 import useDebounce from "~/hooks/useDebounce";
+import { useSearch } from "./Context/SearchContext";
 
-const ScrollTab = ({ currentPage, resultsCount, setCurrentPage, resultsPerPage }: { currentPage: number, resultsCount: number, setCurrentPage: React.Dispatch<React.SetStateAction<number>>, resultsPerPage: number }) => {
+const ScrollTab = ({ resultsPerPage }: { resultsPerPage: number }) => {
+    const { currentPage, setCurrentPage, resultsCount } = useSearch();
+
     const totalPages = Math.ceil(resultsCount / resultsPerPage);
+
     const [inputValue, setInputValue] = useState(currentPage || '');
+
     const debouncedInputValue = useDebounce(inputValue, 1000);
 
     const getDisplayedPages = () => {
@@ -42,7 +47,7 @@ const ScrollTab = ({ currentPage, resultsCount, setCurrentPage, resultsPerPage }
         <div className="flex h-10 bg-gray-800 justify-between items-center text-sm rounded-xl text-gray-300">
             {resultsCount !== 0 && currentPage !== 0 && (
                 <div className="flex justify-between w-1/2">
-                   <div className="items-center flex pl-3">{`Page ${currentPage} from ${resultsCount} characters`}</div>
+                    <div className="items-center flex pl-3">{`Page ${currentPage} from ${resultsCount} characters`}</div>
                     <div className="flex gap-2 items-center">
                         <span>Go to page:</span>
                         <input
@@ -56,37 +61,39 @@ const ScrollTab = ({ currentPage, resultsCount, setCurrentPage, resultsPerPage }
                     </div>
                 </div>
             )}
-            <div className="flex gap-1">
-                <div className="flex items-center justify-center w-8 h-8">
-                    {currentPage > 1 && (
-                        <FiChevronsLeft
-                            color="gray-300"
-                            size={25}
-                            onClick={() => handlePageChange(currentPage - 1)}
-                            className="cursor-pointer"
-                        />
-                    )}
-                </div>
-                {getDisplayedPages().map((page, index) => (
-                    <div
-                        key={index}
-                        className={`w-8 h-8 flex items-center justify-center cursor-pointer rounded-full select-none ${page === currentPage ? 'bg-gray-600 text-white' : 'bg-gray-300 text-black'}`}
-                        onClick={() => handlePageChange(page)}
-                    >
-                        {page}
+            {resultsCount !== 0 && currentPage !== 0 && (
+                <div className="flex gap-1">
+                    <div className="flex items-center justify-center w-8 h-8">
+                        {currentPage > 1 && (
+                            <FiChevronsLeft
+                                color="gray-300"
+                                size={25}
+                                onClick={() => handlePageChange(currentPage - 1)}
+                                className="cursor-pointer"
+                            />
+                        )}
                     </div>
-                ))}
-                <div className="flex items-center justify-center w-8 h-8">
-                    {currentPage < totalPages && (
-                        <FiChevronsRight
-                            color="gray-300"
-                            size={25}
-                            onClick={() => handlePageChange(currentPage + 1)}
-                            className="cursor-pointer"
-                        />
-                    )}
+                    {getDisplayedPages().map((page, index) => (
+                        <div
+                            key={index}
+                            className={`w-8 h-8 flex items-center justify-center cursor-pointer rounded-full select-none ${page === currentPage ? 'bg-gray-600 text-white' : 'bg-gray-300 text-black'}`}
+                            onClick={() => handlePageChange(page)}
+                        >
+                            {page}
+                        </div>
+                    ))}
+                    <div className="flex items-center justify-center w-8 h-8">
+                        {currentPage < totalPages && (
+                            <FiChevronsRight
+                                color="gray-300"
+                                size={25}
+                                onClick={() => handlePageChange(currentPage + 1)}
+                                className="cursor-pointer"
+                            />
+                        )}
+                    </div>
                 </div>
-            </div>
+            )}
         </div>
     )
 }
