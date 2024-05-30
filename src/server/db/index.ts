@@ -3,6 +3,7 @@ import { sql } from "@vercel/postgres";
 import * as schema from './schema'
 import { updateLeaderboard } from "~/server/actions/updateLeaderboard"
 import { getExtraDataForEachPlayer } from "~/server/actions/getExtraDataForEachPlayer";
+import { getPossibleRealms } from '../actions/getPossibleRealms';
 
 // Use this object to send drizzle queries to your DB
 export const db = drizzle(sql, { schema });
@@ -12,7 +13,7 @@ const doFirstRun = async () => {
   if (firstRun) {
     // await updateLeaderboard();
     // await getExtraDataForEachPlayer()
-
+    // await getPossibleRealms()
     firstRun = false;
 
   }

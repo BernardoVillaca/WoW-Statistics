@@ -67,3 +67,16 @@ export const authToken = createTable(
     expiresInIndex: index("expires_in_idx").on(authToken.expires_in)
   })
 );
+
+export const usRealms = createTable(
+  "us_realms",
+  {
+    id: serial("id").primaryKey(),
+    realm_name: varchar("realm_name", { length: 256 }),
+   
+  },
+  (usRealms) => ({
+    usRealmsIndex: index("realm_name_idx").on(usRealms.realm_name),
+    
+  })
+);
