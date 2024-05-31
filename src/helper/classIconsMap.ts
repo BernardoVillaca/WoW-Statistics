@@ -15,7 +15,7 @@ import { StaticImageData } from 'next/image';
 
 
 
-const classIconsMap: { [key: string]: StaticImageData } = {
+const classIconsMap = {
     'Death Knight': deathKnight,
     'Demon Hunter': demonHunter,
     'Druid': druid,

@@ -6,13 +6,20 @@ import euImage from '../../../assets/Regions/eu.png';
 
 const RegionSearch = () => {
 
-    const { region, setRegion, faction, setFaction, realm, setRealm, rating, setRating } = useSearch();
+    const { region, setRegion, setFaction, setSelectedSpecs } = useSearch();
+
+const handleClick = (newRegion: string) => {
+       setRegion(newRegion);
+       setFaction('');
+       setSelectedSpecs([]);
+}
+
 
     return (
         <div className='flex text-black items-center justify-center w-1/4 rounded-lg gap-8 border-[1px] border-gray-700'>
             <div
                 className={`cursor-pointer rounded-full flex items-center justify-center ${region === 'us' ? 'border-2 border-blue-500' : ''}`}
-                onClick={() => setRegion('us')}
+                onClick={() => handleClick('us')}
                 style={{ width: 54, height: 54 }}
             >
                 <Image
@@ -25,7 +32,7 @@ const RegionSearch = () => {
             </div>
             <div
                 className={`cursor-pointer rounded-full flex items-center justify-center ${region === 'eu' ? 'border-2 border-blue-500' : ''}`}
-                onClick={() => setRegion('eu')}
+                onClick={() => handleClick('eu')}
                 style={{ width: 54, height: 54 }}
             >
                 <Image

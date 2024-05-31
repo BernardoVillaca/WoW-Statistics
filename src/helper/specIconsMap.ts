@@ -39,7 +39,7 @@ import devastation_evoker from '../assets/WoWClasses/Evoker/devastation_evoker_s
 import { StaticImageData } from 'next/image';
 
 
-const specIconsMap: { [key: string]: StaticImageData } = {
+const specIconsMap = {
     'Blood Death Knight': blood_deathknight,
     'Frost Death Knight': frost_deathknight,
     'Unholy Death Knight': unholy_deathknight,

@@ -22,7 +22,6 @@ const classSpecs: { [key: string]: string[] } = {
 
 
 const ClassSearch = () => {
-
     const {selectedSpecs, setSelectedSpecs} = useSearch()
     const toggleClassSelection = (className: string) => {
         const specs = classSpecs[className];
