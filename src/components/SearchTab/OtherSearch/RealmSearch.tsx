@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState, useRef } from 'react';
 import { useSearch } from '~/components/Context/SearchContext';
-import { FiChevronDown } from 'react-icons/fi';
+import { FiChevronDown, FiLoader } from 'react-icons/fi';
 
 interface Realm {
     id: number;
@@ -13,6 +13,7 @@ const RealmSearch = () => {
     const [filteredRealmList, setFilteredRealmList] = useState<Realm[]>([]);
     const [isOpen, setIsOpen] = useState(false);
     const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
+    const [isDataFetched, setIsDataFetched] = useState(false);
     const { realm, setRealm } = useSearch();
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -22,7 +23,8 @@ const RealmSearch = () => {
                 const response = await axios.get(`/api/getRealms`);
                 if (response.data && response.data.realmList) {
                     setRealmList(response.data.realmList);
-                    setFilteredRealmList(response.data.realmList); // Set the initial filtered list
+                    setFilteredRealmList(response.data.realmList);
+                    setIsDataFetched(true);
                 } else {
                     console.error('Invalid data format', response.data);
                 }
@@ -102,8 +104,15 @@ const RealmSearch = () => {
         }
     }, [highlightedIndex, isOpen]);
 
+
+    if (!isDataFetched) {
+        return <div className='flex flex-col items-center justify-center w-1/5 p-4 rounded-lg border border-gray-700'>
+          <FiLoader className="animate-spin text-white" size={50} />
+        </div>;
+      }
+
     return (
-        <div className='relative flex text-black items-center justify-center w-1/4 rounded-lg border-[1px] border-gray-700'>
+        <div className='relative flex text-black items-center justify-center w-1/5 rounded-lg border-[1px] border-gray-700'>
             <input
                 ref={inputRef}
                 placeholder='Search Realm'

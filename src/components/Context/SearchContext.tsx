@@ -2,6 +2,8 @@
 import React, { createContext, useContext, useState, Dispatch, SetStateAction, ReactNode } from 'react';
 
 interface SearchContextType {
+  bracket: string, 
+  setBracket: Dispatch<SetStateAction<string>>,
   currentPage: number;
   setCurrentPage: Dispatch<SetStateAction<number>>;
   resultsCount: number;
@@ -27,6 +29,7 @@ export const SearchProvider = ({ children }: { children: ReactNode }) => {
   const [region, setRegion] = useState<string>('us');
   const [faction, setFaction] = useState<string>('');
   const [realm, setRealm] = useState<string>('');
+  const [bracket, setBracket] = useState<string>('3v3');
   const [rating, setRating] = useState<number[]>([0, Infinity]);
 
   return (
@@ -37,6 +40,7 @@ export const SearchProvider = ({ children }: { children: ReactNode }) => {
       region, setRegion,
       faction, setFaction,
       realm, setRealm,
+      bracket, setBracket,
       rating, setRating
     }}>
       {children}
