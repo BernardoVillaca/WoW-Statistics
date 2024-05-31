@@ -20,16 +20,3 @@ export async function GET(req: NextRequest) {
   }
 }
 
-
-// useEffect(() => {
-//     const fetchRatings = async () => {
-//       try {
-//         const response = await axios.get('/api/getMinMaxRating');
-//         setMaxRating(response.data.highestRating);
-//         setMinRating(response.data.lowestRating);
-//         setMinValue(response.data.lowestRating);
-//         setMaxValue(response.data.highestRating);
-//       } catch (error) {
-//         console.error('Error fetching ratings:', error);
-//       }
-//     };

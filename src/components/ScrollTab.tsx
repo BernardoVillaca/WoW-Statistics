@@ -7,10 +7,8 @@ import { useSearch } from "./Context/SearchContext";
 
 const ScrollTab = ({ resultsPerPage }: { resultsPerPage: number }) => {
     const { currentPage, setCurrentPage, resultsCount } = useSearch();
-
-    const totalPages = Math.ceil(resultsCount / resultsPerPage);
-
     const [inputValue, setInputValue] = useState(currentPage || '');
+    const totalPages = Math.ceil(resultsCount / resultsPerPage);
 
     const debouncedInputValue = useDebounce(inputValue, 1000);
 

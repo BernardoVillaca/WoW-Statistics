@@ -1,12 +1,12 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { FiLoader } from 'react-icons/fi';
+import { useSearch } from '~/components/Context/SearchContext';
 
 const RatingSearch = () => {
+  const { minValue, setMinValue, maxValue, setMaxValue } = useSearch();
   const [minRating, setMinRating] = useState(0);
-  const [maxRating, setMaxRating] = useState(100);
-  const [minValue, setMinValue] = useState(0);
-  const [maxValue, setMaxValue] = useState(100);
+  const [maxRating, setMaxRating] = useState(2000);
   const [isDataFetched, setIsDataFetched] = useState(false);
 
   useEffect(() => {
@@ -23,7 +23,7 @@ const RatingSearch = () => {
       }
     };
     fetchRatings();
-  }, []);
+  }, [minRating, maxRating]);
 
   const handleMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = Math.min(Number(e.target.value), maxValue - 1);

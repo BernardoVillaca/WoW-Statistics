@@ -22,12 +22,12 @@ const searchTabs = [
 ];
 
 const HomePage = () => {
-  
-  const { currentPage, resultsCount, setResultsCount, selectedSpecs, setSelectedSpecs } = useSearch();
-  
+
+  const { currentPage, resultsCount, setResultsCount, selectedSpecs, faction } = useSearch();
+
   const resultsPerPage = 50;
   const rowHeight = 40;
-  
+
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
 
@@ -36,16 +36,15 @@ const HomePage = () => {
   useEffect(() => {
     const getData = async () => {
       const formattedSpecs = encodeURIComponent(selectedSpecs.join(','));
-      const classSpecSearch = formattedSpecs.length > 0 ? `?search=${formattedSpecs}` : '';
+      const pageSearch = currentPage === 1 ? '' : `/?page=${currentPage}`;
+      const classSpecSearch = formattedSpecs.length > 0 ? `/?search=${formattedSpecs}` : '';
+      const factionSearch = faction.length > 0 ? `/&faction=${faction}` : '';
 
-      // Reset the data and results count to prevent bottom scrolltab to appear on the refresh
-      setData([])
-      setResultsCount(0);
 
       setLoading(true);
 
-      router.push(`/?page=${currentPage}/${classSpecSearch}`);
-      const response = await axios.get(`/api/get50Results?page=${currentPage}&search=${formattedSpecs}`);
+      router.push(`${pageSearch}${factionSearch}${classSpecSearch}`);
+      const response = await axios.get(`/api/get50Results?page=${currentPage}&search=${formattedSpecs}&faction=${faction}`);
       setResultsCount(response.data.total);
       setData(response.data.results);
 
@@ -58,7 +57,7 @@ const HomePage = () => {
   return (
     <main className="flex min-h-screen bg-gradient-to-b from-[#000080] to-black text-white relative">
       <div className="flex flex-col w-full gap-4 pt-4">
-        <SearchTab/>
+        <SearchTab />
         <ScrollTab resultsPerPage={resultsPerPage} />
         <div className="flex h-16 bg-black justify-between rounded-xl">
           {searchTabs.map((tab, index) => (
@@ -84,9 +83,9 @@ const HomePage = () => {
             ) : null
           ))}
         </div>
-        {resultsCount > 0 &&
-            <ScrollTab resultsPerPage={resultsPerPage} />
-          }
+        {!loading &&
+          <ScrollTab resultsPerPage={resultsPerPage} />
+        }
       </div>
 
     </main>
