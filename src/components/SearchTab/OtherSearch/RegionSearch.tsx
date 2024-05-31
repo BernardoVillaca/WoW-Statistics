@@ -9,6 +9,7 @@ const RegionSearch = () => {
     const { region, setRegion, setFaction, setSelectedSpecs } = useSearch();
 
 const handleClick = (newRegion: string) => {
+    if (newRegion === region) return;
        setRegion(newRegion);
        setFaction('');
        setSelectedSpecs([]);
