@@ -1,15 +1,17 @@
 // SearchContext.tsx
-import React, { createContext, useContext, useState, Dispatch, SetStateAction, ReactNode } from 'react';
+import axios from 'axios';
+import { get } from 'node_modules/axios/index.cjs';
+import React, { createContext, useContext, useState, Dispatch, SetStateAction, ReactNode, useEffect } from 'react';
 
 interface SearchContextType {
-  minInitialRating: number,
-  setMinInitialRating: Dispatch<SetStateAction<number>>,
-  maxInitialRating: number,
-  setMaxInitialRating: Dispatch<SetStateAction<number>>,
-  minRating: number,
-  setMinRating: Dispatch<SetStateAction<number>>,
-  maxRating: number,
-  setMaxRating: Dispatch<SetStateAction<number>>,
+  minRating: string;
+  setMinRating: Dispatch<SetStateAction<string>>;
+  maxRating: string;
+  setMaxRating: Dispatch<SetStateAction<string>>;
+  minRatingSearch: string;
+  setMinRatingSearch: Dispatch<SetStateAction<string>>;
+  maxRatingSearch: string;
+  setMaxRatingSearch: Dispatch<SetStateAction<string>>;
   bracket: string,
   setBracket: Dispatch<SetStateAction<string>>,
   currentPage: number;
@@ -31,15 +33,16 @@ interface SearchContextType {
 const SearchContext = createContext<SearchContextType | undefined>(undefined);
 
 export const SearchProvider = ({ children }: { children: ReactNode }) => {
+ 
   const [currentPage, setCurrentPage] = useState<number>(1);
 
   const [resultsCount, setResultsCount] = useState<number>(0);
   const [selectedSpecs, setSelectedSpecs] = useState<string[]>([]);
 
-  const [minRating, setMinRating] = useState(0);
-  const [maxRating, setMaxRating] = useState(2000);
-  const [minInitialRating, setMinInitialRating] = useState(0);
-  const [maxInitialRating, setMaxInitialRating] = useState(4000);
+  const [minRatingSearch, setMinRatingSearch] = useState('');
+  const [maxRatingSearch, setMaxRatingSearch] = useState('');
+  const [minRating, setMinRating] = useState('');
+  const [maxRating, setMaxRating] = useState('');
 
   const [region, setRegion] = useState<string>('us');
 
@@ -54,10 +57,10 @@ export const SearchProvider = ({ children }: { children: ReactNode }) => {
   return (
     <SearchContext.Provider value={{
       currentPage, setCurrentPage,
-      minInitialRating, setMinInitialRating,
-      maxInitialRating, setMaxInitialRating,
       minRating, setMinRating,
       maxRating, setMaxRating,
+      minRatingSearch, setMinRatingSearch,
+      maxRatingSearch, setMaxRatingSearch,
       resultsCount, setResultsCount,
       selectedSpecs, setSelectedSpecs,
       region, setRegion,

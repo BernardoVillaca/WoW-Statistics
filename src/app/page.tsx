@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import ScrollTab from "~/components/ScrollTab";
 import axios from "axios";
 import { FiLoader } from "react-icons/fi";  // Import spinner icon from react-icons
@@ -7,6 +7,7 @@ import LeaderboardRow from "~/components/LeaderBoardRow";
 import SearchTab from "~/components/SearchTab";
 import { useRouter } from 'next/navigation'
 import { SearchProvider, useSearch } from "~/components/Context/SearchContext";
+import { max } from "drizzle-orm";
 
 const searchTabs = [
   { name: 'rank', label: 'Rank' },
@@ -23,7 +24,7 @@ const searchTabs = [
 
 const HomePage = () => {
 
-  const { currentPage, resultsCount, setResultsCount, selectedSpecs, faction, region, bracket, realm, minRating, maxRating, minInitialRating, maxInitialRating} = useSearch();
+  const { currentPage, resultsCount, setResultsCount, selectedSpecs, faction, region, bracket, realm, minRatingSearch, maxRatingSearch, minRating, maxRating } = useSearch();
 
   const resultsPerPage = 50;
   const rowHeight = 40;
@@ -32,12 +33,11 @@ const HomePage = () => {
   const [data, setData] = useState([]);
 
   const router = useRouter();
+  const queryParams: string[] = [];
 
 
   useEffect(() => {
     const getData = async () => {
-      const queryParams: string[] = [];
-
       setLoading(true);
 
       if (currentPage > 1) queryParams.push(`page=${currentPage}`)
@@ -46,19 +46,30 @@ const HomePage = () => {
       if (faction !== '') queryParams.push(`faction=${faction}`);
       if (region === 'eu') queryParams.push(`region=${region}`);
       if (realm !== '') queryParams.push(`realm=${realm.toLocaleLowerCase()}`);
-      if(minRating !== minInitialRating) queryParams.push(`minRating=${minRating}`);
-      if(maxRating !== maxInitialRating) queryParams.push(`maxRating=${maxRating}`);
+      // console.log( minRating, maxRating, minRatingSearch, maxRatingSearch)
+      // if (minRatingSearch != minRating ) queryParams.push(`minRating=${minRatingSearch}`);
+      // if (maxRatingSearch != maxRating ) queryParams.push(`maxRating=${maxRatingSearch}`);
 
-      router.push(`?${queryParams.join('&')}`);
-      const response = await axios.get(`/api/get50Results/?${queryParams.join('&')}}`);
-      setResultsCount(response.data.total);
-      setData(response.data.results);
+      if (queryParams.length > 0) {
+        router.push(`?${queryParams.join('&')}`);
+        const response = await axios.get(`/api/get50Results/?${queryParams.join('&')}`);
+        setResultsCount(response.data.total);
+        setData(response.data.results);
+        setLoading(false);
+      } else {
+        setLoading(true);
+        router.push('/')
+        const response = await axios.get(`/api/get50Results`);
+        setResultsCount(response.data.total);
+        setData(response.data.results);
+        setLoading(false);
 
-      setLoading(false);
+      }
 
     };
+
     getData();
-  }, [currentPage, faction, selectedSpecs, region, bracket, realm, minRating, maxRating]);
+  }, [currentPage, faction, selectedSpecs, region, bracket, realm, maxRatingSearch, minRatingSearch]);
 
   return (
     <main className="flex min-h-screen bg-gradient-to-b from-[#000080] to-black text-white relative">
@@ -93,9 +104,7 @@ const HomePage = () => {
           <ScrollTab resultsPerPage={resultsPerPage} />
         }
       </div>
-
     </main>
-
   );
 }
 
