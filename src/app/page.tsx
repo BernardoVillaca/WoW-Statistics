@@ -23,7 +23,7 @@ const searchTabs = [
 
 const HomePage = () => {
 
-  const { currentPage, resultsCount, setResultsCount, selectedSpecs, faction } = useSearch();
+  const { currentPage, resultsCount, setResultsCount, selectedSpecs, faction, region, bracket, realm, minRating, maxRating, minInitialRating, maxInitialRating} = useSearch();
 
   const resultsPerPage = 50;
   const rowHeight = 40;
@@ -33,18 +33,24 @@ const HomePage = () => {
 
   const router = useRouter();
 
+
   useEffect(() => {
     const getData = async () => {
-      const formattedSpecs = encodeURIComponent(selectedSpecs.join(','));
-      const pageSearch = currentPage === 1 ? '' : `/?page=${currentPage}`;
-      const classSpecSearch = formattedSpecs.length > 0 ? `/?search=${formattedSpecs}` : '';
-      const factionSearch = faction.length > 0 ? `/&faction=${faction}` : '';
-
+      const queryParams: string[] = [];
 
       setLoading(true);
 
-      router.push(`${pageSearch}${factionSearch}${classSpecSearch}`);
-      const response = await axios.get(`/api/get50Results?page=${currentPage}&search=${formattedSpecs}&faction=${faction}`);
+      if (currentPage > 1) queryParams.push(`page=${currentPage}`)
+      if (bracket !== '3v3') queryParams.push(`bracket=${bracket}`);
+      if (selectedSpecs.length > 0) queryParams.push(`search=${encodeURIComponent(selectedSpecs.join(','))}`)
+      if (faction !== '') queryParams.push(`faction=${faction}`);
+      if (region === 'eu') queryParams.push(`region=${region}`);
+      if (realm !== '') queryParams.push(`realm=${realm.toLocaleLowerCase()}`);
+      if(minRating !== minInitialRating) queryParams.push(`minRating=${minRating}`);
+      if(maxRating !== maxInitialRating) queryParams.push(`maxRating=${maxRating}`);
+
+      router.push(`?${queryParams.join('&')}`);
+      const response = await axios.get(`/api/get50Results/?${queryParams.join('&')}}`);
       setResultsCount(response.data.total);
       setData(response.data.results);
 
@@ -52,7 +58,7 @@ const HomePage = () => {
 
     };
     getData();
-  }, [currentPage, selectedSpecs]);
+  }, [currentPage, faction, selectedSpecs, region, bracket, realm, minRating, maxRating]);
 
   return (
     <main className="flex min-h-screen bg-gradient-to-b from-[#000080] to-black text-white relative">

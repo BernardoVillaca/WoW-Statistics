@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState, useRef } from 'react';
 import { useSearch } from '~/components/Context/SearchContext';
 import { FiChevronDown, FiLoader } from 'react-icons/fi';
+import { set } from 'zod';
 
 interface Realm {
     id: number;
@@ -12,9 +13,10 @@ const RealmSearch = () => {
     const [realmList, setRealmList] = useState<Realm[]>([]);
     const [filteredRealmList, setFilteredRealmList] = useState<Realm[]>([]);
     const [isOpen, setIsOpen] = useState(false);
-    const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
+    const [highlightedIndex, setHighlightedIndex] = useState<number>(0);
     const [isDataFetched, setIsDataFetched] = useState(false);
-    const { realm, setRealm } = useSearch();
+    const [textInput, setTextInput] = useState(''); 
+    const { setRealm } = useSearch();
     const inputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
@@ -36,19 +38,32 @@ const RealmSearch = () => {
     }, []);
 
     const handleFocus = () => {
+        setFilteredRealmList(realmList)
+        setTextInput('');
         setRealm('');
         setIsOpen(true);
-        setHighlightedIndex(-1);
+        setHighlightedIndex(0);
     }
 
     const handleChange = (value: string) => {
-        setRealm(value);
+        setTextInput(value);
         setIsOpen(true);
         const filtered = realmList.filter((realm) =>
             realm.realm_name.toLowerCase().includes(value.toLowerCase())
         );
+        // if realmList contains the textIput set the realm
         setFilteredRealmList(filtered);
-        setHighlightedIndex(-1); // Reset highlighted index on input change
+        setHighlightedIndex(0); // Reset highlighted index on input change
+        const exactMatch = realmList.find(
+            (realm) => realm.realm_name.toLowerCase() === value.toLowerCase()
+        );
+    
+        // Set the realm if there's an exact match
+        if (exactMatch) {
+            setRealm(exactMatch.realm_name);
+            setTextInput(exactMatch.realm_name);
+            setIsOpen(false);
+        }
     };
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -75,6 +90,7 @@ const RealmSearch = () => {
                     const selectedRealm = filteredRealmList[highlightedIndex];
                     if (selectedRealm) {
                         setRealm(selectedRealm.realm_name);
+                        setTextInput(selectedRealm.realm_name);
                         if (inputRef.current) {
                             inputRef.current.blur();
                         }
@@ -116,7 +132,7 @@ const RealmSearch = () => {
             <input
                 ref={inputRef}
                 placeholder='Search Realm'
-                value={realm}
+                value={textInput}
                 onFocus={() => handleFocus()}
                 onChange={(e) => handleChange(e.target.value)}
                 onKeyDown={handleKeyDown}

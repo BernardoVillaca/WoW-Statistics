@@ -22,7 +22,7 @@ const classSpecs: { [key: string]: string[] } = {
 
 
 const ClassSearch = () => {
-    const {selectedSpecs, setSelectedSpecs} = useSearch()
+    const {selectedSpecs, setSelectedSpecs, setCurrentPage} = useSearch()
     const toggleClassSelection = (className: string) => {
         const specs = classSpecs[className];
         if (specs) {
@@ -37,6 +37,7 @@ const ClassSearch = () => {
     };
 
     const toggleSpecSelection = (spec: string) => {
+        setCurrentPage(1)
         if (selectedSpecs.includes(spec)) {
             setSelectedSpecs(selectedSpecs.filter(selected => selected !== spec));
         } else {

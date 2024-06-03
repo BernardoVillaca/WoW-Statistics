@@ -2,37 +2,50 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { FiLoader } from 'react-icons/fi';
 import { useSearch } from '~/components/Context/SearchContext';
+import useDebounce from '~/hooks/useDebounce';
 
 const RatingSearch = () => {
-  const { minValue, setMinValue, maxValue, setMaxValue } = useSearch();
-  const [minRating, setMinRating] = useState(0);
-  const [maxRating, setMaxRating] = useState(2000);
+  const { minRating, setMinRating, maxRating, setMaxRating, maxInitialRating, setMaxInitialRating, minInitialRating, setMinInitialRating } = useSearch();
+  const [minInputValue, setMinInputValue] = useState(minRating);
+  const [maxInputValue, setMaxInputValue] = useState(maxRating);
   const [isDataFetched, setIsDataFetched] = useState(false);
+  
+  const debouncedMinRating = useDebounce(minInputValue, 1000);
+  const debouncedMaxRating = useDebounce(maxInputValue, 1000);
 
   useEffect(() => {
     const fetchRatings = async () => {
       try {
         const response = await axios.get('/api/getMinMaxRating');
-        setMaxRating(response.data.highestRating);
-        setMinRating(response.data.lowestRating);
-        setMinValue(response.data.lowestRating);
-        setMaxValue(response.data.highestRating);
+        setMaxInitialRating(response.data.highestRating);
+        setMinInitialRating(response.data.lowestRating);
+        setMinInputValue(response.data.lowestRating);
+        setMaxInputValue(response.data.highestRating);
         setIsDataFetched(true);
       } catch (error) {
         console.error('Error fetching ratings:', error);
       }
     };
     fetchRatings();
-  }, [minRating, maxRating]);
+  }, [minInitialRating, maxInitialRating]);
+
+  useEffect(() => {
+    if (debouncedMinRating !== minRating) {
+      setMinRating(debouncedMinRating);
+    }
+    if (debouncedMaxRating !== maxRating) {
+      setMaxRating(debouncedMaxRating);
+    }
+  }, [debouncedMinRating, debouncedMaxRating]);
 
   const handleMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Math.min(Number(e.target.value), maxValue - 1);
-    setMinValue(value);
+    const value = Math.min(Number(e.target.value), maxRating - 1);
+    setMinInputValue(value);
   };
 
   const handleMaxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Math.max(Number(e.target.value), minValue + 1);
-    setMaxValue(value);
+    const value = Math.max(Number(e.target.value), minRating + 1);
+    setMaxInputValue(value);
   };
 
   if (!isDataFetched) {
@@ -46,34 +59,34 @@ const RatingSearch = () => {
       <div className='relative w-full h-10'>
         <input
           type='range'
-          min={minRating}
-          max={maxRating}
-          value={minValue}
+          min={minInitialRating}
+          max={maxInitialRating}
+          value={minInputValue}
           onChange={handleMinChange}
           className='absolute h-10 bg-transparent appearance-none pointer-events-none z-30 w-full'
-          style={{ zIndex: minValue > maxRating * 0.5 ? '40' : '30' }}
+          style={{ zIndex: minRating > maxInitialRating * 0.5 ? '40' : '30' }}
         />
         <input
           type='range'
-          min={minRating}
-          max={maxRating}
-          value={maxValue}
+          min={minInitialRating}
+          max={maxInitialRating}
+          value={maxInputValue}
           onChange={handleMaxChange}
           className='absolute h-10 bg-transparent appearance-none pointer-events-none z-40 w-full'
-          style={{ zIndex: maxValue <= maxRating * 0.5 ? '40' : '30' }}
+          style={{ zIndex: maxInputValue <= maxInputValue * 0.5 ? '40' : '30' }}
         />
         <div className='absolute w-full h-1 bg-gray-300 rounded-lg top-1/2 transform -translate-y-1/2'></div>
         <div
           className='absolute h-1 bg-blue-500 rounded-lg top-1/2 transform -translate-y-1/2'
           style={{
-            left: `${((minValue - minRating) / (maxRating - minRating)) * 100}%`,
-            width: `${((maxValue - minValue) / (maxRating - minRating)) * 100}%`,
+            left: `${((minInputValue - minInitialRating) / (maxInitialRating - minInitialRating)) * 100}%`,
+            width: `${((maxInputValue - minInputValue) / (maxInitialRating - minInitialRating)) * 100}%`,
           }}
         ></div>
       </div>
       <div className='flex justify-between w-full'>
-        <span className='text-sm text-gray-300'>{minValue}</span>
-        <span className='text-sm text-gray-300'>{maxValue}</span>
+        <span className='text-sm text-gray-300'>{minInputValue}</span>
+        <span className='text-sm text-gray-300'>{maxInputValue}</span>
       </div>
     </div>
   );
