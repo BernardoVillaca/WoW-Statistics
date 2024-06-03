@@ -1,8 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState, useRef } from 'react';
 import { useSearch } from '~/components/Context/SearchContext';
-import { FiChevronDown, FiLoader } from 'react-icons/fi';
-import { set } from 'zod';
+import { FiChevronDown, FiLoader, FiMinusCircle } from 'react-icons/fi';
+import { text } from 'stream/consumers';
 
 interface Realm {
     id: number;
@@ -15,9 +15,13 @@ const RealmSearch = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [highlightedIndex, setHighlightedIndex] = useState<number>(0);
     const [isDataFetched, setIsDataFetched] = useState(false);
-    const [textInput, setTextInput] = useState(''); 
-    const { setRealm } = useSearch();
+    const [textInput, setTextInput] = useState('');
+    const { realm, setRealm } = useSearch();
     const inputRef = useRef<HTMLInputElement>(null);
+
+    if (realm !== '' && textInput === '' && isOpen === false) {
+        setTextInput(realm);
+    }
 
     useEffect(() => {
         const getData = async () => {
@@ -40,10 +44,9 @@ const RealmSearch = () => {
     const handleFocus = () => {
         setFilteredRealmList(realmList)
         setTextInput('');
-        setRealm('');
         setIsOpen(true);
         setHighlightedIndex(0);
-    }
+    };
 
     const handleChange = (value: string) => {
         setTextInput(value);
@@ -57,7 +60,7 @@ const RealmSearch = () => {
         const exactMatch = realmList.find(
             (realm) => realm.realm_name.toLowerCase() === value.toLowerCase()
         );
-    
+
         // Set the realm if there's an exact match
         if (exactMatch) {
             setRealm(exactMatch.realm_name);
@@ -123,12 +126,25 @@ const RealmSearch = () => {
 
     if (!isDataFetched) {
         return <div className='flex flex-col items-center justify-center w-1/5 p-4 rounded-lg border border-gray-700'>
-          <FiLoader className="animate-spin text-white" size={50} />
+            <FiLoader className="animate-spin text-white" size={50} />
         </div>;
-      }
+    }
 
     return (
-        <div className='relative flex text-black items-center justify-center w-1/5 rounded-lg border-[1px] border-gray-700'>
+        <div className='relative flex text-black items-center justify-center w-1/5 rounded-lg border-[1px] border-gray-700'>\
+
+            {realm !== '' && (
+                <button
+                    className='absolute left-[150px] text-red-500 '
+                    onClick={() => {
+                        setRealm('')
+                        setTextInput('')
+                    }}
+                >
+                    <FiMinusCircle />
+                </button>
+
+            )}
             <input
                 ref={inputRef}
                 placeholder='Search Realm'
@@ -145,7 +161,7 @@ const RealmSearch = () => {
                 <FiChevronDown className={`${isOpen ? 'rotate-180' : ''}`} />
             </button>
             {isOpen && (
-                <div 
+                <div
                     className='absolute top-12 w-40 max-h-24 bg-gray-600 border-[1px] border-gray-700 overflow-auto snap-mandatory snap-y'
                 >
                     {filteredRealmList.length > 0 ? (
@@ -154,6 +170,7 @@ const RealmSearch = () => {
                                 id={`realm-${index}`}
                                 key={realm.id}
                                 onClick={() => {
+                                    setTextInput(realm.realm_name);
                                     setRealm(realm.realm_name);
                                     setIsOpen(false);
                                 }}
