@@ -7,7 +7,7 @@ import LeaderboardRow from "~/components/LeaderBoardRow";
 import SearchTab from "~/components/SearchTab";
 import { useRouter } from 'next/navigation'
 import { SearchProvider, useSearch } from "~/components/Context/SearchContext";
-import { max } from "drizzle-orm";
+import { min } from "drizzle-orm";
 
 const searchTabs = [
   { name: 'rank', label: 'Rank' },
@@ -34,21 +34,21 @@ const HomePage = () => {
 
   const router = useRouter();
   const queryParams: string[] = [];
-
-
+  const [refreshCount, setRefreshCount] = useState(0);
+  
   useEffect(() => {
     const getData = async () => {
+      setRefreshCount(refreshCount + 1);
+      if(refreshCount === 1) return 
       setLoading(true);
-
       if (currentPage > 1) queryParams.push(`page=${currentPage}`)
       if (bracket !== '3v3') queryParams.push(`bracket=${bracket}`);
       if (selectedSpecs.length > 0) queryParams.push(`search=${encodeURIComponent(selectedSpecs.join(','))}`)
       if (faction !== '') queryParams.push(`faction=${faction}`);
       if (region === 'eu') queryParams.push(`region=${region}`);
       if (realm !== '') queryParams.push(`realm=${realm.toLocaleLowerCase()}`);
-      // console.log( minRating, maxRating, minRatingSearch, maxRatingSearch)
-      // if (minRatingSearch != minRating ) queryParams.push(`minRating=${minRatingSearch}`);
-      // if (maxRatingSearch != maxRating ) queryParams.push(`maxRating=${maxRatingSearch}`);
+      if (minRatingSearch !== minRating) queryParams.push(`minRating=${minRatingSearch}`);
+      if (maxRatingSearch !== maxRating) queryParams.push(`maxRating=${maxRatingSearch}`);
 
       if (queryParams.length > 0) {
         router.push(`?${queryParams.join('&')}`);
@@ -63,13 +63,12 @@ const HomePage = () => {
         setResultsCount(response.data.total);
         setData(response.data.results);
         setLoading(false);
-
       }
 
     };
 
     getData();
-  }, [currentPage, faction, selectedSpecs, region, bracket, realm, maxRatingSearch, minRatingSearch]);
+  }, [currentPage, faction, selectedSpecs, region, bracket, realm, minRatingSearch , maxRatingSearch]);
 
   return (
     <main className="flex min-h-screen bg-gradient-to-b from-[#000080] to-black text-white relative">

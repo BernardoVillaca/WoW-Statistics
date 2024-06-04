@@ -16,7 +16,7 @@ const OtherSearch = () => {
             <FactionSearch />
             <BracketSearch/>
             <RealmSearch />
-            {/* <RatingSearch /> */}
+            <RatingSearch />
             
         </div>
     );

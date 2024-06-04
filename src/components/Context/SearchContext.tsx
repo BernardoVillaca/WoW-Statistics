@@ -4,14 +4,14 @@ import { get } from 'node_modules/axios/index.cjs';
 import React, { createContext, useContext, useState, Dispatch, SetStateAction, ReactNode, useEffect } from 'react';
 
 interface SearchContextType {
-  minRating: string;
-  setMinRating: Dispatch<SetStateAction<string>>;
-  maxRating: string;
-  setMaxRating: Dispatch<SetStateAction<string>>;
-  minRatingSearch: string;
-  setMinRatingSearch: Dispatch<SetStateAction<string>>;
-  maxRatingSearch: string;
-  setMaxRatingSearch: Dispatch<SetStateAction<string>>;
+  minRating: number;
+  setMinRating: Dispatch<SetStateAction<number>>;
+  maxRating: number;
+  setMaxRating: Dispatch<SetStateAction<number>>;
+  minRatingSearch: number;
+  setMinRatingSearch: Dispatch<SetStateAction<number>>;
+  maxRatingSearch: number;
+  setMaxRatingSearch: Dispatch<SetStateAction<number>>;
   bracket: string,
   setBracket: Dispatch<SetStateAction<string>>,
   currentPage: number;
@@ -39,10 +39,10 @@ export const SearchProvider = ({ children }: { children: ReactNode }) => {
   const [resultsCount, setResultsCount] = useState<number>(0);
   const [selectedSpecs, setSelectedSpecs] = useState<string[]>([]);
 
-  const [minRatingSearch, setMinRatingSearch] = useState('');
-  const [maxRatingSearch, setMaxRatingSearch] = useState('');
-  const [minRating, setMinRating] = useState('');
-  const [maxRating, setMaxRating] = useState('');
+  const [minRatingSearch, setMinRatingSearch] = useState(0);
+  const [maxRatingSearch, setMaxRatingSearch] = useState(4000);
+  const [minRating, setMinRating] = useState(0);
+  const [maxRating, setMaxRating] = useState(4000);
 
   const [region, setRegion] = useState<string>('us');
 
