@@ -3,18 +3,17 @@ import React, { useState, useEffect, useRef } from 'react';
 import { FiLoader } from 'react-icons/fi';
 
 import { useSearch } from '~/components/Context/SearchContext';
-import useDebounce from '~/hooks/useDebounce';
+import { updateURLParameter } from '~/utils/helper/updateURL';
+import useDebounce from '~/utils/hooks/useDebounce';
 
 const RatingSearch = () => {
+  const { setCurrentPage } = useSearch();
 
   const [minRatingSearch, setMinRatingSearch] = useState(0);
   const [maxRatingSearch, setMaxRatingSearch] = useState(4000);
+
   const [minRating, setMinRating] = useState(0);
   const [maxRating, setMaxRating] = useState(4000);
-
-
-
-
 
   const [minInputValue, setMinInputValue] = useState(minRatingSearch);
   const [maxInputValue, setMaxInputValue] = useState(maxRatingSearch);
@@ -63,6 +62,17 @@ const RatingSearch = () => {
     const value = Math.max(Number(e.target.value), minInputValue + 1);
     setMaxInputValue(value);
   };
+
+  useEffect(() => {
+    updateURLParameter('minRating', minRatingSearch === minRating ? '' : minRatingSearch.toString(), true);
+    setCurrentPage(1);
+  }, [minRatingSearch]);
+
+  useEffect(() => {
+    updateURLParameter('maxRating', maxRatingSearch === maxRating ? '' : maxRatingSearch.toString(), true);
+    setCurrentPage(1);
+  }, [maxRatingSearch]);
+
 
   if (!isDataFetched) {
     return (

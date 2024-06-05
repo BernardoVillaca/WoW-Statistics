@@ -3,6 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useSearch } from '~/components/Context/SearchContext';
 import { FiChevronDown, FiLoader, FiMinusCircle } from 'react-icons/fi';
 import { text } from 'stream/consumers';
+import { updateURLParameter } from '~/utils/helper/updateURL';
 
 interface Realm {
     id: number;
@@ -10,6 +11,7 @@ interface Realm {
 }
 
 const RealmSearch = () => {
+    const { setCurrentPage } = useSearch();
     const [realmList, setRealmList] = useState<Realm[]>([]);
     const [filteredRealmList, setFilteredRealmList] = useState<Realm[]>([]);
     const [isOpen, setIsOpen] = useState(false);
@@ -122,6 +124,12 @@ const RealmSearch = () => {
             }
         }
     }, [highlightedIndex, isOpen]);
+
+    useEffect(() => {
+        updateURLParameter('realm', realm, true);
+        setCurrentPage(1);
+    }, [realm]);
+
 
 
     if (!isDataFetched) {

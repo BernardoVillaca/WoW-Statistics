@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Image from 'next/image';
 import { useSearch } from '../../Context/SearchContext';
 import hordeIcon from '../../../assets/WowFactions/horde.png';
 import allyIcon from '../../../assets/WowFactions/alliance.png';
+import { updateURLParameter } from '~/utils/helper/updateURL';
 
 const RegionSearch = () => {
+    const { setCurrentPage } = useSearch(); 
   
     const [faction, setFaction] = React.useState('');
     
@@ -15,8 +17,12 @@ const RegionSearch = () => {
             setFaction(newFaction);
         }
     }
+    useEffect(() => {
+        updateURLParameter('faction', faction, true);
+        setCurrentPage(1);
+    }, [faction]);
 
-    
+   
     return (
         <div className='flex text-black items-center justify-center w-1/5 rounded-lg gap-8 border-[1px] border-gray-700'>
             <div

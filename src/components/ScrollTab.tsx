@@ -2,12 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { FiChevronsRight, FiChevronsLeft } from "react-icons/fi";
-import useDebounce from "~/hooks/useDebounce";
+import useDebounce from "~/utils/hooks/useDebounce";
 import { useSearch } from "./Context/SearchContext";
+import { updateURLParameter } from '~/utils/helper/updateURL';
 
 const ScrollTab = ({ resultsPerPage }: { resultsPerPage: number }) => {
     const { resultsCount, currentPage, setCurrentPage } = useSearch();
-    
+
     const [inputValue, setInputValue] = useState(currentPage || '');
     const totalPages = Math.ceil(resultsCount / resultsPerPage);
 
@@ -24,24 +25,23 @@ const ScrollTab = ({ resultsPerPage }: { resultsPerPage: number }) => {
     };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-
         const value = parseInt(e.target.value, 10);
-        
+
         if (value === 0) return setInputValue(1);
         if (value > totalPages) return setInputValue(totalPages);
         setInputValue(value);
     };
 
     const handlePageChange = (page: number) => {
-        window.history.pushState(null, '', `/?page=${page}`);
         setCurrentPage(page);
         setInputValue('');
+        updateURLParameter('page', page === 1 ? null : page.toString());
     };
 
     useEffect(() => {
         if (debouncedInputValue > 0 && debouncedInputValue <= totalPages) {
             setCurrentPage(debouncedInputValue);
-            window.history.pushState(null, '', `/?page=${debouncedInputValue}`);
+            updateURLParameter('page', debouncedInputValue.toString());
             setInputValue('');
         }
     }, [debouncedInputValue]);
@@ -98,7 +98,7 @@ const ScrollTab = ({ resultsPerPage }: { resultsPerPage: number }) => {
                 </div>
             )}
         </div>
-    )
-}
+    );
+};
 
 export default ScrollTab;

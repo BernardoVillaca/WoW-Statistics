@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
   const minRating = parseInt(searchParams.get('minRating') ?? '0'); // rating on the db
   const maxRating = parseInt(searchParams.get('maxRating') ?? '4000'); // rating on the db
   const bracket = searchParams.get('bracket') ?? '3v3';
-
+  console.log(bracket)
   const page = parseInt(searchParams.get('page') ?? '1');
   const limit = 50;
   const offset = (page - 1) * limit;

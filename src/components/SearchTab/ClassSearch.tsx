@@ -1,8 +1,9 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import specIconsMap from '~/helper/specIconsMap';
-import classIconsMap from '~/helper/classIconsMap';
+import specIconsMap from '~/utils/helper/specIconsMap';
+import classIconsMap from '~/utils/helper/classIconsMap';
 import { useSearch } from '../Context/SearchContext';
+import { updateURLParameter } from '~/utils/helper/updateURL';
 
 const classSpecs: { [key: string]: string[] } = {
     'Evoker': ['Preservation Evoker', 'Devastation Evoker'],
@@ -20,15 +21,14 @@ const classSpecs: { [key: string]: string[] } = {
     'Demon Hunter': ['Havoc Demon Hunter', 'Vengeance Demon Hunter'],
 };
 
-
 const ClassSearch = () => {
-    const {setCurrentPage} = useSearch()
+    const { setCurrentPage } = useSearch();
     const [selectedSpecs, setSelectedSpecs] = useState<string[]>([]);
+
     const toggleClassSelection = (className: string) => {
         const specs = classSpecs[className];
         if (specs) {
             const allSelected = specs.every(spec => selectedSpecs.includes(spec));
-        
             if (allSelected) {
                 setSelectedSpecs(selectedSpecs.filter(spec => !specs.includes(spec)));
             } else {
@@ -38,13 +38,17 @@ const ClassSearch = () => {
     };
 
     const toggleSpecSelection = (spec: string) => {
-        setCurrentPage(1)
         if (selectedSpecs.includes(spec)) {
             setSelectedSpecs(selectedSpecs.filter(selected => selected !== spec));
         } else {
             setSelectedSpecs([...selectedSpecs, spec]);
         }
     };
+
+    useEffect(() => {
+        setCurrentPage(1);
+        updateURLParameter('search', selectedSpecs.length > 0 ? selectedSpecs.join(',') : null, true);
+    }, [selectedSpecs]);
 
     return (
         <div className='flex justify-between w-full bg-gray-800 rounded-lg p-4'>
@@ -55,9 +59,8 @@ const ClassSearch = () => {
                         alt={className}
                         width={30}
                         height={30}
-                        className={`rounded-lg overflow-hidden cursor-pointer ${
-                            classSpecs[className]?.every(spec => selectedSpecs.includes(spec)) ? 'border-2 border-blue-500' : ''
-                        }`}
+                        className={`rounded-lg overflow-hidden cursor-pointer ${classSpecs[className]?.every(spec => selectedSpecs.includes(spec)) ? 'border-2 border-blue-500' : ''
+                            }`}
                         onClick={() => toggleClassSelection(className)}
                     />
                     <div className='flex flex-col gap-4 pt-4'>
@@ -68,9 +71,8 @@ const ClassSearch = () => {
                                 alt={spec}
                                 width={30}
                                 height={30}
-                                className={`rounded-lg overflow-hidden cursor-pointer ${
-                                    selectedSpecs.includes(spec) ? 'border-2 border-blue-500' : ''
-                                }`}
+                                className={`rounded-lg overflow-hidden cursor-pointer ${selectedSpecs.includes(spec) ? 'border-2 border-blue-500' : ''
+                                    }`}
                                 onClick={() => toggleSpecSelection(spec)}
                             />
                         ))}

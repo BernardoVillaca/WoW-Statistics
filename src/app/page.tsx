@@ -1,10 +1,8 @@
 'use client'
-import { useState, useEffect, useRef } from "react";
+
 import ScrollTab from "~/components/ScrollTab";
-import axios from "axios";
 import SearchTab from "~/components/SearchTab";
-import { useRouter } from 'next/navigation'
-import { SearchProvider, useSearch } from "~/components/Context/SearchContext";
+import { SearchProvider } from "~/components/Context/SearchContext";
 import LeaderBoardTable from "~/components/LeaderboardTable";
 
 
@@ -24,7 +22,8 @@ const resultsPerPage = 50
 const rowHeight = 40
 
 const HomePage = () => {
-
+ 
+    
 
   return (
     <main className="flex min-h-screen bg-gradient-to-b from-[#000080] to-black text-white relative">

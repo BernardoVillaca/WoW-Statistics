@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from 'next/image';
 import { useSearch } from '../../Context/SearchContext';
 import usImage from '../../../assets/Regions/us.png';
 import euImage from '../../../assets/Regions/eu.png';
+import { updateURLParameter } from '~/utils/helper/updateURL';
 
 const RegionSearch = () => {
+    const { setCurrentPage } = useSearch();
     
     const [ region, setRegion ] = useState('us');
     const handleClick = (newRegion: string) => {
@@ -12,6 +14,14 @@ const RegionSearch = () => {
         setRegion(newRegion);
         
     }
+
+
+    useEffect(() => {
+        updateURLParameter('regions', region === 'us' ? '' : region, true);
+        setCurrentPage(1);
+    }, [region]);
+
+
 
 
     return (

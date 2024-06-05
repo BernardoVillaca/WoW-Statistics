@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import specIconsMap from '~/helper/specIconsMap';
+import specIconsMap from '~/utils/helper/specIconsMap';
 import horde from '~/assets/WoWFactions/horde.png';
 import alliance from '~/assets/WoWFactions/alliance.png';
 

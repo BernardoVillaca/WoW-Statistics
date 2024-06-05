@@ -1,18 +1,24 @@
 'use client'
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { updateURLParameter } from '~/utils/helper/updateURL';
+import { useSearch } from '~/components/Context/SearchContext';
 
 const BracketSearch = () => {
+    const {setCurrentPage} = useSearch();
     const [bracket, setBracket] = React.useState('3v3');
     // const router = useRouter();
-    
+
     const handleClick = (newBracket: string) => {
         if (newBracket === bracket) return;
         setBracket(newBracket);
-        // router.push(`/?bracket=${newBracket}`, undefined, { shallow: true });
+       
     };
-    console.log('asdasd')
+    useEffect(() => {
+        updateURLParameter('bracket', bracket === '3v3' ? '' : bracket, true);
+        setCurrentPage(1);
+    }, [bracket]);
 
     return (
         <div className='flex text-black items-center justify-center w-1/5 rounded-lg gap-8 border-[1px] border-gray-700'>
