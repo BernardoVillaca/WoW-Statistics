@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import Image from 'next/image';
 import specIconsMap from '~/helper/specIconsMap';
 import classIconsMap from '~/helper/classIconsMap';
@@ -22,7 +22,8 @@ const classSpecs: { [key: string]: string[] } = {
 
 
 const ClassSearch = () => {
-    const {selectedSpecs, setSelectedSpecs, setCurrentPage} = useSearch()
+    const {setCurrentPage} = useSearch()
+    const [selectedSpecs, setSelectedSpecs] = useState<string[]>([]);
     const toggleClassSelection = (className: string) => {
         const specs = classSpecs[className];
         if (specs) {

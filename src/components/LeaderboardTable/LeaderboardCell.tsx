@@ -52,8 +52,6 @@ const LeaderboardCell = ({ text, height, index, tab, characterClass, characterSp
     }
   };
 
-  
-
   return (
     <div className={`flex items-center justify-center text-gray-300 h-[${height}px] w-full ${index === 0 ? '' : 'border-l-[1px] border-gray-700'}`}>
       {factionIcon ? (

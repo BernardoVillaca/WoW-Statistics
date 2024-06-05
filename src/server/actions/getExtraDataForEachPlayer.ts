@@ -5,18 +5,9 @@ import { us3v3Leaderboard, us2v2Leaderboard } from '~/server/db/schema';
 import { eq } from 'drizzle-orm';
 
 
-
-
 const bracketMapping = {
-    '3v3': {
-        table: us3v3Leaderboard,
-        apiEndpoint: 'https://us.api.blizzard.com/data/wow/pvp-season/37/pvp-leaderboard/3v3'
-    },
-    '2v2': {
-        table: us2v2Leaderboard,
-        apiEndpoint: 'https://us.api.blizzard.com/data/wow/pvp-season/37/pvp-leaderboard/2v2'
-    },
-
+    '3v3': { table: us3v3Leaderboard, },
+    '2v2': { table: us2v2Leaderboard, },
 };
 
 export const getExtraDataForEachPlayer = async (bracket: string) => {
@@ -24,7 +15,7 @@ export const getExtraDataForEachPlayer = async (bracket: string) => {
         throw new Error(`Invalid bracket: ${bracket}`);
     }
 
-    const { table, apiEndpoint } = bracketMapping[bracket as keyof typeof bracketMapping];
+    const { table } = bracketMapping[bracket as keyof typeof bracketMapping];
 
     let requests = [];
     console.log('Updating extra data for each player')

@@ -5,8 +5,9 @@ import hordeIcon from '../../../assets/WowFactions/horde.png';
 import allyIcon from '../../../assets/WowFactions/alliance.png';
 
 const RegionSearch = () => {
-    const { faction, setFaction } = useSearch();
-
+  
+    const [faction, setFaction] = React.useState('');
+    
     const handleToggle = (newFaction: string) => {
         if (faction === newFaction) {
             setFaction('');
@@ -15,7 +16,7 @@ const RegionSearch = () => {
         }
     }
 
-
+    
     return (
         <div className='flex text-black items-center justify-center w-1/5 rounded-lg gap-8 border-[1px] border-gray-700'>
             <div

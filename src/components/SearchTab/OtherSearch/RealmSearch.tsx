@@ -16,7 +16,7 @@ const RealmSearch = () => {
     const [highlightedIndex, setHighlightedIndex] = useState<number>(0);
     const [isDataFetched, setIsDataFetched] = useState(false);
     const [textInput, setTextInput] = useState('');
-    const { realm, setRealm } = useSearch();
+    const [realm, setRealm ] = useState('');
     const inputRef = useRef<HTMLInputElement>(null);
 
     if (realm !== '' && textInput === '' && isOpen === false) {

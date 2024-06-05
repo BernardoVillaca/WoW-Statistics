@@ -6,7 +6,8 @@ import useDebounce from "~/hooks/useDebounce";
 import { useSearch } from "./Context/SearchContext";
 
 const ScrollTab = ({ resultsPerPage }: { resultsPerPage: number }) => {
-    const { currentPage, setCurrentPage, resultsCount } = useSearch();
+    const { resultsCount, currentPage, setCurrentPage } = useSearch();
+    
     const [inputValue, setInputValue] = useState(currentPage || '');
     const totalPages = Math.ceil(resultsCount / resultsPerPage);
 
@@ -23,13 +24,16 @@ const ScrollTab = ({ resultsPerPage }: { resultsPerPage: number }) => {
     };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+
         const value = parseInt(e.target.value, 10);
+        
         if (value === 0) return setInputValue(1);
         if (value > totalPages) return setInputValue(totalPages);
         setInputValue(value);
     };
 
     const handlePageChange = (page: number) => {
+        window.history.pushState(null, '', `/?page=${page}`);
         setCurrentPage(page);
         setInputValue('');
     };
@@ -37,9 +41,10 @@ const ScrollTab = ({ resultsPerPage }: { resultsPerPage: number }) => {
     useEffect(() => {
         if (debouncedInputValue > 0 && debouncedInputValue <= totalPages) {
             setCurrentPage(debouncedInputValue);
+            window.history.pushState(null, '', `/?page=${debouncedInputValue}`);
             setInputValue('');
         }
-    }, [debouncedInputValue, totalPages, setCurrentPage]);
+    }, [debouncedInputValue]);
 
     return (
         <div className="flex h-10 bg-gray-800 justify-between items-center text-sm rounded-xl text-gray-300">

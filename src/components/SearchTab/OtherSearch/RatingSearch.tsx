@@ -6,16 +6,15 @@ import { useSearch } from '~/components/Context/SearchContext';
 import useDebounce from '~/hooks/useDebounce';
 
 const RatingSearch = () => {
-  const {
-    minRatingSearch,
-    setMinRatingSearch,
-    maxRatingSearch,
-    setMaxRatingSearch,
-    minRating,
-    setMinRating,
-    maxRating,
-    setMaxRating
-  } = useSearch();
+
+  const [minRatingSearch, setMinRatingSearch] = useState(0);
+  const [maxRatingSearch, setMaxRatingSearch] = useState(4000);
+  const [minRating, setMinRating] = useState(0);
+  const [maxRating, setMaxRating] = useState(4000);
+
+
+
+
 
   const [minInputValue, setMinInputValue] = useState(minRatingSearch);
   const [maxInputValue, setMaxInputValue] = useState(maxRatingSearch);

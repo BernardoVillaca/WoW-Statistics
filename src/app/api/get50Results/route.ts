@@ -3,10 +3,6 @@ import { db } from '~/server/db';
 import { us3v3Leaderboard, us2v2Leaderboard } from '~/server/db/schema';
 import { asc, count, eq, and, SQL, gte, lte, or } from 'drizzle-orm';
 
-const validClasses = [
-  'Death Knight', 'Demon Hunter', 'Druid', 'Hunter', 'Mage', 'Monk', 'Paladin',
-  'Priest', 'Rogue', 'Shaman', 'Warlock', 'Warrior'
-];
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);

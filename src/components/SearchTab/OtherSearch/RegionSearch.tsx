@@ -1,18 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Image from 'next/image';
 import { useSearch } from '../../Context/SearchContext';
 import usImage from '../../../assets/Regions/us.png';
 import euImage from '../../../assets/Regions/eu.png';
 
 const RegionSearch = () => {
-
-    const { region, setRegion, setFaction, setSelectedSpecs } = useSearch();
-
+    
+    const [ region, setRegion ] = useState('us');
     const handleClick = (newRegion: string) => {
         if (newRegion === region) return;
         setRegion(newRegion);
-        setFaction('');
-        setSelectedSpecs([]);
+        
     }
 
 

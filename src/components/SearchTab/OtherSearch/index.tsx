@@ -1,7 +1,3 @@
-import Image from 'next/image';
-import { useSearch } from '../../Context/SearchContext';
-import usImage from '../../../assets/Regions/us.png';
-import euImage from '../../../assets/Regions/eu.png';
 import RegionSearch from './RegionSearch';
 import FactionSearch from './FactionSearch';
 import RealmSearch from './RealmSearch';

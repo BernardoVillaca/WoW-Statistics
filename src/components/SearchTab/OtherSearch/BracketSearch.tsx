@@ -1,14 +1,18 @@
-import React from 'react'
-import { useSearch } from '~/components/Context/SearchContext';
+'use client'
+
+import React from 'react';
+import { useRouter } from 'next/router';
 
 const BracketSearch = () => {
-    const { bracket, setBracket } = useSearch();
-
-
+    const [bracket, setBracket] = React.useState('3v3');
+    // const router = useRouter();
+    
     const handleClick = (newBracket: string) => {
         if (newBracket === bracket) return;
         setBracket(newBracket);
-    }
+        // router.push(`/?bracket=${newBracket}`, undefined, { shallow: true });
+    };
+    console.log('asdasd')
 
     return (
         <div className='flex text-black items-center justify-center w-1/5 rounded-lg gap-8 border-[1px] border-gray-700'>
@@ -31,7 +35,7 @@ const BracketSearch = () => {
                 Rbg
             </button>
         </div>
-    )
-}
+    );
+};
 
-export default BracketSearch
+export default BracketSearch;
