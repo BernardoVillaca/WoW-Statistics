@@ -7,18 +7,17 @@ import LeaderboardRow from "~/components/LeaderBoardRow";
 import SearchTab from "~/components/SearchTab";
 import { useRouter } from 'next/navigation'
 import { SearchProvider, useSearch } from "~/components/Context/SearchContext";
-import { min } from "drizzle-orm";
+
 
 const searchTabs = [
   { name: 'rank', label: 'Rank' },
-  { name: 'character_spec', label: 'Spec' },
   { name: 'character_name', label: 'Name' },
   { name: 'rating', label: 'Rating' },
+  { name: 'character_spec', label: 'Spec' },
   { name: 'realm_slug', label: 'Realm' },
   { name: 'faction_name', label: 'Faction' },
   { name: 'played', label: 'Played' },
-  { name: 'won', label: 'Won' },
-  { name: 'lost', label: 'Lost' },
+  { name: 'win_ratio', label: 'Win Ratio' },
   { name: 'updated_at', label: 'Last Played' },
 ];
 
@@ -34,12 +33,12 @@ const HomePage = () => {
 
   const router = useRouter();
   const queryParams: string[] = [];
-  const [refreshCount, setRefreshCount] = useState(0);
-  
+  const [refreshCount, setRefreshCount] = useState(0); // Ugly workaround. Used to prevent the useEffect from running on the second render
+
   useEffect(() => {
     const getData = async () => {
       setRefreshCount(refreshCount + 1);
-      if(refreshCount === 1) return 
+      if (refreshCount === 1) return
       setLoading(true);
       if (currentPage > 1) queryParams.push(`page=${currentPage}`)
       if (bracket !== '3v3') queryParams.push(`bracket=${bracket}`);
@@ -68,7 +67,7 @@ const HomePage = () => {
     };
 
     getData();
-  }, [currentPage, faction, selectedSpecs, region, bracket, realm, minRatingSearch , maxRatingSearch]);
+  }, [currentPage, faction, selectedSpecs, region, bracket, realm, minRatingSearch, maxRatingSearch]);
 
   return (
     <main className="flex min-h-screen bg-gradient-to-b from-[#000080] to-black text-white relative">

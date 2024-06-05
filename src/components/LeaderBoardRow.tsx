@@ -11,8 +11,7 @@ const LeaderboardRow = ({ characterData, searchTabs, rowHeight}: { characterData
                     text={characterData[tab.name]}
                     tab={tab.name}
                     characterClass={characterData.character_class}
-                    characterSpec={characterData.character_spec}
-                   
+                    characterSpec={characterData.character_spec}                  
                 />
             ))}
         </div>

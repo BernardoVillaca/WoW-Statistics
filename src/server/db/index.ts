@@ -11,8 +11,8 @@ let firstRun = true;
 
 const doFirstRun = async () => {
   if (firstRun) {
-    // await updateLeaderboard();
-    // await getExtraDataForEachPlayer()
+    // await updateLeaderboard('2v2');
+    await getExtraDataForEachPlayer('2v2')
     // await getPossibleRealms()
     firstRun = false;
 

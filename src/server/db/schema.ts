@@ -5,7 +5,8 @@ import {
   serial,
   timestamp,
   varchar,
-  integer
+  integer,
+  numeric
 } from "drizzle-orm/pg-core";
 
 
@@ -14,9 +15,8 @@ export const createTable = pgTableCreator((name) => `wowstats_${name}`);
 export const us3v3Leaderboard = createTable(
   "us_3v3_leaderboard",
   {
-    id: serial("id").primaryKey(),
     character_name: varchar("character_name", { length: 256 }),
-    character_id: integer("character_id"),
+    character_id: integer("character_id").primaryKey(),
     character_class: varchar("character_class", { length: 256 }).default(''),
     character_spec: varchar("character_spec", { length: 256 }).default(''),
     realm_id: integer("realm_id"),
@@ -25,6 +25,7 @@ export const us3v3Leaderboard = createTable(
     rank: integer("rank"),
     rating: integer("rating"),
     played: integer("played"),
+    win_ratio: numeric("win_ratio"),
     won: integer("won"),
     lost: integer("lost"),
     tier_id: integer("tier_id"),
@@ -37,16 +38,132 @@ export const us3v3Leaderboard = createTable(
 
   },
   (leaderboard) => ({
-    characterNameIndex: index("character_name_idx").on(leaderboard.character_name),
-    characterIdIndex: index("character_id_idx").on(leaderboard.character_id),
-    characterClassIndex: index("character_class_idx").on(leaderboard.character_class),
-    characterSpecIndex: index("character_spec_idx").on(leaderboard.character_spec),
-    factionNameIndex: index("faction_name_idx").on(leaderboard.faction_name),
-    rankIndex: index("rank_idx").on(leaderboard.rank),
-    ratingIndex: index("rating_idx").on(leaderboard.rating),
-    playedIndex: index("played_idx").on(leaderboard.played),
+    us3v3CharacterNameIndex: index("us3v3_character_name_idx").on(leaderboard.character_name),
+    us3v3CharacterIdIndex: index("us3v3_character_id_idx").on(leaderboard.character_id),
+    us3v3CharacterClassIndex: index("us3v3_character_class_idx").on(leaderboard.character_class),
+    us3v3CharacterSpecIndex: index("us3v3_character_spec_idx").on(leaderboard.character_spec),
+    us3v3FactionNameIndex: index("us3v3_faction_name_idx").on(leaderboard.faction_name),
+    us3v3RankIndex: index("us3v3_rank_idx").on(leaderboard.rank),
+    us3v3RatingIndex: index("us3v3_rating_idx").on(leaderboard.rating),
+    us3v3PlayedIndex: index("us3v3_played_idx").on(leaderboard.played),
+    us3v3WinRatioIndex: index("us3v3_win_ratio_idx").on(leaderboard.win_ratio),
   })
 );
+
+export const us2v2Leaderboard = createTable(
+  "us_2v2_leaderboard",
+  {
+    character_name: varchar("character_name", { length: 256 }),
+    character_id: integer("character_id").primaryKey(),
+    character_class: varchar("character_class", { length: 256 }).default(''),
+    character_spec: varchar("character_spec", { length: 256 }).default(''),
+    realm_id: integer("realm_id"),
+    realm_slug: varchar("realm_slug", { length: 256 }),
+    faction_name: varchar("faction_name", { length: 256 }),
+    rank: integer("rank"),
+    rating: integer("rating"),
+    played: integer("played"),
+    win_ratio: numeric("win_ratio"),
+    won: integer("won"),
+    lost: integer("lost"),
+    tier_id: integer("tier_id"),
+    tier_href: varchar("tier_href", { length: 512 }),
+    created_at: timestamp("created_at", { withTimezone: true })
+      .default(sql`CURRENT_TIMESTAMP`)
+    ,
+    updated_at: timestamp("updated_at", { withTimezone: true })
+      .default(sql`CURRENT_TIMESTAMP`)
+
+  },
+  (leaderboard) => ({
+    us2v2CharacterNameIndex: index("us2v2_character_name_idx").on(leaderboard.character_name),
+    us2v2CharacterIdIndex: index("us2v2_character_id_idx").on(leaderboard.character_id),
+    us2v2CharacterClassIndex: index("us2v2_character_class_idx").on(leaderboard.character_class),
+    us2v2CharacterSpecIndex: index("us2v2_character_spec_idx").on(leaderboard.character_spec),
+    us2v2FactionNameIndex: index("us2v2_faction_name_idx").on(leaderboard.faction_name),
+    us2v2RankIndex: index("us2v2_rank_idx").on(leaderboard.rank),
+    us2v2RatingIndex: index("us2v2_rating_idx").on(leaderboard.rating),
+    us2v2PlayedIndex: index("us2v2_played_idx").on(leaderboard.played),
+    us2v2WinRatioIndex: index("us2v2_win_ratio_idx").on(leaderboard.win_ratio)
+  })
+);
+
+export const eu3v3Leaderboard = createTable(
+  "eu_3v3_leaderboard",
+  {
+    character_name: varchar("character_name", { length: 256 }),
+    character_id: integer("character_id").primaryKey(),
+    character_class: varchar("character_class", { length: 256 }).default(''),
+    character_spec: varchar("character_spec", { length: 256 }).default(''),
+    realm_id: integer("realm_id"),
+    realm_slug: varchar("realm_slug", { length: 256 }),
+    faction_name: varchar("faction_name", { length: 256 }),
+    rank: integer("rank"),
+    rating: integer("rating"),
+    played: integer("played"),
+    win_ratio: numeric("win_ratio"),
+    won: integer("won"),
+    lost: integer("lost"),
+    tier_id: integer("tier_id"),
+    tier_href: varchar("tier_href", { length: 512 }),
+    created_at: timestamp("created_at", { withTimezone: true })
+      .default(sql`CURRENT_TIMESTAMP`)
+    ,
+    updated_at: timestamp("updated_at", { withTimezone: true })
+      .default(sql`CURRENT_TIMESTAMP`)
+
+  },
+  (leaderboard) => ({
+    eu3v3CharacterNameIndex: index("eu3v3_character_name_idx").on(leaderboard.character_name),
+    eu3v3CharacterIdIndex: index("eu3v3_character_id_idx").on(leaderboard.character_id),
+    eu3v3CharacterClassIndex: index("eu3v3_character_class_idx").on(leaderboard.character_class),
+    eu3v3CharacterSpecIndex: index("eu3v3_character_spec_idx").on(leaderboard.character_spec),
+    eu3v3FactionNameIndex: index("eu3v3_faction_name_idx").on(leaderboard.faction_name),
+    eu3v3RankIndex: index("eu3v3_rank_idx").on(leaderboard.rank),
+    eu3v3RatingIndex: index("eu3v3_rating_idx").on(leaderboard.rating),
+    eu3v3PlayedIndex: index("eu3v3_played_idx").on(leaderboard.played),
+    eu3v3WinRatioIndex: index("eu3v3_win_ratio_idx").on(leaderboard.win_ratio),
+  })
+);
+
+export const eu2v2Leaderboard = createTable(
+  "eu_2v2_leaderboard",
+  {
+    character_name: varchar("character_name", { length: 256 }),
+    character_id: integer("character_id").primaryKey(),
+    character_class: varchar("character_class", { length: 256 }).default(''),
+    character_spec: varchar("character_spec", { length: 256 }).default(''),
+    realm_id: integer("realm_id"),
+    realm_slug: varchar("realm_slug", { length: 256 }),
+    faction_name: varchar("faction_name", { length: 256 }),
+    rank: integer("rank"),
+    rating: integer("rating"),
+    played: integer("played"),
+    win_ratio: numeric("win_ratio"),
+    won: integer("won"),
+    lost: integer("lost"),
+    tier_id: integer("tier_id"),
+    tier_href: varchar("tier_href", { length: 512 }),
+    created_at: timestamp("created_at", { withTimezone: true })
+      .default(sql`CURRENT_TIMESTAMP`)
+    ,
+    updated_at: timestamp("updated_at", { withTimezone: true })
+      .default(sql`CURRENT_TIMESTAMP`)
+
+  },
+  (leaderboard) => ({
+    eu2v2CharacterNameIndex: index("eu2v2_character_name_idx").on(leaderboard.character_name),
+    eu2v2CharacterIdIndex: index("eu2v2_character_id_idx").on(leaderboard.character_id),
+    eu2v2CharacterClassIndex: index("eu2v2_character_class_idx").on(leaderboard.character_class),
+    eu2v2CharacterSpecIndex: index("eu2v2_character_spec_idx").on(leaderboard.character_spec),
+    eu2v2FactionNameIndex: index("eu2v2_faction_name_idx").on(leaderboard.faction_name),
+    eu2v2RankIndex: index("eu2v2_rank_idx").on(leaderboard.rank),
+    eu2v2RatingIndex: index("eu2v2_rating_idx").on(leaderboard.rating),
+    eu2v2PlayedIndex: index("eu2v2_played_idx").on(leaderboard.played),
+    eu2v2WinRatioIndex: index("eu2v2_win_ratio_idx").on(leaderboard.win_ratio),
+  })
+);
+
 
 export const authToken = createTable(
   "auth_token",
@@ -73,10 +190,10 @@ export const usRealms = createTable(
   {
     id: serial("id").primaryKey(),
     realm_name: varchar("realm_name", { length: 256 }),
-   
+
   },
   (usRealms) => ({
     usRealmsIndex: index("realm_name_idx").on(usRealms.realm_name),
-    
+
   })
 );

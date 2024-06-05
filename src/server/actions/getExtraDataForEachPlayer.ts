@@ -1,23 +1,41 @@
 import axios from 'axios';
 import { db } from '~/server/db';
 import { getAuthToken } from '~/server/actions/getAuthToken';
-import { us3v3Leaderboard } from '~/server/db/schema';
+import { us3v3Leaderboard, us2v2Leaderboard } from '~/server/db/schema';
 import { eq } from 'drizzle-orm';
 
-export const getExtraDataForEachPlayer = async () => {
+
+
+
+const bracketMapping = {
+    '3v3': {
+        table: us3v3Leaderboard,
+        apiEndpoint: 'https://us.api.blizzard.com/data/wow/pvp-season/37/pvp-leaderboard/3v3'
+    },
+    '2v2': {
+        table: us2v2Leaderboard,
+        apiEndpoint: 'https://us.api.blizzard.com/data/wow/pvp-season/37/pvp-leaderboard/2v2'
+    },
+
+};
+
+export const getExtraDataForEachPlayer = async (bracket: string) => {
+    if (!bracketMapping[bracket as keyof typeof bracketMapping]) {
+        throw new Error(`Invalid bracket: ${bracket}`);
+    }
+
+    const { table, apiEndpoint } = bracketMapping[bracket as keyof typeof bracketMapping];
+
     let requests = [];
     console.log('Updating extra data for each player')
     // Retrieve all leaderboard entries without a class_spec
-    const leaderboardData = await db.query.us3v3Leaderboard.findMany({
-        where: eq(us3v3Leaderboard.character_class, '')
-    });
-
+    const leaderboardData = await db.select().from(table).where(eq(table.character_class, ''));
 
     for (const character of leaderboardData) {
         const { character_name: characterName, realm_slug: realmSlug } = character;
 
         if (characterName && realmSlug) {
-            requests.push(updateCharacterData(characterName, realmSlug));
+            requests.push(updateCharacterData(characterName, realmSlug, table));
 
             // Process in batches of 30 requests
             if (requests.length >= 30) {
@@ -33,16 +51,16 @@ export const getExtraDataForEachPlayer = async () => {
     console.log('Extra data updated successfully');
 };
 
-const updateCharacterData = async (characterName: string, realmSlug: string) => {
+const updateCharacterData = async (characterName: string, realmSlug: string, table: any) => {
     try {
         const characterData = await getPlayerData(characterName, realmSlug);
         if (characterData) {
-            await db.update(us3v3Leaderboard)
+            await db.update(table)
                 .set({
                     character_spec: characterData.active_spec.name,
                     character_class: characterData.character_class.name,
                 })
-                .where(eq(us3v3Leaderboard.character_name, characterName))
+                .where(eq(table.character_name, characterName))
         }
     } catch (error: any) {
         console.error(`Failed to update for ${characterName}: ${error.message}`);
@@ -63,7 +81,7 @@ const getPlayerData = async (characterName: string, realmSlug: string): Promise<
     } catch (error: any) {
         if (error.response && error.response.status === 404) {
             console.log(`Character ${characterName}-${realmSlug} not found`);
-            
+
         }
         if (error.response && error.response.status === 401) {
             console.log('Token expired, refreshing token and retrying the request...');
