@@ -7,22 +7,17 @@ import { updateURLParameter } from '~/utils/helper/updateURL';
 
 const RegionSearch = () => {
     const { setCurrentPage } = useSearch();
-    
-    const [ region, setRegion ] = useState('us');
+    const [region, setRegion] = useState('us');
     const handleClick = (newRegion: string) => {
         if (newRegion === region) return;
         setRegion(newRegion);
-        
-    }
 
+    }
 
     useEffect(() => {
         updateURLParameter('regions', region === 'us' ? '' : region, true);
         setCurrentPage(1);
     }, [region]);
-
-
-
 
     return (
         <div className='flex text-black items-center justify-center w-1/5 rounded-lg gap-8 border-[1px] border-gray-700'>
@@ -41,7 +36,7 @@ const RegionSearch = () => {
             <div
                 className={`cursor-pointer rounded-full w-12 h-12 flex items-center justify-center ${region === 'eu' ? 'border-2 border-blue-500' : ''}`}
                 onClick={() => handleClick('eu')}
-                          >
+            >
                 <Image
                     className='rounded-full'
                     src={euImage}

@@ -1,7 +1,6 @@
 import axios from 'axios';
 import React, { useState, useEffect, useRef } from 'react';
 import { FiLoader } from 'react-icons/fi';
-
 import { useSearch } from '~/components/Context/SearchContext';
 import { updateURLParameter } from '~/utils/helper/updateURL';
 import useDebounce from '~/utils/hooks/useDebounce';

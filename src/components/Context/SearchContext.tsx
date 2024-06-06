@@ -1,6 +1,4 @@
 // SearchContext.tsx
-import axios from 'axios';
-import { get } from 'node_modules/axios/index.cjs';
 import React, { createContext, useContext, useState, Dispatch, SetStateAction, ReactNode, useEffect } from 'react';
 
 interface SearchContextType {

@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { FiChevronsRight, FiChevronsLeft } from "react-icons/fi";
 import useDebounce from "~/utils/hooks/useDebounce";
 import { useSearch } from "./Context/SearchContext";
-import { updateURLParameter } from '~/utils/helper/updateURL';
 
 const ScrollTab = ({ resultsPerPage }: { resultsPerPage: number }) => {
     const { resultsCount, currentPage, setCurrentPage } = useSearch();
@@ -32,10 +31,18 @@ const ScrollTab = ({ resultsPerPage }: { resultsPerPage: number }) => {
         setInputValue(value);
     };
 
+    const updateURLParameter = (key: string, value: string) => {
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.set(key, value);
+        const newUrl = `${window.location.pathname}?${urlParams.toString()}`;
+        if(value === '1') return window.history.pushState(null, '', '/');
+        window.history.pushState(null, '', newUrl);
+    };
+
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
         setInputValue('');
-        updateURLParameter('page', page === 1 ? null : page.toString());
+        updateURLParameter('page', page.toString());
     };
 
     useEffect(() => {

@@ -1,37 +1,35 @@
 import axios from 'axios';
 import { db } from '~/server/db';
-import { us3v3Leaderboard, us2v2Leaderboard, eu3v3Leaderboard, eu2v2Leaderboard } from '~/server/db/schema';
 import { getAuthToken } from '~/server/actions/getAuthToken';
 import { and, eq } from 'drizzle-orm/expressions';
+import {
+    versionRegionBracketMapping,
+    BracketMapping,
+    RegionMapping,
+    VersionMapping
+} from '~/utils/helper/leaderboardMapping';
 
-const bracketMapping = {
-    '3v3': {
-        table: us3v3Leaderboard,
-        apiEndpoint: 'https://us.api.blizzard.com/data/wow/pvp-season/37/pvp-leaderboard/3v3'
-    },
-    '2v2': {
-        table: us2v2Leaderboard,
-        apiEndpoint: 'https://us.api.blizzard.com/data/wow/pvp-season/37/pvp-leaderboard/2v2'
-    },
-    
-};
 
-export const updateLeaderboard = async (bracket: string): Promise<void> => {
-    if (!bracketMapping[bracket as keyof typeof bracketMapping]) {
-        throw new Error(`Invalid bracket: ${bracket}`);
+export const updateLeaderboard = async (version: keyof VersionMapping, region: keyof RegionMapping, bracket: keyof BracketMapping): Promise<void> => {
+    const versionMapping = versionRegionBracketMapping[version];
+    if (!versionMapping) {
+        throw new Error(`Invalid version: ${version}`);
+    }
+    const regionMapping = versionMapping[region];
+    if (!regionMapping || !regionMapping[bracket]) {
+        throw new Error(`Invalid region or bracket: ${region} ${bracket}`);
     }
 
-    const { table, apiEndpoint } = bracketMapping[bracket as keyof typeof bracketMapping];
-    let requests = [];
-    
+    const { table, apiEndpoint, params } = regionMapping[bracket];
+    let requests: Promise<any>[] = [];
+
     try {
         const authToken = await getAuthToken(false);
         const response = await axios.get(apiEndpoint, {
             params: {
-                namespace: 'dynamic-us',
-                locale: 'en_US',
+                ...params,
                 access_token: authToken
-            },
+            }
         });
 
         if (response.data && response.data.entries) {
@@ -53,14 +51,14 @@ export const updateLeaderboard = async (bracket: string): Promise<void> => {
                 win_ratio: Math.round((item.season_match_statistics.won / item.season_match_statistics.played) * 100)
             }));
 
-            console.log('Leaderboard data fetched starting to insert on db');
-            
+            console.log(`Updating leaderboard data for ${version} ${region} ${bracket}...`);
+
             for (let data of formattedData) {
                 requests.push(handleDataInsert(data, table));
 
                 if (requests.length >= 100) {
                     await Promise.all(requests);
-                    requests.length = 0; 
+                    requests.length = 0;
                 }
             }
 
@@ -68,7 +66,7 @@ export const updateLeaderboard = async (bracket: string): Promise<void> => {
                 await Promise.all(requests);
             }
 
-            console.log('Leaderboard data updated successfully');
+            console.log(`Leaderboard data updated successfully for ${version} ${region} ${bracket}!`);
         } else {
             console.log('No entries found in the response');
         }
@@ -77,7 +75,7 @@ export const updateLeaderboard = async (bracket: string): Promise<void> => {
         if (error.response && error.response.status === 401) {
             console.log('Token expired, refreshing token and retrying the request...');
             await getAuthToken(true);
-            return updateLeaderboard(bracket);
+            return updateLeaderboard(version, region, bracket);
         }
     }
 }
@@ -86,28 +84,27 @@ const handleDataInsert = async (data: any, table: any) => {
     const existingRecord = await db
         .select()
         .from(table)
-        .where(and(
-            eq(table.character_name, data.character_name),
-            eq(table.realm_slug, data.realm_slug)
-        ));
+        .where(eq(table.character_id, data.character_id))
+        .limit(1);
 
-    if (existingRecord.length === 0) {
-        console.log(`Inserting new record for ${data.character_name} with ${data.rating}`);
-        return await db.insert(table).values(data);
-    }
-
-    if (existingRecord.length > 0 && existingRecord[0]?.played !== data.played) {
-        console.log(`Updating record for ${data.character_name} with ${data.rating} from ${existingRecord[0]?.played} games played to ${data.played} games played`);
+    if (existingRecord.length === 0) return await db.insert(table).values(data);
+    if (existingRecord[0]?.played !== data.played) {
+        // console.log(`Updating record for ${data.character_name} with ${data.rating} from ${existingRecord[0]?.played} games played to ${data.played} games played`);
         await db.update(table).set({
+            character_name: data.character_name,
+            character_class: data.character_class,
+            character_spec: data.character_spec,
+            realm_id: data.realm_id,
+            realm_slug: data.realm_slug,
+            faction_name: data.faction_name,
             rank: data.rank,
             rating: data.rating,
             played: data.played,
             won: data.won,
             lost: data.lost,
+            tier_id: data.tier_id,
+            tier_href: data.tier_href,
             updated_at: new Date()
-        }).where(and(
-            eq(table.character_name, data.character_name),
-            eq(table.realm_slug, data.realm_slug)
-        ));
+        }).where(eq(table.character_id, data.character_id));
     }
 }

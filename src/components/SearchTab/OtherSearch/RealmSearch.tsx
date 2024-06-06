@@ -2,7 +2,6 @@ import axios from 'axios';
 import React, { useEffect, useState, useRef } from 'react';
 import { useSearch } from '~/components/Context/SearchContext';
 import { FiChevronDown, FiLoader, FiMinusCircle } from 'react-icons/fi';
-import { text } from 'stream/consumers';
 import { updateURLParameter } from '~/utils/helper/updateURL';
 
 interface Realm {

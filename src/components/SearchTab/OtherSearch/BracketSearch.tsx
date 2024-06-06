@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useEffect } from 'react';
-import { useRouter } from 'next/router';
 import { updateURLParameter } from '~/utils/helper/updateURL';
 import { useSearch } from '~/components/Context/SearchContext';
 

@@ -6,8 +6,7 @@ import LeaderboardRow from './LeaderboardRow';
 import axios from 'axios';
 import { useSearch } from '../Context/SearchContext';
 import useURLChange from '~/utils/hooks/useURLChange';
-import { useRouter } from 'next/router';
-import BracketSearch from '../SearchTab/OtherSearch/BracketSearch';
+
 
 const LeaderBoardTable = ({ searchTabs, resultsPerPage, rowHeight }: { searchTabs: any, resultsPerPage: number, rowHeight: number }) => {
     const { setResultsCount } = useSearch();
