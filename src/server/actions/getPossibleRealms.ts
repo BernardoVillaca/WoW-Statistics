@@ -10,7 +10,6 @@ export const getPossibleRealms = async (): Promise<void> => {
     let requests = [];
 
     for (const data of leaderboardData) {
-        console.log('Checking if', data.realm_slug, 'exists in the database');
         requests.push(handleRealmInsert(data));
 
         if (requests.length >= 50) {
@@ -39,7 +38,5 @@ const handleRealmInsert = async (data: any) => {
         } catch (error: any) {
             console.log(error.message);
         }
-    } else {
-        console.log(data.realm_slug, 'already exists in the database');
     }
 };

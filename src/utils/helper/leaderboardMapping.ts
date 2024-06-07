@@ -11,6 +11,7 @@ export type LeaderboardMapping = {
     table: any; // Replace `any` with the actual type if possible
     apiEndpoint: string;
     characterApiEndpoint: string;
+    armoryEndpoint: string;
     params: LeaderboardParams;
     profileParams: LeaderboardParams; // Added profileParams
 };
@@ -37,6 +38,7 @@ export const versionRegionBracketMapping: VersionMapping = {
                 table: eu3v3Leaderboard,
                 apiEndpoint: 'https://eu.api.blizzard.com/data/wow/pvp-season/37/pvp-leaderboard/3v3',
                 characterApiEndpoint: 'https://eu.api.blizzard.com/profile/wow/character/',
+                armoryEndpoint: 'https://worldofwarcraft.blizzard.com/en-gb/character/eu/',
                 params: {
                     namespace: 'dynamic-eu',
                     locale: 'en_GB'
@@ -50,6 +52,7 @@ export const versionRegionBracketMapping: VersionMapping = {
                 table: eu2v2Leaderboard,
                 apiEndpoint: 'https://eu.api.blizzard.com/data/wow/pvp-season/37/pvp-leaderboard/2v2',
                 characterApiEndpoint: 'https://eu.api.blizzard.com/profile/wow/character/',
+                armoryEndpoint: 'https://worldofwarcraft.blizzard.com/en-gb/character/eu/',
                 params: {
                     namespace: 'dynamic-eu',
                     locale: 'en_GB'
@@ -65,6 +68,7 @@ export const versionRegionBracketMapping: VersionMapping = {
                 table: us3v3Leaderboard,
                 apiEndpoint: 'https://us.api.blizzard.com/data/wow/pvp-season/37/pvp-leaderboard/3v3',
                 characterApiEndpoint: 'https://us.api.blizzard.com/profile/wow/character/',
+                armoryEndpoint: 'https://worldofwarcraft.blizzard.com/en-us/character/us/',
                 params: {
                     namespace: 'dynamic-us',
                     locale: 'en_US'
@@ -78,6 +82,7 @@ export const versionRegionBracketMapping: VersionMapping = {
                 table: us2v2Leaderboard,
                 apiEndpoint: 'https://us.api.blizzard.com/data/wow/pvp-season/37/pvp-leaderboard/2v2',
                 characterApiEndpoint: 'https://us.api.blizzard.com/profile/wow/character/',
+                armoryEndpoint: 'https://worldofwarcraft.blizzard.com/en-us/character/us/',
                 params: {
                     namespace: 'dynamic-us',
                     locale: 'en_US'
@@ -95,6 +100,7 @@ export const versionRegionBracketMapping: VersionMapping = {
                 table: classicEu3v3Leaderboard,
                 apiEndpoint: 'https://eu.api.blizzard.com/data/wow/pvp-season/9/pvp-leaderboard/3v3',
                 characterApiEndpoint: 'https://eu.api.blizzard.com/profile/wow/character/',
+                armoryEndpoint: '',
                 params: {
                     namespace: 'dynamic-classic-eu',
                     locale: 'en_GB'
@@ -108,6 +114,7 @@ export const versionRegionBracketMapping: VersionMapping = {
                 table: classicEu2v2Leaderboard,
                 apiEndpoint: 'https://eu.api.blizzard.com/data/wow/pvp-season/9/pvp-leaderboard/2v2',
                 characterApiEndpoint: 'https://eu.api.blizzard.com/profile/wow/character/',
+                armoryEndpoint: '',
                 params: {
                     namespace: 'dynamic-classic-eu',
                     locale: 'en_GB'
@@ -123,6 +130,7 @@ export const versionRegionBracketMapping: VersionMapping = {
                 table: classicUs3v3Leaderboard,
                 apiEndpoint: 'https://us.api.blizzard.com/data/wow/pvp-season/9/pvp-leaderboard/3v3',
                 characterApiEndpoint: 'https://us.api.blizzard.com/profile/wow/character/',
+                armoryEndpoint: '',
                 params: {
                     namespace: 'dynamic-classic-us',
                     locale: 'en_US'
@@ -136,6 +144,7 @@ export const versionRegionBracketMapping: VersionMapping = {
                 table: classicUs2v2Leaderboard,
                 apiEndpoint: 'https://us.api.blizzard.com/data/wow/pvp-season/9/pvp-leaderboard/2v2',
                 characterApiEndpoint: 'https://us.api.blizzard.com/profile/wow/character/',
+                armoryEndpoint: '',
                 params: {
                     namespace: 'dynamic-classic-us',
                     locale: 'en_US'
