@@ -15,7 +15,7 @@ const RegionSearch = () => {
     }
 
     useEffect(() => {
-        updateURLParameter('regions', region === 'us' ? '' : region, true);
+        updateURLParameter('region', region === 'us' ? '' : region, true, false);
         setCurrentPage(1);
     }, [region]);
 

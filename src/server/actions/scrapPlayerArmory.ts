@@ -22,13 +22,12 @@ export const scrapPlayerArmory = async (characterName: string, realmSlug: string
         if (jsonStringMatch && jsonStringMatch[0]) {
             const jsonString = jsonStringMatch[0];
             const characterData = JSON.parse(jsonString);
-             
-            // Correctly access the class and spec information
+                         
             const characterSpec: string = characterData.character.spec && characterData.character.spec.name;
             const characterClass: string = characterData.character.class && characterData.character.class.name;
 
-            console.log('Character Spec:', characterSpec);
-            console.log('Character Class:', characterClass);
+            // console.log('Character Spec:', characterSpec);
+            // console.log('Character Class:', characterClass);
 
             return {
                 characterClass,

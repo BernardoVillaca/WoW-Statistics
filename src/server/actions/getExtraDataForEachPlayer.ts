@@ -8,7 +8,7 @@ import {
     BracketMapping,
     RegionMapping,
     VersionMapping
-} from '~/utils/helper/leaderboardMapping';
+} from '~/utils/helper/versionRegionBracketMapping';
 import { scrapPlayerArmory } from './scrapPlayerArmory';
 
 export const getExtraDataForEachPlayer = async (version: keyof VersionMapping, region: keyof RegionMapping, bracket: keyof BracketMapping) => {

@@ -7,7 +7,7 @@ import {
     BracketMapping,
     RegionMapping,
     VersionMapping
-} from '~/utils/helper/leaderboardMapping';
+} from '~/utils/helper/versionRegionBracketMapping';
 
 
 export const updateLeaderboard = async (version: keyof VersionMapping, region: keyof RegionMapping, bracket: keyof BracketMapping): Promise<void> => {

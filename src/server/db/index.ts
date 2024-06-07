@@ -33,10 +33,10 @@ const doFirstRun = async () => {
     // await updateLeaderboard('classic', 'eu', '2v2');
     // await updateLeaderboard('classic', 'eu', '3v3');
 
-    await getExtraDataForEachPlayer('retail', 'us', '3v3');
-    await getExtraDataForEachPlayer('retail', 'us', '2v2');
-    await getExtraDataForEachPlayer('retail', 'eu', '3v3');
-    await getExtraDataForEachPlayer('retail', 'eu', '2v2');
+    // await getExtraDataForEachPlayer('retail', 'us', '3v3');
+    // await getExtraDataForEachPlayer('retail', 'us', '2v2');
+    // await getExtraDataForEachPlayer('retail', 'eu', '3v3');
+    // await getExtraDataForEachPlayer('retail', 'eu', '2v2');
 
     // await getExtraDataForEachPlayer('classic', 'us', '3v3');
     // await getExtraDataForEachPlayer('classic', 'us', '2v2');

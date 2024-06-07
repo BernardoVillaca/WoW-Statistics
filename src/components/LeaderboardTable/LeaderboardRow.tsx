@@ -3,7 +3,7 @@ import LeaderboardCell from './LeaderboardCell'
 
 const LeaderboardRow = ({ characterData, searchTabs, rowHeight}: { characterData: any, searchTabs: any, rowHeight: number}) => {
     return (
-        <div key={characterData.id} className="bg-gray-800 flex  border-b-[2px] border-gray-700 " style={{ height: rowHeight }}>
+        <div className="bg-gray-800 flex  border-b-[2px] border-gray-700 " style={{ height: rowHeight }}>
             {searchTabs.map((tab: any, index: number) => (
                 <LeaderboardCell
                     key={`${characterData.id}-${tab.name}`}

@@ -7,22 +7,22 @@ import axios from 'axios';
 import { useSearch } from '../Context/SearchContext';
 import useURLChange from '~/utils/hooks/useURLChange';
 
-
 const LeaderBoardTable = ({ searchTabs, resultsPerPage, rowHeight }: { searchTabs: any, resultsPerPage: number, rowHeight: number }) => {
     const { setResultsCount } = useSearch();
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
     const queryParams = useURLChange();
-  
+
     const getQueryParams = () => {
-        const params = new URLSearchParams(queryParams || '');
+        const params = new URLSearchParams(queryParams || '');``
         return {
+            version: params.get('version') || 'retail',
+            region: params.get('region') || 'us',
+            bracket: params.get('bracket') || '3v3',
             page: params.get('page') || 1,
             search: params.get('search') || '',
             faction: params.get('faction') || '',
             realm: params.get('realm') || '',
-            bracket: params.get('bracket') || '',
-            region: params.get('region') || '',
             minRating: parseInt(params.get('minRating') ?? '0'),
             maxRating: parseInt(params.get('maxRating') ?? '4000')
         };
@@ -30,18 +30,20 @@ const LeaderBoardTable = ({ searchTabs, resultsPerPage, rowHeight }: { searchTab
 
     const getData = async () => {
         setLoading(true);
-        const { page, search, faction, realm, minRating, maxRating, bracket, region } = getQueryParams();
+        const queryParams = getQueryParams();
+
+        // Filter out empty parameters and default min/max ratings
+        const filteredParams = Object.fromEntries(
+            Object.entries(queryParams).filter(([key, value]) => {
+                if (key === 'page' && value === 1) return false;
+                if (key === 'minRating' && value === 0) return false;
+                if (key === 'maxRating' && value === 4000) return false;
+                return value !== '' && value !== null;
+            })
+        );
+
         const response = await axios.get(`/api/get50Results`, {
-            params: {
-                page,
-                search,
-                faction,
-                realm,
-                minRating,
-                bracket,
-                maxRating,
-                region
-            }
+            params: filteredParams
         });
         setResultsCount(response.data.total);
         setData(response.data.results);
@@ -63,10 +65,10 @@ const LeaderBoardTable = ({ searchTabs, resultsPerPage, rowHeight }: { searchTab
                     <FiLoader className="animate-spin text-white" size={50} />
                 </div>
             )}
-            {!loading && data.map((characterData: { [key: string]: any }) => (
+            {!loading && data.map((characterData: { [key: string]: any }, index) => (
                 characterData.character_class !== '' ? (
                     <LeaderboardRow
-                        key={characterData.id}
+                        key={`${characterData.id}-${index}`}
                         characterData={characterData}
                         searchTabs={searchTabs}
                         rowHeight={rowHeight}
