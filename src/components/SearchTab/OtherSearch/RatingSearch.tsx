@@ -1,15 +1,12 @@
 import axios from 'axios';
-import { min } from 'drizzle-orm';
 import React, { useState, useEffect } from 'react';
 import { FiLoader } from 'react-icons/fi';
 import { useSearch } from '~/components/Context/SearchContext';
 import { updateURL } from '~/utils/helper/updateURL';
-import useDebounce from '~/utils/hooks/useDebounce';
 import useURLChange from '~/utils/hooks/useURLChange';
 
 const RatingSearch = () => {
     const { setCurrentPage } = useSearch();
-
     const queryParams = useURLChange();
 
     const getQueryParams = () => {
@@ -25,27 +22,22 @@ const RatingSearch = () => {
 
     const { version, region, bracket, minRating, maxRating } = getQueryParams();
 
-    const [minSliderValue, setMinSliderValue] = useState<number >(0);
-    const [maxSliderValue, setMaxSliderValue] = useState<number >(0);
-
-    const [minInputValue, setMinInputValue] = useState<number >( 0);
-    const [maxInputValue, setMaxInputValue] = useState<number >( 0);
-
+    const [minSliderValue, setMinSliderValue] = useState(0);
+    const [maxSliderValue, setMaxSliderValue] = useState(0);
+    const [minInputValue, setMinInputValue] = useState(0);
+    const [maxInputValue, setMaxInputValue] = useState(0);
     const [isDataFetched, setIsDataFetched] = useState(false);
-    
 
     useEffect(() => {
         let isMounted = true;
-    
+
         const fetchRatings = async () => {
-            console.log('fetching ratings')
             try {
                 const response = await axios.get(`/api/getMinMaxRating`, {
                     params: { version, region, bracket }
                 });
                 const { highestRating, lowestRating } = response.data;
                 if (isMounted) {
-                    console.log('highestRating:', highestRating, 'lowestRating:', lowestRating);
                     setMinSliderValue(lowestRating);
                     setMaxSliderValue(highestRating);
                     setMinInputValue(Math.max(minRating || lowestRating, lowestRating));
@@ -56,32 +48,28 @@ const RatingSearch = () => {
                 console.error('Error fetching ratings:', error);
             }
         };
-    
+
         fetchRatings();
-    
+
         return () => {
             isMounted = false;
         };
     }, [version, region, bracket]);
-    
 
     useEffect(() => {
-        if ( minInputValue || maxInputValue) {
+        if (minInputValue || maxInputValue) {
             updateURL('maxRating', maxInputValue === maxSliderValue ? '' : maxInputValue.toString(), true);
             updateURL('minRating', minInputValue === minSliderValue ? '' : minInputValue.toString(), true);
             setCurrentPage(1);
         }
     }, [minInputValue, maxInputValue]);
 
-
     const handleMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-       
         const value = Math.min(Number(e.target.value), maxInputValue - 1);
         setMinInputValue(value);
     };
 
     const handleMaxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-       
         const value = Math.max(Number(e.target.value), minInputValue + 1);
         setMaxInputValue(value);
     };
@@ -95,7 +83,6 @@ const RatingSearch = () => {
     }
 
     return (
-        
         <div className='flex flex-col items-center justify-center w-1/5 p-4 rounded-lg border border-gray-700'>
             <div className='relative w-full h-10'>
                 <input
