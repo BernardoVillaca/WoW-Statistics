@@ -4,6 +4,7 @@ import ScrollTab from "~/components/ScrollTab";
 import SearchTab from "~/components/SearchTab";
 import { SearchProvider } from "~/components/Context/SearchContext";
 import LeaderBoardTable from "~/components/LeaderboardTable";
+import VersionSearch from "~/components/SearchTab/VersionSearch";
 
 
 const searchTabs = [
@@ -28,6 +29,7 @@ const HomePage = () => {
   return (
     <main className="flex min-h-screen bg-gradient-to-b from-[#000080] to-black text-white relative">
       <div className="flex flex-col w-full gap-4 pt-4">
+        <VersionSearch />
         <SearchTab />
         <ScrollTab resultsPerPage={resultsPerPage} />
         <div className="flex h-16 bg-black justify-between rounded-xl">

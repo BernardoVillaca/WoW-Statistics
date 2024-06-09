@@ -14,15 +14,15 @@ const LeaderBoardTable = ({ searchTabs, resultsPerPage, rowHeight }: { searchTab
     const queryParams = useURLChange();
 
     const getQueryParams = () => {
-        const params = new URLSearchParams(queryParams || '');``
+        const params = new URLSearchParams(queryParams || ''); ``
         return {
             version: params.get('version') || 'retail',
             region: params.get('region') || 'us',
             bracket: params.get('bracket') || '3v3',
             page: params.get('page') || 1,
-            search: params.get('search') || '',
-            faction: params.get('faction') || '',
-            realm: params.get('realm') || '',
+            search: params.get('search') || params.delete('search'),
+            faction: params.get('faction') || params.delete('faction'),
+            realm: params.get('realm') || params.delete('realm'),
             minRating: parseInt(params.get('minRating') ?? '0'),
             maxRating: parseInt(params.get('maxRating') ?? '4000')
         };

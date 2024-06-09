@@ -1,22 +1,31 @@
 'use client'
 
 import React, { useEffect } from 'react';
-import { updateURLParameter } from '~/utils/helper/updateURL';
+import { updateURL } from '~/utils/helper/updateURL';
 import { useSearch } from '~/components/Context/SearchContext';
 
 const BracketSearch = () => {
-    const {setCurrentPage} = useSearch();
-    const [bracket, setBracket] = React.useState('3v3');
+    const { setCurrentPage } = useSearch();
+    const [bracket, setBracket] = React.useState('');
     // const router = useRouter();
 
     const handleClick = (newBracket: string) => {
         if (newBracket === bracket) return;
         setBracket(newBracket);
-       
+
     };
+
     useEffect(() => {
-        updateURLParameter('bracket', bracket === '3v3' ? '' : bracket, true);
-        setCurrentPage(1);
+        const urlParams = new URLSearchParams(window.location.search);
+        const initialBracket = urlParams.get('bracket') || '3v3';
+        setBracket(initialBracket);
+    }, []);
+
+    useEffect(() => {
+        if (bracket) {
+            updateURL('bracket', bracket === '3v3' ? '' : bracket, true);
+            setCurrentPage(1);
+        }
     }, [bracket]);
 
     return (

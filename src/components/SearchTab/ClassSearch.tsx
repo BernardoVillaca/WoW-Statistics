@@ -3,7 +3,7 @@ import Image from 'next/image';
 import specIconsMap from '~/utils/helper/specIconsMap';
 import classIconsMap from '~/utils/helper/classIconsMap';
 import { useSearch } from '../Context/SearchContext';
-import { updateURLParameter } from '~/utils/helper/updateURL';
+import { updateURL } from '~/utils/helper/updateURL';
 
 const classSpecs: { [key: string]: string[] } = {
     'Evoker': ['Preservation Evoker', 'Devastation Evoker'],
@@ -46,8 +46,18 @@ const ClassSearch = () => {
     };
 
     useEffect(() => {
-        setCurrentPage(1);
-        updateURLParameter('search', selectedSpecs.length > 0 ? selectedSpecs.join(',') : null, true);
+        const urlParams = new URLSearchParams(window.location.search);
+        const initialSearch = urlParams.get('search');
+        if (initialSearch) {
+            setSelectedSpecs(initialSearch.split(','));
+        }
+    }, []);
+
+    useEffect(() => {
+        if (selectedSpecs) {
+            setCurrentPage(1);
+            updateURL('search', selectedSpecs.length > 0 ? selectedSpecs.join(',') : null, true);
+        }
     }, [selectedSpecs]);
 
     return (
@@ -59,8 +69,7 @@ const ClassSearch = () => {
                         alt={className}
                         width={30}
                         height={30}
-                        className={`rounded-lg overflow-hidden cursor-pointer ${classSpecs[className]?.every(spec => selectedSpecs.includes(spec)) ? 'border-2 border-blue-500' : ''
-                            }`}
+                        className={`rounded-lg overflow-hidden cursor-pointer ${classSpecs[className]?.every(spec => selectedSpecs.includes(spec)) ? 'border-2 border-blue-500' : ''}`}
                         onClick={() => toggleClassSelection(className)}
                     />
                     <div className='flex flex-col gap-4 pt-4'>
@@ -71,8 +80,7 @@ const ClassSearch = () => {
                                 alt={spec}
                                 width={30}
                                 height={30}
-                                className={`rounded-lg overflow-hidden cursor-pointer ${selectedSpecs.includes(spec) ? 'border-2 border-blue-500' : ''
-                                    }`}
+                                className={`rounded-lg overflow-hidden cursor-pointer ${selectedSpecs.includes(spec) ? 'border-2 border-blue-500' : ''}`}
                                 onClick={() => toggleSpecSelection(spec)}
                             />
                         ))}

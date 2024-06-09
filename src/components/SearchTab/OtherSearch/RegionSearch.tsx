@@ -3,20 +3,29 @@ import Image from 'next/image';
 import { useSearch } from '../../Context/SearchContext';
 import usImage from '../../../assets/Regions/us.png';
 import euImage from '../../../assets/Regions/eu.png';
-import { updateURLParameter } from '~/utils/helper/updateURL';
+import { updateURL } from '~/utils/helper/updateURL';
 
 const RegionSearch = () => {
     const { setCurrentPage } = useSearch();
-    const [region, setRegion] = useState('us');
+    const [region, setRegion] = useState('');
+
+    // Initialize state based on URL parameter
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const initialRegion = urlParams.get('region') || 'us';
+        setRegion(initialRegion);
+    }, []);
+
     const handleClick = (newRegion: string) => {
         if (newRegion === region) return;
         setRegion(newRegion);
-
     }
 
     useEffect(() => {
-        updateURLParameter('region', region === 'us' ? '' : region, true, false);
-        setCurrentPage(1);
+        if (region) {
+            updateURL('region', region === 'us' ? '' : region, true);
+            setCurrentPage(1);
+        }
     }, [region]);
 
     return (
@@ -49,4 +58,4 @@ const RegionSearch = () => {
     )
 }
 
-export default RegionSearch
+export default RegionSearch;

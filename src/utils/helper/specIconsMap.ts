@@ -37,14 +37,6 @@ import arms_warrior from '../../assets/WoWClasses/Warrior/arms_warrior_spec.jpg'
 import fury_warrior from '../../assets/WoWClasses/Warrior/fury_warrior_spec.jpg';
 import protection_warrior from '../../assets/WoWClasses/Warrior/protection_warrior_spec.jpg';
 
-
-
-
-
-
-
-
-
 const specIconsMap = {
     'Blood Death Knight': blood_deathknight,
     'Frost Death Knight': frost_deathknight,
@@ -55,6 +47,7 @@ const specIconsMap = {
     'Devastation Evoker': devastation_evoker,
     'Balance Druid': balance_druid,
     'Feral Druid': feral_druid,
+    'Feral Combat Druid': feral_druid,
     'Restoration Druid': restoration_druid,
     'Beast Mastery Hunter': beastmastery_hunter,
     'Marksmanship Hunter': marksmanship_hunter,

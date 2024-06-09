@@ -12,11 +12,11 @@ export async function GET(req: NextRequest) {
 
   const versionMapping = versionRegionBracketMapping[version];
   if (!versionMapping) {
-    throw new Error(`Invalid version: ${version}`);
+    return NextResponse.json({ error: `Invalid version: ${version}` }, { status: 400 });
   }
   const regionMapping = versionMapping[region];
   if (!regionMapping || !regionMapping[bracket]) {
-    throw new Error(`Invalid region or bracket: ${region} ${bracket}`);
+    return NextResponse.json({ error: `Invalid region or bracket: ${region} ${bracket}` }, { status: 400 });
   }
 
   const { table } = regionMapping[bracket];
@@ -24,7 +24,7 @@ export async function GET(req: NextRequest) {
   try {
     const [highestRatingResult, lowestRatingResult] = await Promise.all([
       db.select({ highestRating: max(table.rating) }).from(table),
-      db.select({ lowestRating: min(table.rating) }).from(us3v3Leaderboard)
+      db.select({ lowestRating: min(table.rating) }).from(table)
     ]);
 
     const highestRating = highestRatingResult[0]?.highestRating ?? 0;
@@ -33,6 +33,6 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ highestRating, lowestRating });
   } catch (error) {
     console.error('Error executing query:', error);
-    return NextResponse.json({ highestRating: 0, lowestRating: 0 });
+    return NextResponse.json({ error: 'Error fetching ratings. Please try again later.' }, { status: 500 });
   }
 }

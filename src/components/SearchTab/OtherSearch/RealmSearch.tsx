@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState, useRef } from 'react';
 import { useSearch } from '~/components/Context/SearchContext';
 import { FiChevronDown, FiLoader, FiMinusCircle } from 'react-icons/fi';
-import { updateURLParameter } from '~/utils/helper/updateURL';
+import { updateURL } from '~/utils/helper/updateURL';
 
 interface Realm {
     id: number;
@@ -17,7 +17,7 @@ const RealmSearch = () => {
     const [highlightedIndex, setHighlightedIndex] = useState<number>(0);
     const [isDataFetched, setIsDataFetched] = useState(false);
     const [textInput, setTextInput] = useState('');
-    const [realm, setRealm ] = useState('');
+    const [realm, setRealm] = useState('');
     const inputRef = useRef<HTMLInputElement>(null);
 
     if (realm !== '' && textInput === '' && isOpen === false) {
@@ -69,7 +69,7 @@ const RealmSearch = () => {
             setIsOpen(false);
         }
     };
-
+    
     const handleKeyDown = (e: React.KeyboardEvent) => {
         if (!isOpen) setIsOpen(true);
 
@@ -125,8 +125,16 @@ const RealmSearch = () => {
     }, [highlightedIndex, isOpen]);
 
     useEffect(() => {
-        updateURLParameter('realm', realm, true);
-        setCurrentPage(1);
+        const urlParams = new URLSearchParams(window.location.search);
+        const initialRealm = urlParams.get('realm') || '';
+        setRealm(initialRealm);
+    }, []);
+
+    useEffect(() => {
+        if(realm) {
+            updateURL('realm', realm, true);
+            setCurrentPage(1);
+        }
     }, [realm]);
 
 

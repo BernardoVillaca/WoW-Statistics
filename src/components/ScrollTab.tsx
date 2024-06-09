@@ -4,13 +4,12 @@ import { useState, useEffect } from "react";
 import { FiChevronsRight, FiChevronsLeft } from "react-icons/fi";
 import useDebounce from "~/utils/hooks/useDebounce";
 import { useSearch } from "./Context/SearchContext";
+import { updateURL } from "~/utils/helper/updateURL";
 
 const ScrollTab = ({ resultsPerPage }: { resultsPerPage: number }) => {
     const { resultsCount, currentPage, setCurrentPage } = useSearch();
-
     const [inputValue, setInputValue] = useState(currentPage || '');
     const totalPages = Math.ceil(resultsCount / resultsPerPage);
-
     const debouncedInputValue = useDebounce(inputValue, 1000);
 
     const getDisplayedPages = () => {
@@ -31,27 +30,31 @@ const ScrollTab = ({ resultsPerPage }: { resultsPerPage: number }) => {
         setInputValue(value);
     };
 
-    const updateURLParameter = (key: string, value: string) => {
-        const urlParams = new URLSearchParams(window.location.search);
-        urlParams.set(key, value);
-        const newUrl = `${window.location.pathname}?${urlParams.toString()}`;
-        if(value === '1') return window.history.pushState(null, '', '/');
-        window.history.pushState(null, '', newUrl);
-    };
-
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
         setInputValue('');
-        updateURLParameter('page', page.toString());
     };
+
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const initialPage = parseInt(urlParams.get('page') || '1', 10);
+        setCurrentPage(initialPage);
+        setInputValue(initialPage);
+    }, []);
 
     useEffect(() => {
         if (debouncedInputValue > 0 && debouncedInputValue <= totalPages) {
             setCurrentPage(debouncedInputValue);
-            updateURLParameter('page', debouncedInputValue.toString());
+            updateURL('page', debouncedInputValue.toString(), true);
             setInputValue('');
         }
     }, [debouncedInputValue]);
+
+    useEffect(() => {
+        if (currentPage) {
+            updateURL('page', currentPage.toString(), false);
+        }
+    }, [currentPage]);
 
     return (
         <div className="flex h-10 bg-gray-800 justify-between items-center text-sm rounded-xl text-gray-300">
