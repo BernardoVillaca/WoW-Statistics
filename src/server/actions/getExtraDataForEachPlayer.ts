@@ -150,4 +150,3 @@ const determineSpecWithMostPoints = (specData: any): string => {
 
     return mainSpecName;
 };
-
