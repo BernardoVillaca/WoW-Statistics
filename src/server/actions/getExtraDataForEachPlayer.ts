@@ -2,13 +2,14 @@ import axios from 'axios';
 import { db } from '~/server/db';
 import { getAuthToken } from '~/server/actions/getAuthToken';
 import { eq } from 'drizzle-orm';
-import {
-    versionRegionBracketMapping,
+import type {
     LeaderboardParams,
     BracketMapping,
     RegionMapping,
     VersionMapping
 } from '~/utils/helper/versionRegionBracketMapping';
+
+import { versionRegionBracketMapping } from '~/utils/helper/versionRegionBracketMapping';
 import { scrapPlayerArmory } from './scrapPlayerArmory';
 
 export const getExtraDataForEachPlayer = async (version: keyof VersionMapping, region: keyof RegionMapping, bracket: keyof BracketMapping) => {
@@ -22,7 +23,7 @@ export const getExtraDataForEachPlayer = async (version: keyof VersionMapping, r
     }
 
     const { table, characterApiEndpoint, armoryEndpoint, profileParams } = regionMapping[bracket];
-    let requests: Promise<any>[] = [];
+    const requests: Promise<any>[] = [];
     console.log(`Updating extra data for ${version} ${region} ${bracket}...`);
 
     // Retrieve all leaderboard entries without a class_spec
@@ -50,7 +51,16 @@ export const getExtraDataForEachPlayer = async (version: keyof VersionMapping, r
     console.log(`Finished updating extra data for ${version} ${region} ${bracket}...`);
 };
 
-const updateCharacterData = async (version: keyof VersionMapping, characterName: string, realmSlug: string, characterId: number, table: any, characterApiEndpoint: string, armoryEndpoint: string, profileParams: LeaderboardParams) => {
+const updateCharacterData = async (
+    version: keyof VersionMapping,
+    characterName: string,
+    realmSlug: string,
+    characterId: number,
+    table: any,
+    characterApiEndpoint: string,
+    armoryEndpoint: string,
+    profileParams: LeaderboardParams
+) => {
     try {
         const characterData = await getPlayerData(characterName, realmSlug, characterApiEndpoint, profileParams);
         let specName = '';
@@ -58,7 +68,7 @@ const updateCharacterData = async (version: keyof VersionMapping, characterName:
         if (version === 'classic' && characterData) {
             const specData = await getSpecData(characterName, realmSlug, characterApiEndpoint, profileParams);
             specName = determineSpecWithMostPoints(specData);
-        } else if (characterData && characterData.active_spec) {
+        } else if (characterData?.active_spec) {
             specName = characterData.active_spec.name;
         }
 
@@ -68,7 +78,7 @@ const updateCharacterData = async (version: keyof VersionMapping, characterName:
                     character_spec: specName,
                     character_class: characterData.character_class.name,
                 })
-                .where(eq(table.character_id, characterId));``            
+                .where(eq(table.character_id, characterId));
         } else if (version === 'retail') {
             console.log(`${characterName} on realm: ${realmSlug} not found fetching from armory`);
             const playerArmoryData = await scrapPlayerArmory(characterName, realmSlug, armoryEndpoint);
@@ -103,7 +113,7 @@ const getPlayerData = async (characterName: string, realmSlug: string, character
         });
         return response.data;
     } catch (error: any) {
-        if (error.response && error.response.status === 401) {
+        if (error.response?.status === 401) {
             console.log('Token expired, refreshing token and retrying the request...');
             await getAuthToken(true);
             return getPlayerData(characterName, realmSlug, characterApiEndpoint, profileParams); // Retry the request after refreshing the token
@@ -129,7 +139,7 @@ const getSpecData = async (characterName: string, realmSlug: string, characterAp
 };
 
 const determineSpecWithMostPoints = (specData: any): string => {
-    if (!specData || !specData.specialization_groups) {
+    if (!specData?.specialization_groups) {
         return '';
     }
 
@@ -139,7 +149,7 @@ const determineSpecWithMostPoints = (specData: any): string => {
     for (const group of specData.specialization_groups) {
         if (Array.isArray(group.specializations)) {
             for (const specialization of group.specializations) {
-                const points = specialization.spent_points || 0;
+                const points = specialization.spent_points ?? 0;
                 if (points > maxPoints) {
                     maxPoints = points;
                     mainSpecName = specialization.specialization_name;

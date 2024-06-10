@@ -2,12 +2,42 @@ import axios from 'axios';
 import { db } from '~/server/db';
 import { getAuthToken } from '~/server/actions/getAuthToken';
 import { eq } from 'drizzle-orm/expressions';
-import {
-    versionRegionBracketMapping,
+import type {
     BracketMapping,
     RegionMapping,
     VersionMapping
 } from '~/utils/helper/versionRegionBracketMapping';
+import { versionRegionBracketMapping } from '~/utils/helper/versionRegionBracketMapping';
+
+interface HistoryEntry {
+    played: number;
+    won: number;
+    lost: number;
+    rating: number;
+    rank: number;
+    updated_at: Date;
+}
+
+interface LeaderboardEntry {
+    character_name: string;
+    character_id: number;
+    character_class: string;
+    character_spec: string;
+    realm_id: number;
+    realm_slug: string;
+    faction_name: string;
+    rank: number;
+    rating: number;
+    played: number;
+    won: number;
+    lost: number;
+    tier_id: number;
+    tier_href: string;
+    created_at: Date;
+    updated_at: Date;
+    win_ratio: number;
+    history: HistoryEntry[];
+}
 
 export const updateLeaderboard = async (version: keyof VersionMapping, region: keyof RegionMapping, bracket: keyof BracketMapping): Promise<void> => {
     const versionMapping = versionRegionBracketMapping[version];
@@ -20,7 +50,7 @@ export const updateLeaderboard = async (version: keyof VersionMapping, region: k
     }
 
     const { table, apiEndpoint, params } = regionMapping[bracket];
-    let requests: Promise<any>[] = [];
+    const requests: Promise<void>[] = [];
 
     try {
         const authToken = await getAuthToken(false);
@@ -31,10 +61,13 @@ export const updateLeaderboard = async (version: keyof VersionMapping, region: k
             }
         });
 
-        if (response.data && response.data.entries) {
-            const formattedData = response.data.entries.map((item: any) => ({
+        const entries = response.data?.entries;
+        if (entries) {
+            const formattedData = entries.map((item: any): LeaderboardEntry => ({
                 character_name: item.character.name,
                 character_id: item.character.id,
+                character_class: '',
+                character_spec: '',
                 realm_id: item.character.realm.id,
                 realm_slug: item.character.realm.slug,
                 faction_name: item.faction.type,
@@ -47,12 +80,13 @@ export const updateLeaderboard = async (version: keyof VersionMapping, region: k
                 tier_href: item.tier.key.href,
                 created_at: new Date(),
                 updated_at: new Date(),
+                history: [],
                 win_ratio: Math.round((item.season_match_statistics.won / item.season_match_statistics.played) * 100)
             }));
 
             console.log(`Updating leaderboard data for ${version} ${region} ${bracket}...`);
 
-            for (let data of formattedData) {
+            for (const data of formattedData) {
                 requests.push(handleDataInsert(data, table));
 
                 if (requests.length >= 500) {
@@ -71,53 +105,48 @@ export const updateLeaderboard = async (version: keyof VersionMapping, region: k
         }
     } catch (error: any) {
         console.log('Failed to fetch or insert leaderboard data:', error.message);
-        if (error.response && error.response.status === 401) {
+        if (error.response?.status === 401) {
             console.log('Token expired, refreshing token and retrying the request...');
             await getAuthToken(true);
             return updateLeaderboard(version, region, bracket);
         }
     }
-}
+};
 
-const handleDataInsert = async (data: any, table: any) => {
+const handleDataInsert = async (data: LeaderboardEntry, table: any): Promise<void> => {
     const existingRecord = await db
         .select()
         .from(table)
         .where(eq(table.character_id, data.character_id))
         .limit(1);
 
-    if (existingRecord.length === 0) return await db.insert(table).values(data);
+    if (existingRecord.length === 0) {
+        await db.insert(table).values(data);
+        return;
+    }
 
+    const existingEntry = existingRecord[0] as LeaderboardEntry | undefined;
 
-    let updateData: any = {
-        character_name: data.character_name,
-        character_class: data.character_class,
-        character_spec: data.character_spec,
-        realm_id: data.realm_id,
-        realm_slug: data.realm_slug,
-        faction_name: data.faction_name,
-        rank: data.rank,
-        rating: data.rating,
-        played: data.played,
-        won: data.won,
-        lost: data.lost,
-        tier_id: data.tier_id,
-        tier_href: data.tier_href,
-        history: JSON.stringify(existingRecord[0]?.history || [])
+    if (!existingEntry) {
+        return;
+    }
+
+    const updateData: LeaderboardEntry = {
+        ...data,
+        history: existingEntry.history
     };
 
-    if (existingRecord[0]?.played !== data.played) {
-        // Create a history entry
-        const historyEntry = {
-            played: existingRecord[0]?.played,
-            won: existingRecord[0]?.won,
-            lost: existingRecord[0]?.lost,
-            rating: existingRecord[0]?.rating,
-            rank: existingRecord[0]?.rank,
-            updated_at: existingRecord[0]?.updated_at
+    if (existingEntry.played !== data.played) {
+        const historyEntry: HistoryEntry = {
+            played: existingEntry.played,
+            won: existingEntry.won,
+            lost: existingEntry.lost,
+            rating: existingEntry.rating,
+            rank: existingEntry.rank,
+            updated_at: existingEntry.updated_at,
         };
 
-        let newHistory = existingRecord[0]?.history || [];
+        let newHistory: HistoryEntry[] = existingEntry.history ?? [];
         newHistory.push(historyEntry);
 
         if (newHistory.length > 20) {
@@ -125,7 +154,8 @@ const handleDataInsert = async (data: any, table: any) => {
         }
 
         updateData.updated_at = new Date();
-        updateData.history = JSON.stringify(newHistory);
-   }
+        updateData.history = newHistory;
+    }
+
     await db.update(table).set(updateData).where(eq(table.character_id, data.character_id));
-}
+};

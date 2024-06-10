@@ -6,7 +6,7 @@ import { useSearch } from '../Context/SearchContext';
 import { updateURL } from '~/utils/helper/updateURL';
 import useURLChange from '~/utils/hooks/useURLChange';
 
-const classSpecs: { [key: string]: string[] } = {
+const classSpecs: Record<string, string[]> = {
     'Evoker': ['Preservation Evoker', 'Devastation Evoker'],
     'Death Knight': ['Blood Death Knight', 'Frost Death Knight', 'Unholy Death Knight'],
     'Druid': ['Balance Druid', 'Feral Druid', 'Restoration Druid'],
@@ -21,8 +21,11 @@ const classSpecs: { [key: string]: string[] } = {
     'Warrior': ['Arms Warrior', 'Fury Warrior', 'Protection Warrior'],
     'Demon Hunter': ['Havoc Demon Hunter', 'Vengeance Demon Hunter'],
 };
-const grayedOutSpecs = ['Preservation Evoker', 'Devastation Evoker', 'Havoc Demon Hunter', 'Vengeance Demon Hunter', 'Brewmaster Monk', 'Mistweaver Monk', 'Windwalker Monk'];
 
+const grayedOutSpecs = [
+    'Preservation Evoker', 'Devastation Evoker', 'Havoc Demon Hunter',
+    'Vengeance Demon Hunter', 'Brewmaster Monk', 'Mistweaver Monk', 'Windwalker Monk'
+];
 
 const ClassSearch = () => {
     const { setCurrentPage } = useSearch();
@@ -30,12 +33,11 @@ const ClassSearch = () => {
     const queryParams = useURLChange();
 
     const getQueryParams = () => {
-        const params = new URLSearchParams(queryParams || '');
+        const params = new URLSearchParams(queryParams ?? '');
         return {
-            version: params.get('version') || 'retail',
+            version: params.get('version') ?? 'retail',
         };
     };
-   
 
     const { version } = getQueryParams();
 
@@ -64,6 +66,7 @@ const ClassSearch = () => {
             setSelectedSpecs([...selectedSpecs, spec]);
         }
     };
+
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
         const initialSearch = urlParams.get('search');
@@ -79,9 +82,9 @@ const ClassSearch = () => {
         }
     }, [selectedSpecs]);
 
-    useEffect(() => {   
-       setSelectedSpecs([]);
-    }   , [version]);
+    useEffect(() => {
+        setSelectedSpecs([]);
+    }, [version]);
 
     return (
         <div className='flex justify-between w-full bg-gray-800 rounded-lg p-4'>

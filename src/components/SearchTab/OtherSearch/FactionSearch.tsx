@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
 import Image from 'next/image';
 import { useSearch } from '../../Context/SearchContext';
-import hordeIcon from '../../../assets/WowFactions/horde.png';
-import allyIcon from '../../../assets/WowFactions/alliance.png';
+import hordeIcon from '../../../assets/WoWFactions/horde.png';
+import allyIcon from '../../../assets/WoWFactions/alliance.png';
 import { updateURL } from '~/utils/helper/updateURL';
 
 const FactionSearch = () => {
@@ -18,7 +18,7 @@ const FactionSearch = () => {
     }
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
-        const initialFaction = urlParams.get('faction') || '';
+        const initialFaction = urlParams.get('faction') ?? '';
         setFaction(initialFaction);
     }, []);
 

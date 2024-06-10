@@ -11,23 +11,23 @@ const RatingSearch = () => {
     const queryParams = useURLChange();
 
     const getQueryParams = () => {
-        const params = new URLSearchParams(queryParams || '');
+        const params = new URLSearchParams(queryParams ?? '');
         return {
-            version: params.get('version') || 'retail',
-            region: params.get('region') || 'us',
-            bracket: params.get('bracket') || '3v3',
-            minRating: Number(params.get('minRating')),
-            maxRating: Number(params.get('maxRating'))
+            version: params.get('version') ?? 'retail',
+            region: params.get('region') ?? 'us',
+            bracket: params.get('bracket') ?? '3v3',
+            minRating: Number(params.get('minRating') ?? 0),
+            maxRating: Number(params.get('maxRating') ?? 4000)
         };
     };
 
     const { version, region, bracket, minRating, maxRating } = getQueryParams();
 
-    const [minSliderValue, setMinSliderValue] = useState(0);
-    const [maxSliderValue, setMaxSliderValue] = useState(0);
-    const [minInputValue, setMinInputValue] = useState(0);
-    const [maxInputValue, setMaxInputValue] = useState(0);
-    const [isDataFetched, setIsDataFetched] = useState(false);
+    const [minSliderValue, setMinSliderValue] = useState<number>(0);
+    const [maxSliderValue, setMaxSliderValue] = useState<number>(0);
+    const [minInputValue, setMinInputValue] = useState<number>(0);
+    const [maxInputValue, setMaxInputValue] = useState<number>(0);
+    const [isDataFetched, setIsDataFetched] = useState<boolean>(false);
 
     useEffect(() => {
         let isMounted = true;
@@ -40,8 +40,8 @@ const RatingSearch = () => {
                 if (isMounted) {
                     setMinSliderValue(lowestRating);
                     setMaxSliderValue(highestRating);
-                    setMinInputValue(Math.max(minRating || lowestRating, lowestRating));
-                    setMaxInputValue(Math.min(maxRating || highestRating, highestRating));
+                    setMinInputValue(Math.max(minRating ?? lowestRating, lowestRating));
+                    setMaxInputValue(Math.min(maxRating ?? highestRating, highestRating));
                     setIsDataFetched(true);
                 }
             } catch (error) {
@@ -54,7 +54,7 @@ const RatingSearch = () => {
         return () => {
             isMounted = false;
         };
-    }, [version, region, bracket]);
+    }, [version, region, bracket, minRating, maxRating]);
 
     useEffect(() => {
         if (minInputValue || maxInputValue) {
@@ -62,7 +62,7 @@ const RatingSearch = () => {
             updateURL('minRating', minInputValue === minSliderValue ? '' : minInputValue.toString(), true);
             setCurrentPage(1);
         }
-    }, [minInputValue, maxInputValue]);
+    }, [minInputValue, maxInputValue, maxSliderValue, minSliderValue, setCurrentPage]);
 
     const handleMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = Math.min(Number(e.target.value), maxInputValue - 1);

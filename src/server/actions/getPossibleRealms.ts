@@ -11,8 +11,18 @@ import {
     classicEusRealms,
 } from '~/server/db/schema';
 
-// Define the mapping with types for better clarity
-const leaderboardsToRealmsMap: { leaderboard: any, realmTable: any, name: string }[] = [
+interface LeaderboardRealmMap {
+    leaderboard: typeof us3v3Leaderboard | typeof eu3v3Leaderboard | typeof classicUs3v3Leaderboard | typeof classicEu2v2Leaderboard;
+    realmTable: typeof usRealms | typeof euRealms | typeof classicUsRealms | typeof classicEusRealms;
+    name: string;
+}
+
+interface RealmCount {
+    realmName: string;
+    count: number;
+}
+
+const leaderboardsToRealmsMap: LeaderboardRealmMap[] = [
     { leaderboard: us3v3Leaderboard, realmTable: usRealms, name: 'us' },
     { leaderboard: eu3v3Leaderboard, realmTable: euRealms, name: 'eu' },
     { leaderboard: classicUs3v3Leaderboard, realmTable: classicUsRealms, name: 'classicUs' },
@@ -27,11 +37,14 @@ export const getPossibleRealms = async (): Promise<void> => {
     }
 };
 
-const updateRealmsForLeaderboard = async (leaderboard: any, realmTable: any, name: string): Promise<void> => {
+const updateRealmsForLeaderboard = async (
+    leaderboard: typeof us3v3Leaderboard | typeof eu3v3Leaderboard | typeof classicUs3v3Leaderboard | typeof classicEu2v2Leaderboard,
+    realmTable: typeof usRealms | typeof euRealms | typeof classicUsRealms | typeof classicEusRealms,
+    name: string
+): Promise<void> => {
     const leaderboardData = await db.select().from(leaderboard).orderBy(asc(leaderboard.rank));
 
-    // Create an object to keep track of the counts
-    let realmCount: { realmName: string, count: number }[] = [];
+    const realmCount: RealmCount[] = [];
    
     for (const data of leaderboardData) {
         const realmSlug = data.realm_slug ?? '';
@@ -47,9 +60,13 @@ const updateRealmsForLeaderboard = async (leaderboard: any, realmTable: any, nam
     await handleRealmInsert(realmCount, realmTable, name);
 };
 
-const handleRealmInsert = async (realmCount: { realmName: string, count: number }[], realmTable: any, name: string) => {
+const handleRealmInsert = async (
+    realmCount: RealmCount[],
+    realmTable: typeof usRealms | typeof euRealms | typeof classicUsRealms | typeof classicEusRealms,
+    name: string
+): Promise<void> => {
     const batchSize = 50;
-    let requests: Promise<any>[] = [];
+    const requests: Promise<void>[] = [];
 
     for (let i = 0; i < realmCount.length; i += batchSize) {
         const batch = realmCount.slice(i, i + batchSize);
@@ -82,10 +99,9 @@ const handleRealmInsert = async (realmCount: { realmName: string, count: number 
             }
         });
 
-        requests.push(Promise.all(updatePromises));
+        requests.push(Promise.all(updatePromises).then(() => {}));
     }
 
     // Wait for all batches to complete
     await Promise.all(requests);
 };
-

@@ -8,9 +8,9 @@ import { updateURL } from "~/utils/helper/updateURL";
 
 const ScrollTab = ({ resultsPerPage }: { resultsPerPage: number }) => {
     const { resultsCount, currentPage, setCurrentPage } = useSearch();
-    const [inputValue, setInputValue] = useState(currentPage || '');
+    const [inputValue, setInputValue] = useState<string | number>(currentPage ?? '');
     const totalPages = Math.ceil(resultsCount / resultsPerPage);
-    const debouncedInputValue = useDebounce(inputValue, 1000);
+    const debouncedInputValue = useDebounce(Number(inputValue), 1000);
 
     const getDisplayedPages = () => {
         if (currentPage <= 2) {
@@ -37,10 +37,10 @@ const ScrollTab = ({ resultsPerPage }: { resultsPerPage: number }) => {
 
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
-        const initialPage = parseInt(urlParams.get('page') || '1', 10);
+        const initialPage = parseInt(urlParams.get('page') ?? '1', 10);
         setCurrentPage(initialPage);
         setInputValue(initialPage);
-    }, []);
+    }, [setCurrentPage]);
 
     useEffect(() => {
         if (debouncedInputValue > 0 && debouncedInputValue <= totalPages) {
@@ -48,7 +48,7 @@ const ScrollTab = ({ resultsPerPage }: { resultsPerPage: number }) => {
             updateURL('page', debouncedInputValue.toString(), true);
             setInputValue('');
         }
-    }, [debouncedInputValue]);
+    }, [debouncedInputValue, setCurrentPage, totalPages]);
 
     useEffect(() => {
         if (currentPage) {
