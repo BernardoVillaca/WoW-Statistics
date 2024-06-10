@@ -2,7 +2,7 @@ import Image from 'next/image';
 import specIconsMap from '~/utils/helper/specIconsMap';
 import horde from '../../assets/WoWFactions/horde.png';
 import alliance from '../../assets/WoWFactions/alliance.png';
-import { calculateDifference } from '~/utils/helper/calculateDifferences';
+import { calculateDifference } from '~/utils/helper/calculateDifference';
 
 const classColors = {
   'Death Knight': "#C41E3A",

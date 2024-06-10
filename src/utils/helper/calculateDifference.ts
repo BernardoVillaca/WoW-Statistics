@@ -17,7 +17,7 @@ export const calculateDifference = (history: HistoryEntry[], cell: string, text:
         const diffTime = currentDate.getTime() - lastUpdate.getTime();
         const diffHours = diffTime / (1000 * 60 * 60);
 
-        if (diffHours < 24) {
+        if (diffHours <= 48) {
             let previousValue = lastHistoryEntry[cell as keyof HistoryEntry];
             if (typeof previousValue === 'string') {
                 previousValue = parseInt(previousValue, 10);
