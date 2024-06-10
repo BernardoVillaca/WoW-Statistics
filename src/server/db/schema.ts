@@ -473,10 +473,49 @@ export const usRealms = createTable(
   {
     id: serial("id").primaryKey(),
     realm_name: varchar("realm_name", { length: 256 }),
-
+    records_count: integer("records_count").default(0),
   },
   (usRealms) => ({
-    usRealmsIndex: index("realm_name_idx").on(usRealms.realm_name),
+    usRealmsIndex: index("us_realm_name_idx").on(usRealms.realm_name),
+    usRecordsCountIndex: index("us_records_count_idx").on(usRealms.records_count),
+  })
+);
 
+export const euRealms = createTable(
+  "eu_realms",
+  {
+    id: serial("id").primaryKey(),
+    realm_name: varchar("realm_name", { length: 256 }),
+    records_count: integer("records_count").default(0),
+  },
+  (usRealms) => ({
+    usRealmsIndex: index("eu_realm_name_idx").on(usRealms.realm_name),
+    euRecordsCountIndex: index("eu_records_count_idx").on(usRealms.records_count),
+  })
+);
+
+export const classicUsRealms = createTable(
+  "classic_us_realms",
+  {
+    id: serial("id").primaryKey(),
+    realm_name: varchar("realm_name", { length: 256 }),
+    records_count: integer("records_count").default(0),
+  },
+  (usRealms) => ({
+    usRealmsIndex: index("classic_us_realm_name_idx").on(usRealms.realm_name),
+    classicUsRecordsCountIndex: index("classic_us_records_count_idx").on(usRealms.records_count),
+  })
+);
+
+export const classicEusRealms = createTable(
+  "classic_eu_realms",
+  {
+    id: serial("id").primaryKey(),
+    realm_name: varchar("realm_name", { length: 256 }),
+    records_count: integer("records_count").default(0),
+  },
+  (usRealms) => ({
+    usRealmsIndex: index("classic_eu_realm_name_idx").on(usRealms.realm_name),
+    classicEuRecordsCountIndex: index("classic_eu_records_count_idx").on(usRealms.records_count),
   })
 );

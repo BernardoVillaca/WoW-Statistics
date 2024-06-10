@@ -1,13 +1,32 @@
 import { asc } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "~/server/db";
-import { usRealms } from "~/server/db/schema";
+import { usRealms, euRealms, classicUsRealms, classicEusRealms } from "~/server/db/schema";
+
+const realmsMap = [
+    { version: 'retail', region: 'us', table: usRealms },
+    { version: 'retail', region: 'eu', table: euRealms },
+    { version: 'classic', region: 'us', table: classicUsRealms },
+    { version: 'classic', region: 'eu', table: classicEusRealms }
+];
 
 export async function GET(req: NextRequest) {
+    const { searchParams } = new URL(req.url);
+    const version = searchParams.get('version') || 'retail';
+    const region = searchParams.get('region') || 'us'; 
+
+    // Find the corresponding table for the specified version and region
+    const regionTableEntry = realmsMap.find(entry => entry.version === version && entry.region === region);
+
+    if (!regionTableEntry) {
+        return NextResponse.json({ error: 'Invalid version or region specified' }, { status: 400 });
+    }
+
+    const regionTable = regionTableEntry.table;
+
     try {
-        const realmList = await db.query.usRealms.findMany({
-            orderBy: [asc(usRealms.realm_name)]
-        });
+        // Query the correct table for realms
+        const realmList = await db.select().from(regionTable).orderBy(asc(regionTable.realm_name));
 
         // Transform the realm names to have the first character in uppercase
         const transformedRealmList = realmList.map(realm => ({

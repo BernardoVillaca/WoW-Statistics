@@ -3,6 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useSearch } from '~/components/Context/SearchContext';
 import { FiChevronDown, FiLoader, FiMinusCircle } from 'react-icons/fi';
 import { updateURL } from '~/utils/helper/updateURL';
+import useURLChange from '~/utils/hooks/useURLChange';
 
 interface Realm {
     id: number;
@@ -20,18 +21,34 @@ const RealmSearch = () => {
     const [realm, setRealm] = useState('');
     const inputRef = useRef<HTMLInputElement>(null);
 
+    const queryParams = useURLChange();
+
+    const getQueryParams = () => {
+        const params = new URLSearchParams(queryParams || ''); ``
+        return {
+            version: params.get('version') || 'retail',
+            region: params.get('region') || 'us',
+            bracket: params.get('bracket') || '3v3',
+
+        };
+    };
     if (realm !== '' && textInput === '' && isOpen === false) {
         setTextInput(realm);
     }
 
+    const { version, region } = getQueryParams();
+    
     useEffect(() => {
         const getData = async () => {
             try {
-                const response = await axios.get(`/api/getRealms`);
+                const response = await axios.get(`/api/getRealms`, {
+                    params: { version, region }
+                });
                 if (response.data && response.data.realmList) {
                     setRealmList(response.data.realmList);
                     setFilteredRealmList(response.data.realmList);
                     setIsDataFetched(true);
+                    console.log('Realm data fetched:', response.data.realmList);
                 } else {
                     console.error('Invalid data format', response.data);
                 }
@@ -40,7 +57,32 @@ const RealmSearch = () => {
             }
         };
         getData();
+        setRealm('');
+        setTextInput('');
+        updateURL('realm', '', true);
+    }, [version, region]);
+
+    useEffect(() => {
+        if (isOpen && highlightedIndex !== -1) {
+            const item = document.getElementById(`realm-${highlightedIndex}`);
+            if (item) {
+                item.scrollIntoView({ block: 'nearest' });
+            }
+        }
+    }, [highlightedIndex, isOpen]);
+
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const initialRealm = urlParams.get('realm') || '';
+        setRealm(initialRealm);
     }, []);
+
+    useEffect(() => {
+        if (realm) {
+            updateURL('realm', realm, true);
+            setCurrentPage(1);
+        }
+    }, [realm]);
 
     const handleFocus = () => {
         setFilteredRealmList(realmList)
@@ -69,7 +111,7 @@ const RealmSearch = () => {
             setIsOpen(false);
         }
     };
-    
+
     const handleKeyDown = (e: React.KeyboardEvent) => {
         if (!isOpen) setIsOpen(true);
 
@@ -114,30 +156,6 @@ const RealmSearch = () => {
             inputRef.current.focus();
         }
     };
-
-    useEffect(() => {
-        if (isOpen && highlightedIndex !== -1) {
-            const item = document.getElementById(`realm-${highlightedIndex}`);
-            if (item) {
-                item.scrollIntoView({ block: 'nearest' });
-            }
-        }
-    }, [highlightedIndex, isOpen]);
-
-    useEffect(() => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const initialRealm = urlParams.get('realm') || '';
-        setRealm(initialRealm);
-    }, []);
-
-    useEffect(() => {
-        if(realm) {
-            updateURL('realm', realm, true);
-            setCurrentPage(1);
-        }
-    }, [realm]);
-
-
 
     if (!isDataFetched) {
         return <div className='flex flex-col items-center justify-center w-1/5 p-4 rounded-lg border border-gray-700'>

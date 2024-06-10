@@ -25,7 +25,6 @@ export const calculateDifference = (history: HistoryEntry[], cell: string, text:
         const currentValue = parseInt(text, 10);
         if (previousValue !== undefined) {
             const difference = cell === 'rank' ? previousValue - currentValue : currentValue - previousValue;
-            console.log(`${cell} Difference:`, difference);
             return difference;
         }
     }
