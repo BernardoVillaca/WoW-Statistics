@@ -43,8 +43,8 @@ const BracketSearch = () => {
                 2v2
             </button>
             <button
-                className={`flex text-gray-300 border-[1px] ${bracket === 'Rbg' ? 'border-blue-500' : 'border-gray-300'}  rounded-full w-12 h-12 items-center justify-center`}
-                onClick={() => handleClick('Rbg')}
+                className={`flex text-gray-300 border-[1px] ${bracket === 'rbg' ? 'border-blue-500' : 'border-gray-300'}  rounded-full w-12 h-12 items-center justify-center`}
+                onClick={() => handleClick('rbg')}
             >
                 Rbg
             </button>

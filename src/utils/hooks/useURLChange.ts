@@ -9,10 +9,10 @@ const useURLChange = () => {
         setSearch(window.location.search);
       };
 
-      // Set the initial search value
+      
       setSearch(window.location.search);
 
-      // Polling mechanism to detect changes in the URL
+    
       const interval = setInterval(handleURLChange, 100);
 
       return () => {

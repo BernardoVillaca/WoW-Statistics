@@ -63,14 +63,12 @@ const updateCharacterData = async (version: keyof VersionMapping, characterName:
         }
 
         if (characterData) {
-            console.log(`Updating character: ${characterName} on realm: ${realmSlug}`);
             await db.update(table)
                 .set({
                     character_spec: specName,
                     character_class: characterData.character_class.name,
                 })
-                .where(eq(table.character_id, characterId));
-            console.log(`Successfully updated character: ${characterName} on realm: ${realmSlug}`);
+                .where(eq(table.character_id, characterId));``            
         } else if (version === 'retail') {
             console.log(`${characterName} on realm: ${realmSlug} not found fetching from armory`);
             const playerArmoryData = await scrapPlayerArmory(characterName, realmSlug, armoryEndpoint);

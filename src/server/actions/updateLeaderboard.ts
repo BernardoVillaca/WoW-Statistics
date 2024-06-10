@@ -1,14 +1,13 @@
 import axios from 'axios';
 import { db } from '~/server/db';
 import { getAuthToken } from '~/server/actions/getAuthToken';
-import { and, eq } from 'drizzle-orm/expressions';
+import { eq } from 'drizzle-orm/expressions';
 import {
     versionRegionBracketMapping,
     BracketMapping,
     RegionMapping,
     VersionMapping
 } from '~/utils/helper/versionRegionBracketMapping';
-
 
 export const updateLeaderboard = async (version: keyof VersionMapping, region: keyof RegionMapping, bracket: keyof BracketMapping): Promise<void> => {
     const versionMapping = versionRegionBracketMapping[version];
@@ -56,7 +55,7 @@ export const updateLeaderboard = async (version: keyof VersionMapping, region: k
             for (let data of formattedData) {
                 requests.push(handleDataInsert(data, table));
 
-                if (requests.length >= 100) {
+                if (requests.length >= 500) {
                     await Promise.all(requests);
                     requests.length = 0;
                 }
@@ -88,23 +87,45 @@ const handleDataInsert = async (data: any, table: any) => {
         .limit(1);
 
     if (existingRecord.length === 0) return await db.insert(table).values(data);
+
+
+    let updateData: any = {
+        character_name: data.character_name,
+        character_class: data.character_class,
+        character_spec: data.character_spec,
+        realm_id: data.realm_id,
+        realm_slug: data.realm_slug,
+        faction_name: data.faction_name,
+        rank: data.rank,
+        rating: data.rating,
+        played: data.played,
+        won: data.won,
+        lost: data.lost,
+        tier_id: data.tier_id,
+        tier_href: data.tier_href,
+        history: JSON.stringify(existingRecord[0]?.history || [])
+    };
+
     if (existingRecord[0]?.played !== data.played) {
-        // console.log(`Updating record for ${data.character_name} with ${data.rating} from ${existingRecord[0]?.played} games played to ${data.played} games played`);
-        await db.update(table).set({
-            character_name: data.character_name,
-            character_class: data.character_class,
-            character_spec: data.character_spec,
-            realm_id: data.realm_id,
-            realm_slug: data.realm_slug,
-            faction_name: data.faction_name,
-            rank: data.rank,
-            rating: data.rating,
-            played: data.played,
-            won: data.won,
-            lost: data.lost,
-            tier_id: data.tier_id,
-            tier_href: data.tier_href,
-            updated_at: new Date()
-        }).where(eq(table.character_id, data.character_id));
-    }
+        // Create a history entry
+        const historyEntry = {
+            played: existingRecord[0]?.played,
+            won: existingRecord[0]?.won,
+            lost: existingRecord[0]?.lost,
+            rating: existingRecord[0]?.rating,
+            rank: existingRecord[0]?.rank,
+            updated_at: existingRecord[0]?.updated_at
+        };
+
+        let newHistory = existingRecord[0]?.history || [];
+        newHistory.push(historyEntry);
+
+        if (newHistory.length > 20) {
+            newHistory = newHistory.slice(newHistory.length - 20);
+        }
+
+        updateData.updated_at = new Date();
+        updateData.history = JSON.stringify(newHistory);
+   }
+    await db.update(table).set(updateData).where(eq(table.character_id, data.character_id));
 }

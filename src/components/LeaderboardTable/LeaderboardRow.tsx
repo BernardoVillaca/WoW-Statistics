@@ -4,14 +4,15 @@ import LeaderboardCell from './LeaderboardCell'
 const LeaderboardRow = ({ characterData, searchTabs, rowHeight}: { characterData: any, searchTabs: any, rowHeight: number}) => {
     return (
         <div className="bg-gray-800 flex  border-b-[2px] border-gray-700 " style={{ height: rowHeight }}>
-            {searchTabs.map((tab: any, index: number) => (
+            {searchTabs.map((cell: any, index: number) => (
                 <LeaderboardCell
-                    key={`${characterData.id}-${tab.name}`}
+                    key={`${characterData.id}-${cell.name}`}
                     height={rowHeight} index={index}
-                    text={characterData[tab.name]}
-                    tab={tab.name}
+                    text={characterData[cell.name]}
+                    cell={cell.name}
                     characterClass={characterData.character_class}
-                    characterSpec={characterData.character_spec}                  
+                    characterSpec={characterData.character_spec}
+                    history={characterData.history}               
                 />
             ))}
         </div>

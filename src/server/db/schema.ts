@@ -6,7 +6,8 @@ import {
   timestamp,
   varchar,
   integer,
-  numeric
+  numeric,
+  jsonb
 } from "drizzle-orm/pg-core";
 
 
@@ -30,11 +31,10 @@ export const us3v3Leaderboard = createTable(
     lost: integer("lost"),
     tier_id: integer("tier_id"),
     tier_href: varchar("tier_href", { length: 512 }),
-    created_at: timestamp("created_at", { withTimezone: true })
-      .default(sql`CURRENT_TIMESTAMP`)
+    created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`)
     ,
-    updated_at: timestamp("updated_at", { withTimezone: true })
-      .default(sql`CURRENT_TIMESTAMP`)
+    updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
+    history: jsonb("history").default(sql`'[]'::jsonb`)
 
   },
   (leaderboard) => ({
@@ -68,11 +68,10 @@ export const us2v2Leaderboard = createTable(
     lost: integer("lost"),
     tier_id: integer("tier_id"),
     tier_href: varchar("tier_href", { length: 512 }),
-    created_at: timestamp("created_at", { withTimezone: true })
-      .default(sql`CURRENT_TIMESTAMP`)
+    created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`)
     ,
-    updated_at: timestamp("updated_at", { withTimezone: true })
-      .default(sql`CURRENT_TIMESTAMP`)
+    updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
+    history: jsonb("history").default(sql`'[]'::jsonb`)
 
   },
   (leaderboard) => ({
@@ -85,6 +84,43 @@ export const us2v2Leaderboard = createTable(
     us2v2RatingIndex: index("us_2v2_rating_idx").on(leaderboard.rating),
     us2v2PlayedIndex: index("us_2v2_played_idx").on(leaderboard.played),
     us2v2WinRatioIndex: index("us_2v2_win_ratio_idx").on(leaderboard.win_ratio)
+  })
+);
+
+export const usRBGLeaderboard = createTable(
+  "us_RBG_leaderboard",
+  {
+    character_name: varchar("character_name", { length: 256 }),
+    character_id: integer("character_id").primaryKey(),
+    character_class: varchar("character_class", { length: 256 }).default(''),
+    character_spec: varchar("character_spec", { length: 256 }).default(''),
+    realm_id: integer("realm_id"),
+    realm_slug: varchar("realm_slug", { length: 256 }),
+    faction_name: varchar("faction_name", { length: 256 }),
+    rank: integer("rank"),
+    rating: integer("rating"),
+    played: integer("played"),
+    win_ratio: numeric("win_ratio"),
+    won: integer("won"),
+    lost: integer("lost"),
+    tier_id: integer("tier_id"),
+    tier_href: varchar("tier_href", { length: 512 }),
+    created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`)
+    ,
+    updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
+    history: jsonb("history").default(sql`'[]'::jsonb`)
+
+  },
+  (leaderboard) => ({
+    usRBGCharacterNameIndex: index("us_RBG_character_name_idx").on(leaderboard.character_name),
+    usRBGCharacterIdIndex: index("us_RBG_character_id_idx").on(leaderboard.character_id),
+    usRBGCharacterClassIndex: index("us_RBG_character_class_idx").on(leaderboard.character_class),
+    usRBGCharacterSpecIndex: index("us_RBG_character_spec_idx").on(leaderboard.character_spec),
+    usRBGFactionNameIndex: index("us_RBG_faction_name_idx").on(leaderboard.faction_name),
+    usRBGRankIndex: index("us_RBG_rank_idx").on(leaderboard.rank),
+    usRBGRatingIndex: index("us_RBG_rating_idx").on(leaderboard.rating),
+    usRBGPlayedIndex: index("us_RBG_played_idx").on(leaderboard.played),
+    usRBGWinRatioIndex: index("us_RBG_win_ratio_idx").on(leaderboard.win_ratio)
   })
 );
 
@@ -106,11 +142,10 @@ export const eu3v3Leaderboard = createTable(
     lost: integer("lost"),
     tier_id: integer("tier_id"),
     tier_href: varchar("tier_href", { length: 512 }),
-    created_at: timestamp("created_at", { withTimezone: true })
-      .default(sql`CURRENT_TIMESTAMP`)
+    created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`)
     ,
-    updated_at: timestamp("updated_at", { withTimezone: true })
-      .default(sql`CURRENT_TIMESTAMP`)
+    updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
+    history: jsonb("history").default(sql`'[]'::jsonb`)
 
   },
   (leaderboard) => ({
@@ -144,11 +179,10 @@ export const eu2v2Leaderboard = createTable(
     lost: integer("lost"),
     tier_id: integer("tier_id"),
     tier_href: varchar("tier_href", { length: 512 }),
-    created_at: timestamp("created_at", { withTimezone: true })
-      .default(sql`CURRENT_TIMESTAMP`)
+    created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`)
     ,
-    updated_at: timestamp("updated_at", { withTimezone: true })
-      .default(sql`CURRENT_TIMESTAMP`)
+    updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
+    history: jsonb("history").default(sql`'[]'::jsonb`)
 
   },
   (leaderboard) => ({
@@ -163,6 +197,42 @@ export const eu2v2Leaderboard = createTable(
     eu2v2WinRatioIndex: index("eu_2v2_win_ratio_idx").on(leaderboard.win_ratio),
   })
 );
+
+export const euRBGLeaderboard = createTable(
+  "eu_RBG_leaderboard",
+  {
+    character_name: varchar("character_name", { length: 256 }),
+    character_id: integer("character_id").primaryKey(),
+    character_class: varchar("character_class", { length: 256 }).default(''),
+    character_spec: varchar("character_spec", { length: 256 }).default(''),
+    realm_id: integer("realm_id"),
+    realm_slug: varchar("realm_slug", { length: 256 }),
+    faction_name: varchar("faction_name", { length: 256 }),
+    rank: integer("rank"),
+    rating: integer("rating"),
+    played: integer("played"),
+    win_ratio: numeric("win_ratio"),
+    won: integer("won"),
+    lost: integer("lost"),
+    tier_id: integer("tier_id"),
+    tier_href: varchar("tier_href", { length: 512 }),
+    created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`)
+    ,
+    updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
+    history: jsonb("history").default(sql`'[]'::jsonb`)
+
+  },
+  (leaderboard) => ({
+    euRBGCharacterNameIndex: index("eu_RBG_character_name_idx").on(leaderboard.character_name),
+    euRBGCharacterIdIndex: index("eu_RBG_character_id_idx").on(leaderboard.character_id),
+    euRBGCharacterClassIndex: index("eu_RBG_character_class_idx").on(leaderboard.character_class),
+    euRBGCharacterSpecIndex: index("eu_RBG_character_spec_idx").on(leaderboard.character_spec),
+    euRBGFactionNameIndex: index("eu_RBG_faction_name_idx").on(leaderboard.faction_name),
+    euRBGRankIndex: index("eu_RBG_rank_idx").on(leaderboard.rank),
+    euRBGRatingIndex: index("eu_RBG_rating_idx").on(leaderboard.rating),
+    euRBGPlayedIndex: index("eu_RBG_played_idx").on(leaderboard.played),
+    euRBGWinRatioIndex: index("eu_RBG_win_ratio_idx").on(leaderboard.win_ratio),
+  }))
 
 export const classicUs3v3Leaderboard = createTable(
   "classic_us_3v3_leaderboard",
@@ -183,7 +253,8 @@ export const classicUs3v3Leaderboard = createTable(
     tier_id: integer("tier_id"),
     tier_href: varchar("tier_href", { length: 512 }),
     created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
-    updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`)
+    updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
+    history: jsonb("history").default(sql`'[]'::jsonb`)
   },
   (leaderboard) => ({
     classicUs3v3CharacterNameIndex: index("classic_us_3v3_character_name_idx").on(leaderboard.character_name),
@@ -217,7 +288,8 @@ export const classicUs2v2Leaderboard = createTable(
     tier_id: integer("tier_id"),
     tier_href: varchar("tier_href", { length: 512 }),
     created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
-    updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`)
+    updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
+    history: jsonb("history").default(sql`'[]'::jsonb`)
   },
   (leaderboard) => ({
     classicUs2v2CharacterNameIndex: index("classic_us_2v2_character_name_idx").on(leaderboard.character_name),
@@ -231,6 +303,42 @@ export const classicUs2v2Leaderboard = createTable(
     classicUs2v2WinRatioIndex: index("classic_us_2v2_win_ratio_idx").on(leaderboard.win_ratio)
   })
 );
+
+export const classicUsRBGLeaderboard = createTable(
+  "classic_us_RBG_leaderboard",
+  {
+    character_name: varchar("character_name", { length: 256 }),
+    character_id: integer("character_id").primaryKey(),
+    character_class: varchar("character_class", { length: 256 }).default(''),
+    character_spec: varchar("character_spec", { length: 256 }).default(''),
+    realm_id: integer("realm_id"),
+    realm_slug: varchar("realm_slug", { length: 256 }),
+    faction_name: varchar("faction_name", { length: 256 }),
+    rank: integer("rank"),
+    rating: integer("rating"),
+    played: integer("played"),
+    win_ratio: numeric("win_ratio"),
+    won: integer("won"),
+    lost: integer("lost"),
+    tier_id: integer("tier_id"),
+    tier_href: varchar("tier_href", { length: 512 }),
+    created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
+    updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
+    history: jsonb("history").default(sql`'[]'::jsonb`)
+  },
+  (leaderboard) => ({
+    classicUsRBGCharacterNameIndex: index("classic_us_RBG_character_name_idx").on(leaderboard.character_name),
+    classicUsRBGCharacterIdIndex: index("classic_us_RBG_character_id_idx").on(leaderboard.character_id),
+    classicUsRBGCharacterClassIndex: index("classic_us_RBG_character_class_idx").on(leaderboard.character_class),
+    classicUsRBGCharacterSpecIndex: index("classic_us_RBG_character_spec_idx").on(leaderboard.character_spec),
+    classicUsRBGFactionNameIndex: index("classic_us_RBG_faction_name_idx").on(leaderboard.faction_name),
+    classicUsRBGRankIndex: index("classic_us_RBG_rank_idx").on(leaderboard.rank),
+    classicUsRBGRatingIndex: index("classic_us_RBG_rating_idx").on(leaderboard.rating),
+    classicUsRBGPlayedIndex: index("classic_us_RBG_played_idx").on(leaderboard.played),
+    classicUsRBGWinRatioIndex: index("classic_us_RBG_win_ratio_idx").on(leaderboard.win_ratio)
+  })
+);
+
 
 export const classicEu3v3Leaderboard = createTable(
   "classic_eu_3v3_leaderboard",
@@ -251,7 +359,8 @@ export const classicEu3v3Leaderboard = createTable(
     tier_id: integer("tier_id"),
     tier_href: varchar("tier_href", { length: 512 }),
     created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
-    updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`)
+    updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
+    history: jsonb("history").default(sql`'[]'::jsonb`)
   },
   (leaderboard) => ({
     classicEu3v3CharacterNameIndex: index("classic_eu_3v3_character_name_idx").on(leaderboard.character_name),
@@ -285,7 +394,8 @@ export const classicEu2v2Leaderboard = createTable(
     tier_id: integer("tier_id"),
     tier_href: varchar("tier_href", { length: 512 }),
     created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
-    updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`)
+    updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
+    history: jsonb("history").default(sql`'[]'::jsonb`)
   },
   (leaderboard) => ({
     classicEu2v2CharacterNameIndex: index("classic_eu_2v2_character_name_idx").on(leaderboard.character_name),
@@ -299,6 +409,43 @@ export const classicEu2v2Leaderboard = createTable(
     classicEu2v2WinRatioIndex: index("classic_eu_2v2_win_ratio_idx").on(leaderboard.win_ratio)
   })
 );
+
+export const classicEuRBGLeaderboard = createTable(
+  "classic_eu_RBG_leaderboard",
+  {
+    character_name: varchar("character_name", { length: 256 }),
+    character_id: integer("character_id").primaryKey(),
+    character_class: varchar("character_class", { length: 256 }).default(''),
+    character_spec: varchar("character_spec", { length: 256 }).default(''),
+    realm_id: integer("realm_id"),
+    realm_slug: varchar("realm_slug", { length: 256 }),
+    faction_name: varchar("faction_name", { length: 256 }),
+    rank: integer("rank"),
+    rating: integer("rating"),
+    played: integer("played"),
+    win_ratio: numeric("win_ratio"),
+    won: integer("won"),
+    lost: integer("lost"),
+    tier_id: integer("tier_id"),
+    tier_href: varchar("tier_href", { length: 512 }),
+    created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
+    updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
+    history: jsonb("history").default(sql`'[]'::jsonb`)
+  },
+  (leaderboard) => ({
+    classicEuRBGCharacterNameIndex: index("classic_eu_RBG_character_name_idx").on(leaderboard.character_name),
+    classicEuRBGCharacterIdIndex: index("classic_eu_RBG_character_id_idx").on(leaderboard.character_id),
+    classicEuRBGCharacterClassIndex: index("classic_eu_RBG_character_class_idx").on(leaderboard.character_class),
+    classicEuRBGCharacterSpecIndex: index("classic_eu_RBG_character_spec_idx").on(leaderboard.character_spec),
+    classicEuRBGFactionNameIndex: index("classic_eu_RBG_faction_name_idx").on(leaderboard.faction_name),
+    classicEuRBGRankIndex: index("classic_eu_RBG_rank_idx").on(leaderboard.rank),
+    classicEuRBGRatingIndex: index("classic_eu_RBG_rating_idx").on(leaderboard.rating),
+    classicEuRBGPlayedIndex: index("classic_eu_RBG_played_idx").on(leaderboard.played),
+    classicEuRBGWinRatioIndex: index("classic_eu_RBG_win_ratio_idx").on(leaderboard.win_ratio)
+  })
+);
+
+
 
 
 export const authToken = createTable(

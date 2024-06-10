@@ -58,7 +58,6 @@ const ClassSearch = () => {
         if (version === 'classic' && grayedOutSpecs.includes(spec)) {
             return;
         }
-
         if (selectedSpecs.includes(spec)) {
             setSelectedSpecs(selectedSpecs.filter(selected => selected !== spec));
         } else {

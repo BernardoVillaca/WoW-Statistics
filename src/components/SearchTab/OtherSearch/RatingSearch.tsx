@@ -7,6 +7,7 @@ import useURLChange from '~/utils/hooks/useURLChange';
 
 const RatingSearch = () => {
     const { setCurrentPage } = useSearch();
+
     const queryParams = useURLChange();
 
     const getQueryParams = () => {
@@ -30,7 +31,6 @@ const RatingSearch = () => {
 
     useEffect(() => {
         let isMounted = true;
-
         const fetchRatings = async () => {
             try {
                 const response = await axios.get(`/api/getMinMaxRating`, {

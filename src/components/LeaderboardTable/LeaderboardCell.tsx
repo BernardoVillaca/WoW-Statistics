@@ -2,6 +2,7 @@ import Image from 'next/image';
 import specIconsMap from '~/utils/helper/specIconsMap';
 import horde from '~/assets/WoWFactions/horde.png';
 import alliance from '~/assets/WoWFactions/alliance.png';
+import { calculateDifference } from '~/utils/helper/calculateDifferences';
 
 const classColors = {
   'Death Knight': "#C41E3A",
@@ -19,8 +20,8 @@ const classColors = {
   'Evoker': "#33937F",
 };
 
-const LeaderboardCell = ({ text, height, index, tab, characterClass, characterSpec }
-  : { text: string, height: number, index: number, tab: string, characterClass: string, characterSpec: string }) => {
+const LeaderboardCell = ({ text, height, index, cell, characterClass, characterSpec, history }
+  : { text: string, height: number, index: number, cell: string, characterClass: string, characterSpec: string, history: any[] }) => {
 
   const specClass = `${characterSpec} ${characterClass}`;
   const specIcon = specIconsMap[specClass as keyof typeof specIconsMap];
@@ -52,25 +53,35 @@ const LeaderboardCell = ({ text, height, index, tab, characterClass, characterSp
     }
   };
 
+  const difference = calculateDifference(history, cell, text);
+  const showDifference = difference !== 0;
+
   return (
-    <div className={`flex items-center justify-center text-gray-300 h-[${height}px] w-full ${index === 0 ? '' : 'border-l-[1px] border-gray-700'}`}>
+    <div className={`relative flex items-center justify-center text-gray-300 h-[${height}px] w-full ${index === 0 ? '' : 'border-l-[1px] border-gray-700'}`}>
       {factionIcon ? (
         <Image src={factionIcon} alt={text} height={height / 2} width={height / 2} className='rounded-lg overflow-hidden' />
-      ) : tab === 'character_spec' ? (
+      ) : cell === 'rating' || cell === 'rank' || cell === 'played' ? (
+        <div className=''>
+          <span>{text}</span>
+          {showDifference && (
+            <div className={`absolute bottom-3 left-24 text-xs ${difference > 0 ? 'text-green-600' : 'text-red-600'}`}>
+              {difference !== 0 ? `(${difference > 0 ? '+' : ''}${difference})` : ''}
+            </div>
+          )}
+        </div>
+      ) : cell === 'character_spec' ? (
         <Image src={specIcon} alt={text} height={height / 1.8} width={height / 1.8} className='rounded-lg overflow-none' />
-      ) : tab === 'character_name' ? (
+      ) : cell === 'character_name' ? (
         <span style={{ color: classColor }}>
           {text}
         </span>
-      ) : tab === 'win_ratio' ? (
+      ) : cell === 'win_ratio' ? (
         <span className={` ${Number(text) >= 70 ? 'text-green-300' : Number(text) >= 55 ? 'text-yellow-300' : 'text-red-300'} `}>
           {text}%
         </span>
-
-      ) : tab === 'realm_slug' ? (
+      ) : cell === 'realm_slug' ? (
         <span>{formatRealmName(text)}</span>
-
-      ) : tab === 'updated_at' ? (
+      ) : cell === 'updated_at' ? (
         <div>
           {getTimeSinceLastPlayed(text)}
         </div>
