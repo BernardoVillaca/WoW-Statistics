@@ -17,7 +17,7 @@ type CharacterData = {
   character_class: string;
   character_spec: string;
   history: HistoryEntry[];
-  [key: string]: any; // To handle dynamic keys for cell names
+  
 };
 
 type HistoryEntry = {

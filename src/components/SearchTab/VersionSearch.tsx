@@ -14,7 +14,7 @@ const VersionSearch = () => {
 
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
-        const initialVersion = urlParams.get('version') || 'retail';
+        const initialVersion = urlParams.get('version') ?? 'retail';
         setVersion(initialVersion);
     }, []);
 
