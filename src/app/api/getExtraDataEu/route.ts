@@ -4,12 +4,12 @@ import { getExtraDataForEachPlayer } from '~/server/actions/getExtraDataForEachP
 export const maxDuration = 300;
 export const dynamic = 'force-dynamic';
 
-const SCHEDULED_TASK_SECRET = process.env.SCHEDULED_TASK_SECRET;
+const CRON_SECRET = process.env.CRON_SECRET;
 
 export async function GET(req: NextRequest) {
     // Verify the shared secret
     const providedSecret = req.headers.get('secret');
-    if (!providedSecret || providedSecret !== SCHEDULED_TASK_SECRET) {
+    if (!providedSecret || providedSecret !== CRON_SECRET) {
         return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 

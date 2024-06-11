@@ -5,12 +5,12 @@ import { updateShuffle } from '~/server/actions/updateShuffle';
 export const maxDuration = 300;
 export const dynamic = 'force-dynamic';
 
-const SCHEDULED_TASK_SECRET = process.env.SCHEDULED_TASK_SECRET;
+const CRON_SECRET = process.env.CRON_SECRET;
 
 export async function GET(req: NextRequest) {
     // Verify the shared secret
     const providedSecret = req.headers.get('secret');
-    if (!providedSecret || providedSecret !== SCHEDULED_TASK_SECRET) {
+    if (!providedSecret || providedSecret !== CRON_SECRET) {
         return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
@@ -30,6 +30,7 @@ export async function GET(req: NextRequest) {
         await updateLeaderboard('classic', 'us', '3v3');
         await updateLeaderboard('classic', 'us', '2v2');
         await updateLeaderboard('classic', 'us', 'rbg');
+        
         await updateLeaderboard('classic', 'eu', '3v3');
         await updateLeaderboard('classic', 'eu', '2v2');
         await updateLeaderboard('classic', 'eu', 'rbg');
