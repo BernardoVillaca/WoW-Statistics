@@ -4,18 +4,18 @@ import { getExtraDataForEachPlayer } from '~/server/actions/getExtraDataForEachP
 export const maxDuration = 300;
 export const dynamic = 'force-dynamic';
 
-const CRON_SECRET = process.env.CRON_SECRET;
 
 export async function GET(req: NextRequest) {
     // Verify the shared secret
-    const providedSecret = req.headers.get('secret');
-    if (!providedSecret || providedSecret !== CRON_SECRET) {
-        return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    const authHeader = req.headers.get('authorization');
+    if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+        return new Response('Unauthorized', {
+            status: 401,
+        });
     }
-
     try {
-        console.log('Getting extra data for us players...'); 
-        
+        console.log('Getting extra data for us players...');
+
         await getExtraDataForEachPlayer('retail', 'us', '3v3');
         await getExtraDataForEachPlayer('retail', 'us', '2v2');
         await getExtraDataForEachPlayer('retail', 'us', 'rbg');
