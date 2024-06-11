@@ -3,7 +3,8 @@ import { NextResponse } from 'next/server';
 import { db } from '~/server/db';
 import type { VersionMapping, RegionMapping, BracketMapping } from '~/utils/helper/versionRegionBracketMapping';
 import { versionRegionBracketMapping } from '~/utils/helper/versionRegionBracketMapping';
-import { asc, count, eq, and, gte, lte, or, SQL } from 'drizzle-orm';
+import { asc, count, eq, and, gte, lte, or} from 'drizzle-orm';
+import type { SQL } from 'drizzle-orm';
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);

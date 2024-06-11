@@ -84,8 +84,10 @@ const handleRealmInsert = async (
                         realm_name: realmName,
                         records_count: count,
                     }).onConflictDoNothing();
-                } catch (error: any) {
-                    console.log(error.message);
+                } catch (error) {
+                    if (error instanceof Error) {
+                        console.log(error.message);
+                    }
                 }
             } else if (existingRealm[0]?.records_count !== count) {
                 console.log(`Updating record count for ${realmName} in the database for ${name}`);
@@ -93,8 +95,10 @@ const handleRealmInsert = async (
                     await db.update(realmTable)
                         .set({ records_count: count })
                         .where(eq(realmTable.realm_name, realmName));
-                } catch (error: any) {
-                    console.log(error.message);
+                } catch (error) {
+                    if (error instanceof Error) {
+                        console.log(error.message);
+                    }
                 }
             }
         });

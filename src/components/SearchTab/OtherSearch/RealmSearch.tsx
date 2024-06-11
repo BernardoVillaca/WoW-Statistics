@@ -10,7 +10,11 @@ interface Realm {
     realm_name: string;
 }
 
-const RealmSearch = () => {
+interface RealmResponse {
+    realmList: Realm[];
+}
+
+const RealmSearch: React.FC = () => {
     const { setCurrentPage } = useSearch();
     const [realmList, setRealmList] = useState<Realm[]>([]);
     const [filteredRealmList, setFilteredRealmList] = useState<Realm[]>([]);
@@ -41,10 +45,10 @@ const RealmSearch = () => {
     useEffect(() => {
         const getData = async () => {
             try {
-                const response = await axios.get(`/api/getRealms`, {
+                const response = await axios.get<RealmResponse>(`/api/getRealms`, {
                     params: { version, region }
                 });
-                if (response.data?.realmList) {
+                if (response.data && response.data.realmList) {
                     setRealmList(response.data.realmList);
                     setFilteredRealmList(response.data.realmList);
                     setIsDataFetched(true);
@@ -56,7 +60,8 @@ const RealmSearch = () => {
                 console.error('Error fetching realms:', error);
             }
         };
-        getData();
+
+        void getData();
         setRealm('');
         setTextInput('');
         updateURL('realm', '', true);
@@ -82,7 +87,7 @@ const RealmSearch = () => {
             updateURL('realm', realm, true);
             setCurrentPage(1);
         }
-    }, [realm]);
+    }, [realm, setCurrentPage]);
 
     const handleFocus = () => {
         setFilteredRealmList(realmList);
@@ -180,7 +185,7 @@ const RealmSearch = () => {
                 ref={inputRef}
                 placeholder='Search Realm'
                 value={textInput}
-                onFocus={() => handleFocus()}
+                onFocus={handleFocus}
                 onChange={(e) => handleChange(e.target.value)}
                 onKeyDown={handleKeyDown}
                 className="w-32 h-8 px-2 text-center text-black bg-gray-300 border-none focus:outline-none"

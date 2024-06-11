@@ -23,7 +23,7 @@ const VersionSearch = () => {
             updateURL('version', version === 'retail' ? '' : version, true);
             setCurrentPage(1);
         }
-    }, [version]);
+    }, [version, setCurrentPage]);
 
     return (
         <div className='flex h-16 '>

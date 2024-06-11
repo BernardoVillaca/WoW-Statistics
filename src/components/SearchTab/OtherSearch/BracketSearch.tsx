@@ -25,7 +25,7 @@ const BracketSearch = () => {
             updateURL('bracket', bracket === '3v3' ? '' : bracket, true);
             setCurrentPage(1);
         }
-    }, [bracket]);
+    }, [bracket, setCurrentPage]);
 
     return (
         <div className='flex text-black items-center justify-center w-1/5 rounded-lg gap-8 border-[1px] border-gray-700'>

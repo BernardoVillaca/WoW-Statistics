@@ -1,5 +1,7 @@
 // SearchContext.tsx
-import React, { createContext, useContext, useState, Dispatch, SetStateAction, ReactNode, useEffect } from 'react';
+import React, { createContext, useContext, useState} from 'react';
+
+import type { Dispatch, SetStateAction, ReactNode } from 'react';
 
 interface SearchContextType {
   minRating: number;
@@ -31,7 +33,7 @@ interface SearchContextType {
 const SearchContext = createContext<SearchContextType | undefined>(undefined);
 
 export const SearchProvider = ({ children }: { children: ReactNode }) => {
- 
+
   const [currentPage, setCurrentPage] = useState<number>(1);
 
   const [resultsCount, setResultsCount] = useState<number>(0);

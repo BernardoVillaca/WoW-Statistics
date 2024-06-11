@@ -1,14 +1,18 @@
 import axios from 'axios';
 import { load } from 'cheerio';
 
+interface CharacterSpec {
+    name: string;
+}
+
+interface CharacterClass {
+    name: string;
+}
+
 interface CharacterData {
     character: {
-        spec?: {
-            name: string;
-        };
-        class?: {
-            name: string;
-        };
+        spec?: CharacterSpec;
+        class?: CharacterClass;
     };
 }
 

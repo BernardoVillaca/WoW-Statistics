@@ -80,7 +80,7 @@ const ClassSearch = () => {
             setCurrentPage(1);
             updateURL('search', selectedSpecs.length > 0 ? selectedSpecs.join(',') : null, true);
         }
-    }, [selectedSpecs]);
+    }, [selectedSpecs, setCurrentPage]);
 
     useEffect(() => {
         setSelectedSpecs([]);

@@ -39,6 +39,35 @@ interface LeaderboardEntry {
     history: HistoryEntry[];
 }
 
+interface ApiResponse {
+    entries: {
+        character: {
+            name: string;
+            id: number;
+            realm: {
+                id: number;
+                slug: string;
+            };
+        };
+        faction: {
+            type: string;
+        };
+        rank: number;
+        rating: number;
+        season_match_statistics: {
+            played: number;
+            won: number;
+            lost: number;
+        };
+        tier: {
+            id: number;
+            key: {
+                href: string;
+            };
+        };
+    }[];
+}
+
 export const updateLeaderboard = async (version: keyof VersionMapping, region: keyof RegionMapping, bracket: keyof BracketMapping): Promise<void> => {
     const versionMapping = versionRegionBracketMapping[version];
     if (!versionMapping) {
@@ -54,7 +83,7 @@ export const updateLeaderboard = async (version: keyof VersionMapping, region: k
 
     try {
         const authToken = await getAuthToken(false);
-        const response = await axios.get(apiEndpoint, {
+        const response = await axios.get<ApiResponse>(apiEndpoint, {
             params: {
                 ...params,
                 access_token: authToken
@@ -63,7 +92,7 @@ export const updateLeaderboard = async (version: keyof VersionMapping, region: k
 
         const entries = response.data?.entries;
         if (entries) {
-            const formattedData = entries.map((item: any): LeaderboardEntry => ({
+            const formattedData = entries.map((item): LeaderboardEntry => ({
                 character_name: item.character.name,
                 character_id: item.character.id,
                 character_class: '',
@@ -103,9 +132,9 @@ export const updateLeaderboard = async (version: keyof VersionMapping, region: k
         } else {
             console.log('No entries found in the response');
         }
-    } catch (error: any) {
-        console.log('Failed to fetch or insert leaderboard data:', error.message);
-        if (error.response?.status === 401) {
+    } catch (error: unknown) {
+        console.log('Failed to fetch or insert leaderboard data:', (error as Error).message);
+        if (axios.isAxiosError(error) && error.response?.status === 401) {
             console.log('Token expired, refreshing token and retrying the request...');
             await getAuthToken(true);
             return updateLeaderboard(version, region, bracket);

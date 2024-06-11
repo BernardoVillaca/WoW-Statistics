@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { FiLoader } from 'react-icons/fi';
 import LeaderboardRow from './LeaderboardRow';
 import axios from 'axios';
@@ -17,7 +17,6 @@ type CharacterData = {
   character_class: string;
   character_spec: string;
   history: HistoryEntry[];
-  
 };
 
 type HistoryEntry = {
@@ -44,16 +43,16 @@ const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, results
       version: params.get('version') ?? 'retail',
       region: params.get('region') ?? 'us',
       bracket: params.get('bracket') ?? '3v3',
-      page: params.get('page') ?? 1,
-      search: params.get('search') ?? params.delete('search'),
-      faction: params.get('faction') ?? params.delete('faction'),
-      realm: params.get('realm') ?? params.delete('realm'),
+      page: parseInt(params.get('page') ?? '1'),
+      search: params.get('search') ?? undefined,
+      faction: params.get('faction') ?? undefined,
+      realm: params.get('realm') ?? undefined,
       minRating: parseInt(params.get('minRating') ?? '0'),
       maxRating: parseInt(params.get('maxRating') ?? '4000')
     };
   };
 
-  const getData = async () => {
+  const getData = useCallback(async () => {
     setLoading(true);
     const queryParams = getQueryParams();
 
@@ -63,28 +62,29 @@ const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, results
         if (key === 'page' && value === 1) return false;
         if (key === 'minRating' && value === 0) return false;
         if (key === 'maxRating' && value === 4000) return false;
-        return value !== '' && value !== null;
+        return value !== '' && value !== null && value !== undefined;
       })
     );
 
     try {
-      const response = await axios.get(`/api/get50Results`, {
+      const response = await axios.get('/api/get50Results', {
         params: filteredParams
       });
-      setResultsCount(response.data.total);
-      setData(response.data.results);
+      const responseData = response.data as { total: number; results: CharacterData[] };
+      setResultsCount(responseData.total);
+      setData(responseData.results);
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
       setLoading(false);
     }
-  };
+  }, [queryParams, setResultsCount]);
 
   useEffect(() => {
     if (queryParams !== null) {
-      getData();
+      void getData();
     }
-  }, [queryParams]);
+  }, [queryParams, getData]);
 
   const containerHeight = resultsPerPage * rowHeight;
 

@@ -12,6 +12,24 @@ import type {
 import { versionRegionBracketMapping } from '~/utils/helper/versionRegionBracketMapping';
 import { scrapPlayerArmory } from './scrapPlayerArmory';
 
+interface CharacterData {
+    active_spec?: {
+        name: string;
+    };
+    character_class: {
+        name: string;
+    };
+}
+
+interface SpecData {
+    specialization_groups: {
+        specializations: {
+            spent_points?: number;
+            specialization_name: string;
+        }[];
+    }[];
+}
+
 export const getExtraDataForEachPlayer = async (version: keyof VersionMapping, region: keyof RegionMapping, bracket: keyof BracketMapping) => {
     const versionMapping = versionRegionBracketMapping[version];
     if (!versionMapping) {
@@ -23,7 +41,7 @@ export const getExtraDataForEachPlayer = async (version: keyof VersionMapping, r
     }
 
     const { table, characterApiEndpoint, armoryEndpoint, profileParams } = regionMapping[bracket];
-    const requests: Promise<any>[] = [];
+    const requests: Promise<void>[] = [];
     console.log(`Updating extra data for ${version} ${region} ${bracket}...`);
 
     // Retrieve all leaderboard entries without a class_spec
@@ -60,13 +78,13 @@ const updateCharacterData = async (
     characterApiEndpoint: string,
     armoryEndpoint: string,
     profileParams: LeaderboardParams
-) => {
+): Promise<void> => {
     try {
-        const characterData = await getPlayerData(characterName, realmSlug, characterApiEndpoint, profileParams);
+        const characterData = await getPlayerData(characterName, realmSlug, characterApiEndpoint, profileParams) as CharacterData;
         let specName = '';
 
         if (version === 'classic' && characterData) {
-            const specData = await getSpecData(characterName, realmSlug, characterApiEndpoint, profileParams);
+            const specData = await getSpecData(characterName, realmSlug, characterApiEndpoint, profileParams) as SpecData;
             specName = determineSpecWithMostPoints(specData);
         } else if (characterData?.active_spec) {
             specName = characterData.active_spec.name;
@@ -100,7 +118,7 @@ const updateCharacterData = async (
     }
 };
 
-const getPlayerData = async (characterName: string, realmSlug: string, characterApiEndpoint: string, profileParams: LeaderboardParams): Promise<any> => {
+const getPlayerData = async (characterName: string, realmSlug: string, characterApiEndpoint: string, profileParams: LeaderboardParams): Promise<CharacterData | null> => {
     const authToken = await getAuthToken(false);
     const url = `${characterApiEndpoint}${realmSlug}/${characterName.toLowerCase()}`;
     // console.log(`Fetching data for ${characterName}-${realmSlug} from ${url}`);
@@ -118,10 +136,11 @@ const getPlayerData = async (characterName: string, realmSlug: string, character
             await getAuthToken(true);
             return getPlayerData(characterName, realmSlug, characterApiEndpoint, profileParams); // Retry the request after refreshing the token
         }
+        return null;
     }
 };
 
-const getSpecData = async (characterName: string, realmSlug: string, characterApiEndpoint: string, profileParams: LeaderboardParams): Promise<any> => {
+const getSpecData = async (characterName: string, realmSlug: string, characterApiEndpoint: string, profileParams: LeaderboardParams): Promise<SpecData | null> => {
     const authToken = await getAuthToken(false);
     const specUrl = `${characterApiEndpoint}${realmSlug}/${characterName.toLowerCase()}/specializations`;
     // console.log(`Fetching spec data for ${characterName}-${realmSlug} from ${specUrl}`);
@@ -135,10 +154,11 @@ const getSpecData = async (characterName: string, realmSlug: string, characterAp
         return response.data;
     } catch (error: any) {
         console.error(`Error fetching spec data for ${characterName}-${realmSlug}: ${error.message}`);
+        return null;
     }
 };
 
-const determineSpecWithMostPoints = (specData: any): string => {
+const determineSpecWithMostPoints = (specData: SpecData | null): string => {
     if (!specData?.specialization_groups) {
         return '';
     }
