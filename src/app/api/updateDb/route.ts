@@ -14,7 +14,8 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
-    try {
+    try { 
+        
         console.log('Running scheduled tasks...');
         await updateLeaderboard('retail', 'us', '3v3');
         await updateLeaderboard('retail', 'us', '2v2');
