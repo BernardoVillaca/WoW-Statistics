@@ -16,10 +16,10 @@ interface CharacterData {
     };
 }
 
-export const scrapPlayerArmory = async (characterName: string, realmSlug: string, armoryEndpoint: string) => {
+export const scrapPlayerArmory = async (characterName: string, realmSlug: string, armoryEndpoint: string): Promise<{ characterClass: string; characterSpec: string } | null> => {
     const url = `${armoryEndpoint}${realmSlug}/${characterName}`;
     try {
-        const response = await axios.get(url, {
+        const response = await axios.get<string>(url, {
             headers: {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
             }
@@ -34,14 +34,14 @@ export const scrapPlayerArmory = async (characterName: string, realmSlug: string
         const jsonData = scriptTag ? $(`script:contains(${scriptTag})`).html() : null;
 
         // Extract the JSON data from the script tag
-        const jsonStringMatch = jsonData?.match(/({.*})/);
+        const jsonStringMatch: RegExpMatchArray | null | undefined = jsonData?.match(/({.*})/);
 
         if (jsonStringMatch && jsonStringMatch[0]) {
-            const jsonString = jsonStringMatch[0];
+            const jsonString: string = jsonStringMatch[0];
             const characterData: CharacterData = JSON.parse(jsonString);
 
-            const characterSpec = characterData.character?.spec?.name ?? '';
-            const characterClass = characterData.character?.class?.name ?? '';
+            const characterSpec: string = characterData.character?.spec?.name ?? '';
+            const characterClass: string = characterData.character?.class?.name ?? '';
 
             return {
                 characterClass,

@@ -48,7 +48,7 @@ const RealmSearch: React.FC = () => {
                 const response = await axios.get<RealmResponse>(`/api/getRealms`, {
                     params: { version, region }
                 });
-                if (response.data && response.data.realmList) {
+                if (response.data?.realmList) {
                     setRealmList(response.data.realmList);
                     setFilteredRealmList(response.data.realmList);
                     setIsDataFetched(true);

@@ -113,25 +113,26 @@ const updateCharacterData = async (
             console.log(`Deleting ${characterName} on realm: ${realmSlug}`);
             await db.delete(table).where(eq(table.character_id, characterId));
         }
-    } catch (error: any) {
-        console.error(`Failed to update for ${characterName}: ${error.message}`);
+    } catch (error: unknown) {
+        console.error(`Failed to update for ${characterName}: ${(error as Error).message}`);
     }
 };
 
+// Specified return type
 const getPlayerData = async (characterName: string, realmSlug: string, characterApiEndpoint: string, profileParams: LeaderboardParams): Promise<CharacterData | null> => {
     const authToken = await getAuthToken(false);
     const url = `${characterApiEndpoint}${realmSlug}/${characterName.toLowerCase()}`;
     // console.log(`Fetching data for ${characterName}-${realmSlug} from ${url}`);
     try {
-        const response = await axios.get(url, {
+        const response = await axios.get<CharacterData>(url, {
             params: {
                 ...profileParams,
                 access_token: authToken
             },
         });
         return response.data;
-    } catch (error: any) {
-        if (error.response?.status === 401) {
+    } catch (error: unknown) {
+        if (axios.isAxiosError(error) && error.response?.status === 401) {
             console.log('Token expired, refreshing token and retrying the request...');
             await getAuthToken(true);
             return getPlayerData(characterName, realmSlug, characterApiEndpoint, profileParams); // Retry the request after refreshing the token
@@ -140,20 +141,21 @@ const getPlayerData = async (characterName: string, realmSlug: string, character
     }
 };
 
+// Specified return type
 const getSpecData = async (characterName: string, realmSlug: string, characterApiEndpoint: string, profileParams: LeaderboardParams): Promise<SpecData | null> => {
     const authToken = await getAuthToken(false);
     const specUrl = `${characterApiEndpoint}${realmSlug}/${characterName.toLowerCase()}/specializations`;
     // console.log(`Fetching spec data for ${characterName}-${realmSlug} from ${specUrl}`);
     try {
-        const response = await axios.get(specUrl, {
+        const response = await axios.get<SpecData>(specUrl, {
             params: {
                 ...profileParams,
                 access_token: authToken
             },
         });
         return response.data;
-    } catch (error: any) {
-        console.error(`Error fetching spec data for ${characterName}-${realmSlug}: ${error.message}`);
+    } catch (error: unknown) {
+        console.error(`Error fetching spec data for ${characterName}-${realmSlug}: ${(error as Error).message}`);
         return null;
     }
 };

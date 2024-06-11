@@ -92,7 +92,7 @@ export const updateLeaderboard = async (version: keyof VersionMapping, region: k
 
         const entries = response.data?.entries;
         if (entries) {
-            const formattedData = entries.map((item): LeaderboardEntry => ({
+            const formattedData: LeaderboardEntry[] = entries.map((item): LeaderboardEntry => ({
                 character_name: item.character.name,
                 character_id: item.character.id,
                 character_class: '',

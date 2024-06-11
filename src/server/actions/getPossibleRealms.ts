@@ -103,7 +103,8 @@ const handleRealmInsert = async (
             }
         });
 
-        requests.push(Promise.all(updatePromises).then(() => {}));
+        // Push the individual promises to the requests array
+        requests.push(...updatePromises);
     }
 
     // Wait for all batches to complete
