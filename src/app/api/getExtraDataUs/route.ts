@@ -8,7 +8,7 @@ const SCHEDULED_TASK_SECRET = process.env.SCHEDULED_TASK_SECRET;
 
 export async function GET(req: NextRequest) {
     // Verify the shared secret
-    const providedSecret = req.headers.get('scheduled-task-secret');
+    const providedSecret = req.headers.get('secret');
     if (!providedSecret || providedSecret !== SCHEDULED_TASK_SECRET) {
         return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }

@@ -1,23 +1,71 @@
 {
+    "version": 2,
+    "builds": [
+        {
+            "src": "api/updateDb.js",
+            "use": "@vercel/node"
+        },
+        {
+            "src": "api/getExtraDataClassicUs.js",
+            "use": "@vercel/node"
+        },
+        {
+            "src": "api/getExtraDataClassicEu.js",
+            "use": "@vercel/node"
+        },
+        {
+            "src": "api/getExtraDataUs.js",
+            "use": "@vercel/node"
+        },
+        {
+            "src": "api/getExtraDataEu.js",
+            "use": "@vercel/node"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/api/updateDb",
+            "dest": "/api/updateDb.js"
+        },
+        {
+            "src": "/api/getExtraDataClassicUs",
+            "dest": "/api/getExtraDataClassicUs.js"
+        },
+        {
+            "src": "/api/getExtraDataClassicEu",
+            "dest": "/api/getExtraDataClassicEu.js"
+        },
+        {
+            "src": "/api/getExtraDataUs",
+            "dest": "/api/getExtraDataUs.js"
+        },
+        {
+            "src": "/api/getExtraDataEu",
+            "dest": "/api/getExtraDataEu.js"
+        }
+    ],
+    "env": {
+        "SCHEDULED_TASK_SECRET": "@secret"
+    },
     "crons": [
         {
-            "path": "/api/updateDb",
+            "path": "/api/updateDb?secret=@env.SCHEDULED_TASK_SECRET",
             "schedule": "0 * * * *"
         },
         {
-            "path": "/api/getExtraDataClassicUs",
+            "path": "/api/getExtraDataClassicUs?secret=@env.SCHEDULED_TASK_SECRET",
             "schedule": "0 * * * *"
         },
         {
-            "path": "/api/getExtraDataClassicEu",
+            "path": "/api/getExtraDataClassicEu?secret=@env.SCHEDULED_TASK_SECRET",
             "schedule": "0 * * * *"
         },
         {
-            "path": "/api/getExtraDataUs",
+            "path": "/api/getExtraDataUs?secret=@env.SCHEDULED_TASK_SECRET",
             "schedule": "0 * * * *"
         },
         {
-            "path": "/api/getExtraDataEu",
+            "path": "/api/getExtraDataEu?secret=@env.SCHEDULED_TASK_SECRET",
             "schedule": "0 * * * *"
         }
     ]
