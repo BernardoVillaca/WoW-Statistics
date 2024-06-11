@@ -2,7 +2,7 @@ import schedule from 'node-schedule';
 import { updateLeaderboard } from '../actions/updateLeaderboard';
 import { getExtraDataForEachPlayer } from '../actions/getExtraDataForEachPlayer';
 import { getPossibleRealms } from '../actions/getPossibleRealms';
-
+import './scheduler'
 console.log('Scheduler initialized.');
 
 // Schedule tasks to run every 30 seconds for testing
