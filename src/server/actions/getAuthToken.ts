@@ -1,12 +1,28 @@
 import axios from "axios";
+import { eq } from "drizzle-orm";
 import { db } from '~/server/db';
 import { authToken } from '~/server/db/schema';
 
+interface TokenResponse {
+    access_token: string;
+    token_type: string;
+    expires_in: number;
+}
+
+export const getAuthToken = async (tokenHasExpired: boolean): Promise<string> => {
+    const tokenData = await db.query.authToken.findFirst();
+    if (!tokenData || tokenHasExpired) {
+        return refreshToken();
+    }
+    return tokenData.access_token;
+};
+
+
 // Refreshes the token and updates the database
-const refreshToken = async () => {
+const refreshToken = async (): Promise<string> => {
     const clientId = process.env.BLIZZARD_ID;
     const clientSecret = process.env.BLIZZARD_SECRET;
-    const response = await axios.post('https://us.battle.net/oauth/token', null, {
+    const response = await axios.post<TokenResponse>('https://us.battle.net/oauth/token', null, {
         params: {
             grant_type: 'client_credentials',
             client_id: clientId,
@@ -14,21 +30,15 @@ const refreshToken = async () => {
         },
     });
 
+    const { access_token, token_type, expires_in } = response.data;
+
     // Upsert the token into the database
     await db.update(authToken).set({
-        access_token: response.data.access_token,
-        token_type: response.data.token_type,
-        expires_in: response.data.expires_in,
+        access_token,
+        token_type,
+        expires_in,
         updated_at: new Date()
-    })
-    return response.data.access_token;
-}
+    }).where(eq(authToken.id, 1));
 
-// Fetches or refreshes the token based request being unauthorized
-export const getAuthToken = async (tokenHasExpired: boolean) => {
-    const tokenData = await db.query.authToken.findFirst();
-    if (!tokenData || tokenHasExpired) {
-        return refreshToken();
-    }
-    return tokenData.access_token;
-};
+    return access_token;
+}

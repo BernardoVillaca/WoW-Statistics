@@ -1,7 +1,7 @@
 
-import { 
-    eu3v3Leaderboard, eu2v2Leaderboard , euRBGLeaderboard, 
-    us3v3Leaderboard, us2v2Leaderboard, usRBGLeaderboard, 
+import {
+    eu3v3Leaderboard, eu2v2Leaderboard, euRBGLeaderboard,
+    us3v3Leaderboard, us2v2Leaderboard, usRBGLeaderboard,
     classicUs3v3Leaderboard, classicUs2v2Leaderboard, classicUsRBGLeaderboard,
     classicEu2v2Leaderboard, classicEu3v3Leaderboard, classicEuRBGLeaderboard
 
@@ -13,12 +13,15 @@ export type LeaderboardParams = {
 };
 
 export type LeaderboardMapping = {
-    table: any;
+    table: typeof eu3v3Leaderboard | typeof eu2v2Leaderboard | typeof euRBGLeaderboard
+    | typeof us3v3Leaderboard | typeof us2v2Leaderboard | typeof usRBGLeaderboard
+    | typeof classicUs3v3Leaderboard | typeof classicUs2v2Leaderboard | typeof classicUsRBGLeaderboard
+    | typeof classicEu2v2Leaderboard | typeof classicEu3v3Leaderboard | typeof classicEuRBGLeaderboard;
     apiEndpoint: string;
     characterApiEndpoint: string;
     armoryEndpoint: string;
     params: LeaderboardParams;
-    profileParams: LeaderboardParams; 
+    profileParams: LeaderboardParams;
 };
 
 export type BracketMapping = {

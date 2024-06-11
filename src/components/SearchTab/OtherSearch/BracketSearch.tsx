@@ -12,12 +12,11 @@ const BracketSearch = () => {
     const handleClick = (newBracket: string) => {
         if (newBracket === bracket) return;
         setBracket(newBracket);
-
     };
 
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
-        const initialBracket = urlParams.get('bracket') || '3v3';
+        const initialBracket = urlParams.get('bracket') ?? '3v3';
         setBracket(initialBracket);
     }, []);
 

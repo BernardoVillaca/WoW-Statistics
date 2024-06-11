@@ -10,7 +10,11 @@ interface Realm {
     realm_name: string;
 }
 
-const RealmSearch = () => {
+interface RealmResponse {
+    realmList: Realm[];
+}
+
+const RealmSearch: React.FC = () => {
     const { setCurrentPage } = useSearch();
     const [realmList, setRealmList] = useState<Realm[]>([]);
     const [filteredRealmList, setFilteredRealmList] = useState<Realm[]>([]);
@@ -24,27 +28,27 @@ const RealmSearch = () => {
     const queryParams = useURLChange();
 
     const getQueryParams = () => {
-        const params = new URLSearchParams(queryParams || ''); ``
+        const params = new URLSearchParams(queryParams ?? '');
         return {
-            version: params.get('version') || 'retail',
-            region: params.get('region') || 'us',
-            bracket: params.get('bracket') || '3v3',
-
+            version: params.get('version') ?? 'retail',
+            region: params.get('region') ?? 'us',
+            bracket: params.get('bracket') ?? '3v3',
         };
     };
+
     if (realm !== '' && textInput === '' && isOpen === false) {
         setTextInput(realm);
     }
 
     const { version, region } = getQueryParams();
-    
+
     useEffect(() => {
         const getData = async () => {
             try {
-                const response = await axios.get(`/api/getRealms`, {
+                const response = await axios.get<RealmResponse>(`/api/getRealms`, {
                     params: { version, region }
                 });
-                if (response.data && response.data.realmList) {
+                if (response.data?.realmList) {
                     setRealmList(response.data.realmList);
                     setFilteredRealmList(response.data.realmList);
                     setIsDataFetched(true);
@@ -56,7 +60,8 @@ const RealmSearch = () => {
                 console.error('Error fetching realms:', error);
             }
         };
-        getData();
+
+        void getData();
         setRealm('');
         setTextInput('');
         updateURL('realm', '', true);
@@ -73,7 +78,7 @@ const RealmSearch = () => {
 
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
-        const initialRealm = urlParams.get('realm') || '';
+        const initialRealm = urlParams.get('realm') ?? '';
         setRealm(initialRealm);
     }, []);
 
@@ -85,7 +90,7 @@ const RealmSearch = () => {
     }, [realm]);
 
     const handleFocus = () => {
-        setFilteredRealmList(realmList)
+        setFilteredRealmList(realmList);
         setTextInput('');
         setIsOpen(true);
         setHighlightedIndex(0);
@@ -97,14 +102,12 @@ const RealmSearch = () => {
         const filtered = realmList.filter((realm) =>
             realm.realm_name.toLowerCase().includes(value.toLowerCase())
         );
-        // if realmList contains the textIput set the realm
         setFilteredRealmList(filtered);
         setHighlightedIndex(0); // Reset highlighted index on input change
         const exactMatch = realmList.find(
             (realm) => realm.realm_name.toLowerCase() === value.toLowerCase()
         );
 
-        // Set the realm if there's an exact match
         if (exactMatch) {
             setRealm(exactMatch.realm_name);
             setTextInput(exactMatch.realm_name);
@@ -158,31 +161,31 @@ const RealmSearch = () => {
     };
 
     if (!isDataFetched) {
-        return <div className='flex flex-col items-center justify-center w-1/5 p-4 rounded-lg border border-gray-700'>
-            <FiLoader className="animate-spin text-white" size={50} />
-        </div>;
+        return (
+            <div className='flex flex-col items-center justify-center w-1/5 p-4 rounded-lg border border-gray-700'>
+                <FiLoader className="animate-spin text-white" size={50} />
+            </div>
+        );
     }
 
     return (
-        <div className='relative flex text-black items-center justify-center w-1/5 rounded-lg border-[1px] border-gray-700'>\
-
+        <div className='relative flex text-black items-center justify-center w-1/5 rounded-lg border-[1px] border-gray-700'>
             {realm !== '' && (
                 <button
-                    className='absolute left-[150px] text-red-500 '
+                    className='absolute left-[150px] text-red-500'
                     onClick={() => {
-                        setRealm('')
-                        setTextInput('')
+                        setRealm('');
+                        setTextInput('');
                     }}
                 >
                     <FiMinusCircle />
                 </button>
-
             )}
             <input
                 ref={inputRef}
                 placeholder='Search Realm'
                 value={textInput}
-                onFocus={() => handleFocus()}
+                onFocus={handleFocus}
                 onChange={(e) => handleChange(e.target.value)}
                 onKeyDown={handleKeyDown}
                 className="w-32 h-8 px-2 text-center text-black bg-gray-300 border-none focus:outline-none"

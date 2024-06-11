@@ -17,17 +17,17 @@ export const calculateDifference = (history: HistoryEntry[], cell: string, text:
         const diffTime = currentDate.getTime() - lastUpdate.getTime();
         const diffHours = diffTime / (1000 * 60 * 60);
 
-        //   if (diffHours < 24) {
-        let previousValue = lastHistoryEntry[cell as keyof HistoryEntry];
-        if (typeof previousValue === 'string') {
-            previousValue = parseInt(previousValue, 10);
-        }
-        const currentValue = parseInt(text, 10);
-        if (previousValue !== undefined) {
-            const difference = cell === 'rank' ? previousValue - currentValue : currentValue - previousValue;
-            return difference;
+        if (diffHours <= 48) {
+            let previousValue = lastHistoryEntry[cell as keyof HistoryEntry];
+            if (typeof previousValue === 'string') {
+                previousValue = parseInt(previousValue, 10);
+            }
+            const currentValue = parseInt(text, 10);
+            if (previousValue !== undefined) {
+                const difference = cell === 'rank' ? previousValue - currentValue : currentValue - previousValue;
+                return difference;
+            }
         }
     }
-    // }
     return 0;
 };

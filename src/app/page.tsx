@@ -33,7 +33,7 @@ const HomePage = () => {
         <SearchTab />
         <ScrollTab resultsPerPage={resultsPerPage} />
         <div className="flex h-16 bg-black justify-between rounded-xl">
-          {searchTabs.map((tab, index) => (
+          {searchTabs.map((tab) => (
             <div key={tab.name} className={`flex items-center justify-center text-white text-center h-full w-full '} `}>{tab.label}</div>
           ))}
         </div>

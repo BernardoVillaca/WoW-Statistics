@@ -1,5 +1,6 @@
 import { asc } from "drizzle-orm";
-import { NextRequest, NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 import { db } from "~/server/db";
 import { usRealms, euRealms, classicUsRealms, classicEusRealms } from "~/server/db/schema";
 
@@ -12,8 +13,8 @@ const realmsMap = [
 
 export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
-    const version = searchParams.get('version') || 'retail';
-    const region = searchParams.get('region') || 'us'; 
+    const version = searchParams.get('version') ?? 'retail';
+    const region = searchParams.get('region') ?? 'us'; 
 
     // Find the corresponding table for the specified version and region
     const regionTableEntry = realmsMap.find(entry => entry.version === version && entry.region === region);

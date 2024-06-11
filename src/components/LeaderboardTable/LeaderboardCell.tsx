@@ -1,8 +1,8 @@
 import Image from 'next/image';
 import specIconsMap from '~/utils/helper/specIconsMap';
-import horde from '~/assets/WoWFactions/horde.png';
-import alliance from '~/assets/WoWFactions/alliance.png';
-import { calculateDifference } from '~/utils/helper/calculateDifferences';
+import horde from '../../assets/WoWFactions/horde.png';
+import alliance from '../../assets/WoWFactions/alliance.png'
+import { calculateDifference } from '~/utils/helper/calculateDifference';
 
 const classColors = {
   'Death Knight': "#C41E3A",
@@ -20,9 +20,23 @@ const classColors = {
   'Evoker': "#33937F",
 };
 
-const LeaderboardCell = ({ text, height, index, cell, characterClass, characterSpec, history }
-  : { text: string, height: number, index: number, cell: string, characterClass: string, characterSpec: string, history: any[] }) => {
+type HistoryEntry = {
+  cell: string;
+  value: string | number;
+  updated_at: string;
+};
 
+type LeaderboardCellProps = {
+  text: string;
+  height: number;
+  index: number;
+  cell: string;
+  characterClass: string;
+  characterSpec: string;
+  history: HistoryEntry[];
+};
+
+const LeaderboardCell = ({ text, height, index, cell, characterClass, characterSpec, history }: LeaderboardCellProps) => {
   const specClass = `${characterSpec} ${characterClass}`;
   const specIcon = specIconsMap[specClass as keyof typeof specIconsMap];
 
@@ -34,7 +48,7 @@ const LeaderboardCell = ({ text, height, index, cell, characterClass, characterS
     let formattedName = realmName.replace('-', ' ').split(' ');
     formattedName = formattedName.map(word => word.charAt(0).toUpperCase() + word.slice(1));
     return formattedName.join(' ');
-  }
+  };
 
   const getTimeSinceLastPlayed = (dateString: string) => {
     const updatedDate = new Date(dateString);

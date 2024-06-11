@@ -5,119 +5,123 @@ import { useSearch } from '~/components/Context/SearchContext';
 import { updateURL } from '~/utils/helper/updateURL';
 import useURLChange from '~/utils/hooks/useURLChange';
 
-const RatingSearch = () => {
-    const { setCurrentPage } = useSearch();
+interface RatingResponse {
+  highestRating: number;
+  lowestRating: number;
+}
 
-    const queryParams = useURLChange();
+const RatingSearch: React.FC = () => {
+  const { setCurrentPage } = useSearch();
+  const queryParams = useURLChange();
 
-    const getQueryParams = () => {
-        const params = new URLSearchParams(queryParams || '');
-        return {
-            version: params.get('version') || 'retail',
-            region: params.get('region') || 'us',
-            bracket: params.get('bracket') || '3v3',
-            minRating: Number(params.get('minRating')),
-            maxRating: Number(params.get('maxRating'))
-        };
+  const getQueryParams = () => {
+    const params = new URLSearchParams(queryParams ?? '');
+    return {
+      version: params.get('version') ?? 'retail',
+      region: params.get('region') ?? 'us',
+      bracket: params.get('bracket') ?? '3v3',
+      minRating: Number(params.get('minRating') ?? 0),
+      maxRating: Number(params.get('maxRating') ?? 4000),
     };
+  };
 
-    const { version, region, bracket, minRating, maxRating } = getQueryParams();
+  const { version, region, bracket, minRating, maxRating } = getQueryParams();
 
-    const [minSliderValue, setMinSliderValue] = useState(0);
-    const [maxSliderValue, setMaxSliderValue] = useState(0);
-    const [minInputValue, setMinInputValue] = useState(0);
-    const [maxInputValue, setMaxInputValue] = useState(0);
-    const [isDataFetched, setIsDataFetched] = useState(false);
+  const [minSliderValue, setMinSliderValue] = useState<number>(0);
+  const [maxSliderValue, setMaxSliderValue] = useState<number>(0);
+  const [minInputValue, setMinInputValue] = useState<number>(0);
+  const [maxInputValue, setMaxInputValue] = useState<number>(0);
+  const [isDataFetched, setIsDataFetched] = useState<boolean>(false);
 
-    useEffect(() => {
-        let isMounted = true;
-        const fetchRatings = async () => {
-            try {
-                const response = await axios.get(`/api/getMinMaxRating`, {
-                    params: { version, region, bracket }
-                });
-                const { highestRating, lowestRating } = response.data;
-                if (isMounted) {
-                    setMinSliderValue(lowestRating);
-                    setMaxSliderValue(highestRating);
-                    setMinInputValue(Math.max(minRating || lowestRating, lowestRating));
-                    setMaxInputValue(Math.min(maxRating || highestRating, highestRating));
-                    setIsDataFetched(true);
-                }
-            } catch (error) {
-                console.error('Error fetching ratings:', error);
-            }
-        };
-
-        fetchRatings();
-
-        return () => {
-            isMounted = false;
-        };
-    }, [version, region, bracket]);
-
-    useEffect(() => {
-        if (minInputValue || maxInputValue) {
-            updateURL('maxRating', maxInputValue === maxSliderValue ? '' : maxInputValue.toString(), true);
-            updateURL('minRating', minInputValue === minSliderValue ? '' : minInputValue.toString(), true);
-            setCurrentPage(1);
+  useEffect(() => {
+    let isMounted = true;
+    const fetchRatings = async () => {
+      try {
+        const response = await axios.get<RatingResponse>('/api/getMinMaxRating', {
+          params: { version, region, bracket },
+        });
+        const { highestRating, lowestRating } = response.data;
+        if (isMounted) {
+          setMinSliderValue(lowestRating);
+          setMaxSliderValue(highestRating);
+          setMinInputValue(Math.max(minRating, lowestRating));
+          setMaxInputValue(Math.min(maxRating, highestRating));
+          setIsDataFetched(true);
         }
-    }, [minInputValue, maxInputValue]);
-
-    const handleMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = Math.min(Number(e.target.value), maxInputValue - 1);
-        setMinInputValue(value);
+      } catch (error) {
+        console.error('Error fetching ratings:', error);
+      }
     };
 
-    const handleMaxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = Math.max(Number(e.target.value), minInputValue + 1);
-        setMaxInputValue(value);
-    };
+    void fetchRatings();
 
-    if (!isDataFetched) {
-        return (
-            <div className='flex flex-col items-center justify-center w-1/5 p-4 rounded-lg border border-gray-700'>
-                <FiLoader className="animate-spin text-white" size={50} />
-            </div>
-        );
+    return () => {
+      isMounted = false;
+    };
+  }, [version, region, bracket, minRating, maxRating]);
+
+  useEffect(() => {
+    if (minInputValue || maxInputValue) {
+      updateURL('maxRating', maxInputValue === maxSliderValue ? '' : maxInputValue.toString(), true);
+      updateURL('minRating', minInputValue === minSliderValue ? '' : minInputValue.toString(), true);
+      setCurrentPage(1);
     }
+  }, [minInputValue, maxInputValue, maxSliderValue, minSliderValue, setCurrentPage]);
 
+  const handleMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = Math.min(Number(e.target.value), maxInputValue - 1);
+    setMinInputValue(value);
+  };
+
+  const handleMaxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = Math.max(Number(e.target.value), minInputValue + 1);
+    setMaxInputValue(value);
+  };
+
+  if (!isDataFetched) {
     return (
-        <div className='flex flex-col items-center justify-center w-1/5 p-4 rounded-lg border border-gray-700'>
-            <div className='relative w-full h-10'>
-                <input
-                    type='range'
-                    min={minSliderValue}
-                    max={maxSliderValue}
-                    value={minInputValue}
-                    onChange={handleMinChange}
-                    className='absolute h-10 bg-transparent  pointer-events-none z-30 w-full'
-                    style={{ zIndex: minInputValue > maxSliderValue * 0.5 ? '40' : '30' }}
-                />
-                <input
-                    type='range'
-                    min={minSliderValue}
-                    max={maxSliderValue}
-                    value={maxInputValue}
-                    onChange={handleMaxChange}
-                    className='absolute h-10 bg-transparent pointer-events-none z-40 w-full'
-                    style={{ zIndex: maxInputValue <= maxSliderValue * 0.5 ? '40' : '30' }}
-                />
-                <div className='absolute w-full h-1 bg-gray-300 rounded-lg top-1/2 transform -translate-y-1/2'></div>
-                <div
-                    className='absolute h-1 bg-blue-500 rounded-lg top-1/2 transform -translate-y-1/2'
-                    style={{
-                        left: `${((minInputValue - minSliderValue) / (maxSliderValue - minSliderValue)) * 100}%`,
-                        width: `${((maxInputValue - minInputValue) / (maxSliderValue - minSliderValue)) * 100}%`,
-                    }}
-                ></div>
-            </div>
-            <div className='flex justify-between w-full'>
-                <span className='text-sm text-gray-300'>{minInputValue}</span>
-                <span className='text-sm text-gray-300'>{maxInputValue}</span>
-            </div>
-        </div>
+      <div className="flex flex-col items-center justify-center w-1/5 p-4 rounded-lg border border-gray-700">
+        <FiLoader className="animate-spin text-white" size={50} />
+      </div>
     );
+  }
+
+  return (
+    <div className="flex flex-col items-center justify-center w-1/5 p-4 rounded-lg border border-gray-700">
+      <div className="relative w-full h-10">
+        <input
+          type="range"
+          min={minSliderValue}
+          max={maxSliderValue}
+          value={minInputValue}
+          onChange={handleMinChange}
+          className="absolute h-10 bg-transparent pointer-events-none z-30 w-full"
+          style={{ zIndex: minInputValue > maxSliderValue * 0.5 ? '40' : '30' }}
+        />
+        <input
+          type="range"
+          min={minSliderValue}
+          max={maxSliderValue}
+          value={maxInputValue}
+          onChange={handleMaxChange}
+          className="absolute h-10 bg-transparent pointer-events-none z-40 w-full"
+          style={{ zIndex: maxInputValue <= maxSliderValue * 0.5 ? '40' : '30' }}
+        />
+        <div className="absolute w-full h-1 bg-gray-300 rounded-lg top-1/2 transform -translate-y-1/2"></div>
+        <div
+          className="absolute h-1 bg-blue-500 rounded-lg top-1/2 transform -translate-y-1/2"
+          style={{
+            left: `${((minInputValue - minSliderValue) / (maxSliderValue - minSliderValue)) * 100}%`,
+            width: `${((maxInputValue - minInputValue) / (maxSliderValue - minSliderValue)) * 100}%`,
+          }}
+        ></div>
+      </div>
+      <div className="flex justify-between w-full">
+        <span className="text-sm text-gray-300">{minInputValue}</span>
+        <span className="text-sm text-gray-300">{maxInputValue}</span>
+      </div>
+    </div>
+  );
 };
 
 export default RatingSearch;

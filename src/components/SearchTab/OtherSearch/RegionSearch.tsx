@@ -12,7 +12,7 @@ const RegionSearch = () => {
     // Initialize state based on URL parameter
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
-        const initialRegion = urlParams.get('region') || 'us';
+        const initialRegion = urlParams.get('region') ?? 'us';
         setRegion(initialRegion);
     }, []);
 
