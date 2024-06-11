@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
     }
 
     try { 
-        
+
         console.log('Running scheduled tasks...');
         await updateLeaderboard('retail', 'us', '3v3');
         await updateLeaderboard('retail', 'us', '2v2');
@@ -30,7 +30,6 @@ export async function GET(req: NextRequest) {
         await updateLeaderboard('classic', 'us', '3v3');
         await updateLeaderboard('classic', 'us', '2v2');
         await updateLeaderboard('classic', 'us', 'rbg');
-
         await updateLeaderboard('classic', 'eu', '3v3');
         await updateLeaderboard('classic', 'eu', '2v2');
         await updateLeaderboard('classic', 'eu', 'rbg');
