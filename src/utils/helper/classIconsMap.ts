@@ -1,16 +1,16 @@
-import deathKnight from '../../assets/WoWClasses/DeathKnight/death_knight_class.jpg';
-import demonHunter from '../../assets/WoWClasses/DemonHunter/demon_hunter_class.jpg';
-import druid from '../../assets/WoWClasses/Druid/druid_class.jpg';
-import hunter from '../../assets/WoWClasses/Hunter/hunter_class.jpg';
-import mage from '../../assets/WoWClasses/Mage/mage_class.jpg';
-import monk from '../../assets/WoWClasses/Monk/monk_class.jpg';
-import paladin from '../../assets/WoWClasses/Paladin/paladin_class.jpg';
-import priest from '../../assets/WoWClasses/Priest/priest_class.jpg';
-import rogue from '../../assets/WoWClasses/Rogue/rogue_class.jpg';
-import shaman from '../../assets/WoWClasses/Shaman/shaman_class.jpg';
-import warlock from '../../assets/WoWClasses/Warlock/warlock_class.jpg';
-import warrior from '../../assets/WoWClasses/Warrior/warrior_class.jpg';
-import evoker from '../../assets/WoWClasses/Evoker/evoker_class.jpg';
+import deathKnight from '../../assets/Classes/DeathKnight/death_knight_class.jpg';
+import demonHunter from '../../assets/Classes/DemonHunter/demon_hunter_class.jpg';
+import druid from '../../assets/Classes/Druid/druid_class.jpg';
+import hunter from '../../assets/Classes/Hunter/hunter_class.jpg';
+import mage from '../../assets/Classes/Mage/mage_class.jpg';
+import monk from '../../assets/Classes/Monk/monk_class.jpg';
+import paladin from '../../assets/Classes/Paladin/paladin_class.jpg';
+import priest from '../../assets/Classes/Priest/priest_class.jpg';
+import rogue from '../../assets/Classes/Rogue/rogue_class.jpg';
+import shaman from '../../assets/Classes/Shaman/shaman_class.jpg';
+import warlock from '../../assets/Classes/Warlock/warlock_class.jpg';
+import warrior from '../../assets/Classes/Warrior/warrior_class.jpg';
+import evoker from '../../assets/Classes/Evoker/evoker_class.jpg';
 
 
 

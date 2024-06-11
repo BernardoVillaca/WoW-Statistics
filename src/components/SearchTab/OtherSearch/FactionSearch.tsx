@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
 import Image from 'next/image';
 import { useSearch } from '../../Context/SearchContext';
-import hordeIcon from '../../../assets/WoWFactions/horde.png';
-import allyIcon from '../../../assets/WoWFactions/alliance.png';
+import hordeIcon from '../../../assets/Factions/horde.png';
+import allyIcon from '../../../assets/Factions/alliance.png';
 import { updateURL } from '~/utils/helper/updateURL';
 
 const FactionSearch = () => {
