@@ -1,9 +1,10 @@
 
 import {
-    eu3v3Leaderboard, eu2v2Leaderboard, euRBGLeaderboard,
-    us3v3Leaderboard, us2v2Leaderboard, usRBGLeaderboard,
+    eu3v3Leaderboard, eu2v2Leaderboard, euRBGLeaderboard, euShuffleLeaderboard,
+    us3v3Leaderboard, us2v2Leaderboard, usRBGLeaderboard, usShuffleLeaderboard,
     classicUs3v3Leaderboard, classicUs2v2Leaderboard, classicUsRBGLeaderboard,
-    classicEu2v2Leaderboard, classicEu3v3Leaderboard, classicEuRBGLeaderboard
+    classicEu2v2Leaderboard, classicEu3v3Leaderboard, classicEuRBGLeaderboard,
+   
 
 } from '~/server/db/schema';
 
@@ -16,7 +17,8 @@ export type LeaderboardMapping = {
     table: typeof eu3v3Leaderboard | typeof eu2v2Leaderboard | typeof euRBGLeaderboard
     | typeof us3v3Leaderboard | typeof us2v2Leaderboard | typeof usRBGLeaderboard
     | typeof classicUs3v3Leaderboard | typeof classicUs2v2Leaderboard | typeof classicUsRBGLeaderboard
-    | typeof classicEu2v2Leaderboard | typeof classicEu3v3Leaderboard | typeof classicEuRBGLeaderboard;
+    | typeof classicEu2v2Leaderboard | typeof classicEu3v3Leaderboard | typeof classicEuRBGLeaderboard
+    | typeof usShuffleLeaderboard | typeof euShuffleLeaderboard | null;
     apiEndpoint: string;
     characterApiEndpoint: string;
     armoryEndpoint: string;
@@ -28,6 +30,7 @@ export type BracketMapping = {
     '3v3': LeaderboardMapping;
     '2v2': LeaderboardMapping;
     'rbg': LeaderboardMapping;
+    'shuffle': LeaderboardMapping | null;
 };
 
 export type RegionMapping = {
@@ -84,6 +87,20 @@ export const versionRegionBracketMapping: VersionMapping = {
                     namespace: 'profile-eu',
                     locale: 'en_GB'
                 }
+            },
+            'shuffle': {
+                table: euShuffleLeaderboard,
+                apiEndpoint: 'https://eu.api.blizzard.com/data/wow/pvp-season/37/pvp-leaderboard/shuffle',
+                characterApiEndpoint: 'https://eu.api.blizzard.com/profile/wow/character/',
+                armoryEndpoint: 'https://worldofwarcraft.blizzard.com/en-gb/character/eu/',
+                params: {
+                    namespace: 'dynamic-eu',
+                    locale: 'en_GB'
+                },
+                profileParams: {
+                    namespace: 'profile-eu',
+                    locale: 'en_GB'
+                }
             }
         },
         us: {
@@ -127,6 +144,20 @@ export const versionRegionBracketMapping: VersionMapping = {
                 profileParams: {
                     namespace: 'profile-us',
                     locale: 'en_US'
+                }
+            },
+            'shuffle': {
+                table: usShuffleLeaderboard,
+                apiEndpoint: 'https://eu.api.blizzard.com/data/wow/pvp-season/37/pvp-leaderboard/shuffle',
+                characterApiEndpoint: 'https://eu.api.blizzard.com/profile/wow/character/',
+                armoryEndpoint: 'https://worldofwarcraft.blizzard.com/en-gb/character/eu/',
+                params: {
+                    namespace: 'dynamic-eu',
+                    locale: 'en_GB'
+                },
+                profileParams: {
+                    namespace: 'profile-eu',
+                    locale: 'en_GB'
                 }
             }
         }
@@ -174,7 +205,9 @@ export const versionRegionBracketMapping: VersionMapping = {
                     namespace: 'profile-classic-us',
                     locale: 'en_US'
                 }
-            }
+            },
+            'shuffle': null
+            
         },
         us: {
             '3v3': {
@@ -218,7 +251,9 @@ export const versionRegionBracketMapping: VersionMapping = {
                     namespace: 'profile-classic-us',
                     locale: 'en_US'
                 }
-            }
+            },
+            'shuffle': null
+        
         }
     }
 };

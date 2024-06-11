@@ -127,9 +127,11 @@ export const updateLeaderboard = async (version: keyof VersionMapping, region: k
             console.log(`Updating leaderboard data for ${version} ${region} ${bracket}...`);
 
             for (const data of formattedData) {
-                requests.push(handleDataInsert(data, table));
+                if (table !== null) {
+                    requests.push(handleDataInsert(data, table));
+                }
 
-                if (requests.length >= 500) {
+                if (requests.length >= 100) {
                     await Promise.all(requests);
                     requests.length = 0;
                 }

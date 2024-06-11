@@ -3,11 +3,11 @@ import ClassSearch from './ClassSearch'
 import OtherSearch from './OtherSearch'
 
 
-const SearchTab = () => {
+const SearchTab = ({isShuffle} : {isShuffle: boolean}) => {
     return (
         <div className='flex flex-col gap-4'>
             <ClassSearch />
-            <OtherSearch/>           
+            <OtherSearch isShuffle={isShuffle}/>           
         </div>
     )
 }
