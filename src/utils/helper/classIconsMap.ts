@@ -17,8 +17,6 @@ import evoker from '../../assets/Classes/Evoker/evoker_class.jpg';
 const classIconsMap = {
     'Death Knight': deathKnight,
     'Demon Hunter': demonHunter,
-    'Deathknight': deathKnight,
-    'Demonhunter': demonHunter,
     'Druid': druid,
     'Hunter': hunter,
     'Mage': mage,

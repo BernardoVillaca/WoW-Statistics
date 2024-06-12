@@ -17,7 +17,7 @@ const classesSpecs = [
     { class: 'monk', specs: ['brewmaster', 'mistweaver', 'windwalker'] },
     { class: 'druid', specs: ['balance', 'feral', 'guardian', 'restoration'] },
     { class: 'demonhunter', specs: ['havoc', 'vengeance'] },
-    { class: 'evoker', specs: ['preservation, augmentation, devastation'] }
+    { class: 'evoker', specs: ['preservation', 'augmentation', 'devastation'] }
 ];
 
 interface HistoryEntry {
