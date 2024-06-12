@@ -5,8 +5,8 @@ import { and, eq } from 'drizzle-orm/expressions';
 import { euShuffleLeaderboard, usShuffleLeaderboard } from '~/server/db/schema';
 
 const classesSpecs = [
-    // { class: 'warrior', specs: ['arms', 'fury', 'protection'] },
-    // { class: 'paladin', specs: ['holy', 'protection', 'retribution'] },
+    { class: 'warrior', specs: ['arms', 'fury', 'protection'] },
+    { class: 'paladin', specs: ['holy', 'protection', 'retribution'] },
     { class: 'hunter', specs: ['beastmastery', 'marksmanship', 'survival'] },
     { class: 'rogue', specs: ['assassination', 'outlaw', 'subtlety'] },
     { class: 'priest', specs: ['discipline', 'holy', 'shadow'] },
