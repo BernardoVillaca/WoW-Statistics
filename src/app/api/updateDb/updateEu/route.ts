@@ -16,13 +16,13 @@ export async function GET(req: NextRequest) {
 
     try { 
 
-        console.log('Running update us tables tasks...');
-        await updateLeaderboard('retail', 'us', '3v3');
-        await updateLeaderboard('retail', 'us', '2v2');
-        await updateLeaderboard('retail', 'us', 'rbg');
+        console.log('Running update eu tables tasks...');
+        await updateLeaderboard('retail', 'eu', '3v3');
+        await updateLeaderboard('retail', 'eu', '2v2');
+        await updateLeaderboard('retail', 'eu', 'rbg');
         
-        console.log('Finished updating us tables tasks');
-        return NextResponse.json({ message: 'Finished updating us tables tasks' });
+        console.log('Finished updating eu tables tasks');
+        return NextResponse.json({ message: 'Finished updating eu tables tasks' });
     } catch (error) {
         console.error('Error running scheduled tasks:', error);
         return NextResponse.json({ error: 'Error running scheduled tasks.' }, { status: 500 });
