@@ -81,6 +81,11 @@ interface ApiResponse {
 
 type LeaderboardTable = typeof euShuffleLeaderboard | typeof usShuffleLeaderboard;
 
+const capitalizeFirstChar = (str: string): string => {
+    if (!str) return str;
+    return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
 export const updateShuffle = async (region: 'eu' | 'us'): Promise<void> => {
     const isEU = region === 'eu';
     const table = isEU ? euShuffleLeaderboard : usShuffleLeaderboard;
@@ -112,8 +117,8 @@ export const updateShuffle = async (region: 'eu' | 'us'): Promise<void> => {
                     const formattedData: LeaderboardEntry[] = entries.map((item): LeaderboardEntry => ({
                         character_name: item.character.name,
                         character_id: item.character.id,
-                        character_class: characterClass,
-                        character_spec: spec,
+                        character_class: capitalizeFirstChar(characterClass),
+                        character_spec: capitalizeFirstChar(spec),
                         realm_id: item.character.realm.id,
                         realm_slug: item.character.realm.slug,
                         faction_name: item.faction.type,

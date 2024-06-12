@@ -12,6 +12,7 @@ const realmsMap = [
 ];
 
 export async function GET(req: NextRequest) {
+  
     const { searchParams } = new URL(req.url);
     const version = searchParams.get('version') ?? 'retail';
     const region = searchParams.get('region') ?? 'us'; 
