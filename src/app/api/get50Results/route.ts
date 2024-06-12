@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import { db } from '~/server/db';
 import type { VersionMapping, RegionMapping, BracketMapping } from '~/utils/helper/versionRegionBracketMapping';
 import { versionRegionBracketMapping } from '~/utils/helper/versionRegionBracketMapping';
-import { asc, count, eq, and, gte, lte, or} from 'drizzle-orm';
+import { asc, count, eq, and, gte, lte, or, desc} from 'drizzle-orm';
 import type { SQL } from 'drizzle-orm';
 
 export async function GET(req: NextRequest) {
@@ -82,7 +82,7 @@ export async function GET(req: NextRequest) {
       : and(...andConditions);
 
     const [results, totalResult] = await Promise.all([
-      db.select().from(table).where(combinedConditions).limit(limit).offset(offset).orderBy(asc(table.rank)),
+      db.select().from(table).where(combinedConditions).limit(limit).offset(offset).orderBy(desc(table.rating)),
       db.select({ count: count() }).from(table).where(combinedConditions)
     ]);
 

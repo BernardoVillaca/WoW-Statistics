@@ -112,6 +112,8 @@ const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, results
       {!loading && data.map((characterData, index) => (
         characterData.character_class !== '' ? (
           <LeaderboardRow
+            path={path}
+            rowIndex={index}
             key={`${characterData.id}-${index}`}
             characterData={characterData}
             searchTabs={searchTabs}

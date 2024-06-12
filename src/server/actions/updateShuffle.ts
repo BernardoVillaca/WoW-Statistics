@@ -81,9 +81,14 @@ interface ApiResponse {
 
 type LeaderboardTable = typeof euShuffleLeaderboard | typeof usShuffleLeaderboard;
 
-const capitalizeFirstChar = (str: string): string => {
+const capitalizeAndFormatString = (str: string): string => {
     if (!str) return str;
-    return str.charAt(0).toUpperCase() + str.slice(1);
+   
+    const formattedStr = str.replace(/([a-z])([A-Z])/g, '$1 $2');
+    // Capitalize the first character of each word
+    return formattedStr.split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+        .join(' ');
 };
 
 export const updateShuffle = async (region: 'eu' | 'us'): Promise<void> => {
@@ -117,8 +122,8 @@ export const updateShuffle = async (region: 'eu' | 'us'): Promise<void> => {
                     const formattedData: LeaderboardEntry[] = entries.map((item): LeaderboardEntry => ({
                         character_name: item.character.name,
                         character_id: item.character.id,
-                        character_class: capitalizeFirstChar(characterClass),
-                        character_spec: capitalizeFirstChar(spec),
+                        character_class: capitalizeAndFormatString(characterClass),
+                        character_spec: capitalizeAndFormatString(spec),
                         realm_id: item.character.realm.id,
                         realm_slug: item.character.realm.slug,
                         faction_name: item.faction.type,
