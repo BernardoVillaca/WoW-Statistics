@@ -77,7 +77,7 @@ export const getExtraDataForEachPlayer = async (version: keyof VersionMapping, r
             requests.push(updateCharacterData(version, characterName, realmSlug, characterId, table, characterApiEndpoint, armoryEndpoint, profileParams));
 
 
-            if (requests.length >= 10) {
+            if (requests.length >= 30) {
                 await Promise.all(requests);
                 requests.length = 0; 
             }
