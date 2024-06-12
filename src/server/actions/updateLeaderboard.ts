@@ -12,7 +12,9 @@ import type {
     eu3v3Leaderboard, eu2v2Leaderboard, euRBGLeaderboard,
     us3v3Leaderboard, us2v2Leaderboard, usRBGLeaderboard,
     classicUs3v3Leaderboard, classicUs2v2Leaderboard, classicUsRBGLeaderboard,
-    classicEu2v2Leaderboard, classicEu3v3Leaderboard, classicEuRBGLeaderboard
+    classicEu2v2Leaderboard, classicEu3v3Leaderboard, classicEuRBGLeaderboard,
+    usShuffleLeaderboard,
+    euShuffleLeaderboard
 } from '~/server/db/schema';
 
 interface HistoryEntry {
@@ -74,8 +76,8 @@ interface ApiResponse {
     }[];
 }
 
-type LeaderboardTable = typeof eu3v3Leaderboard | typeof eu2v2Leaderboard | typeof euRBGLeaderboard
-    | typeof us3v3Leaderboard | typeof us2v2Leaderboard | typeof usRBGLeaderboard
+type LeaderboardTable = typeof eu3v3Leaderboard | typeof eu2v2Leaderboard | typeof euRBGLeaderboard | typeof usShuffleLeaderboard
+    | typeof us3v3Leaderboard | typeof us2v2Leaderboard | typeof usRBGLeaderboard | typeof euShuffleLeaderboard
     | typeof classicUs3v3Leaderboard | typeof classicUs2v2Leaderboard | typeof classicUsRBGLeaderboard
     | typeof classicEu2v2Leaderboard | typeof classicEu3v3Leaderboard | typeof classicEuRBGLeaderboard;
 
@@ -85,11 +87,13 @@ export const updateLeaderboard = async (version: keyof VersionMapping, region: k
         throw new Error(`Invalid version: ${version}`);
     }
     const regionMapping = versionMapping[region];
-    if (!regionMapping?.[bracket]) {
+    const bracketMapping = regionMapping?.[bracket];
+
+    if (!bracketMapping) {
         throw new Error(`Invalid region or bracket: ${region} ${bracket}`);
     }
 
-    const { table, apiEndpoint, params } = regionMapping[bracket];
+    const { table, apiEndpoint, params } = bracketMapping;
     const requests: Promise<void>[] = [];
 
     try {
