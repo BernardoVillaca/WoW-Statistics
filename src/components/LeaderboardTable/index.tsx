@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import React, { useEffect, useState } from 'react';
 import { FiLoader } from 'react-icons/fi';
@@ -35,15 +35,20 @@ const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, results
   const { setResultsCount } = useSearch();
   const [data, setData] = useState<CharacterData[]>([]);
   const [loading, setLoading] = useState(false);
+  const [path, setPath] = useState<string | null>(null);
   const queryParams = useURLChange();
-  const path = window.location.pathname;
- 
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setPath(window.location.pathname);
+    }
+  }, []);
 
   const getQueryParams = () => {
     const params = new URLSearchParams(queryParams ?? '');
     let bracket = params.get('bracket') ?? '3v3';
 
-    if (path.includes('solo-shuffle')) {
+    if (path?.includes('solo-shuffle')) {
       bracket = 'shuffle';
     }
 
@@ -81,7 +86,7 @@ const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, results
       const responseData = response.data as { total: number; results: CharacterData[] };
       setResultsCount(responseData.total);
       setData(responseData.results);
-      console.log(data)
+      console.log(data);
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -90,10 +95,10 @@ const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, results
   };
 
   useEffect(() => {
-    if (queryParams !== null) {
+    if (queryParams !== null && path !== null) {
       void getData(); // Use the `void` operator to explicitly ignore the promise
     }
-  }, [queryParams]);
+  }, [queryParams, path]);
 
   const containerHeight = resultsPerPage * rowHeight;
 

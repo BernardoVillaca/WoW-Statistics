@@ -11,8 +11,6 @@ const SoloShuffle = () => {
     const resultsPerPage = 50
     const rowHeight = 40
 
-
-
     return (
         <main className="flex min-h-screen bg-gradient-to-b from-[#000080] to-black text-white relative">
             <div className="flex flex-col w-full gap-4 pt-4">
