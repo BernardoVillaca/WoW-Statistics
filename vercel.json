@@ -1,24 +1,57 @@
-{   
+{
     "crons": [
         {
-            "path": "/api/updateDb?secret=@env.SCHEDULED_TASK_SECRET",
+            "path": "/api/updateDb",
             "schedule": "0 * * * *"
         },
         {
-            "path": "/api/getExtraDataClassicUs?secret=@env.SCHEDULED_TASK_SECRET",
+            "path": "/api/getExtraDataUs3v3",
             "schedule": "0 * * * *"
         },
         {
-            "path": "/api/getExtraDataClassicEu?secret=@env.SCHEDULED_TASK_SECRET",
+            "path": "/api/getExtraDataUs2v2",
             "schedule": "0 * * * *"
         },
         {
-            "path": "/api/getExtraDataUs?secret=@env.SCHEDULED_TASK_SECRET",
+            "path": "/api/getExtraDataUsRbg",
             "schedule": "0 * * * *"
         },
         {
-            "path": "/api/getExtraDataEu?secret=@env.SCHEDULED_TASK_SECRET",
+            "path": "/api/getExtraDataEu3v3",
+            "schedule": "0 * * * *"
+        },
+        {
+            "path": "/api/getExtraDataEu2v2",
+            "schedule": "0 * * * *"
+        },
+        {
+            "path": "/api/getExtraDataEuRbg",
+            "schedule": "0 * * * *"
+        },
+        {
+            "path": "/api/getExtraDataClassicUs3v3",
+            "schedule": "0 * * * *"
+        },
+        {
+            "path": "/api/getExtraDataClassicUs2v2",
+            "schedule": "0 * * * *"
+        },
+        {
+            "path": "/api/getExtraDataClassicUsRbg",
+            "schedule": "0 * * * *"
+        },
+        {
+            "path": "/api/getExtraDataClassicEu3v3",
+            "schedule": "0 * * * *"
+        },
+        {
+            "path": "/api/getExtraDataClassicEu2v2",
+            "schedule": "0 * * * *"
+        },
+        {
+            "path": "/api/getExtraDataClassicEuRbg",
             "schedule": "0 * * * *"
         }
+        
     ]
 }

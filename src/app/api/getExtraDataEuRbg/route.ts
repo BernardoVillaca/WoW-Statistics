@@ -14,20 +14,15 @@ export async function GET(req: NextRequest) {
     }
 
     try {
-        console.log('Getting extra data for us classic players...');
-       
-        await getExtraDataForEachPlayer('classic', 'us', '3v3');
-        await getExtraDataForEachPlayer('classic', 'us', '2v2');
-        await getExtraDataForEachPlayer('classic', 'us', 'rbg');
+        console.log('Get extra data for eu rbg');
 
-        await getExtraDataForEachPlayer('classic', 'eu', '3v3');
-        await getExtraDataForEachPlayer('classic', 'eu', '2v2');
-        await getExtraDataForEachPlayer('classic', 'eu', 'rbg');
-
-        console.log('Fishing getting extra data for us classic players.');
-        return NextResponse.json({ message: 'Scheduled tasks completed.' });
+        await getExtraDataForEachPlayer('retail', 'eu', 'rbg');
+     
+        console.log('Fished getting extra data for eu 2v2.');
+        return NextResponse.json({ message: 'Scheduled tasks rbg.' });
     } catch (error) {
         console.error('Error running scheduled tasks:', error);
         return NextResponse.json({ error: 'Error running scheduled tasks.' }, { status: 500 });
     }
+
 }

@@ -14,13 +14,11 @@ export async function GET(req: NextRequest) {
     }
 
     try {
-        console.log('Get extra data for eu players');
-
-        await getExtraDataForEachPlayer('retail', 'eu', '3v3');
-        await getExtraDataForEachPlayer('retail', 'eu', '2v2');
-        await getExtraDataForEachPlayer('retail', 'eu', 'rbg');
-
-        console.log('Fished getting extra data for eu players.');
+        console.log('Getting extra data for us classic 3v3.');
+         
+        await getExtraDataForEachPlayer('classic', 'us', '3v3');
+             
+        console.log('Fishing getting extra data for us classic 3v3.');
         return NextResponse.json({ message: 'Scheduled tasks completed.' });
     } catch (error) {
         console.error('Error running scheduled tasks:', error);
