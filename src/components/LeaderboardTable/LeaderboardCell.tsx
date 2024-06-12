@@ -3,6 +3,7 @@ import specIconsMap from '~/utils/helper/specIconsMap';
 import horde from '../../assets/Factions/horde.png';
 import alliance from '../../assets/Factions/alliance.png'
 import { calculateDifference } from '~/utils/helper/calculateDifference';
+import { useSearch } from '../Context/SearchContext';
 
 const classColors = {
   'Death Knight': "#C41E3A",
@@ -36,9 +37,12 @@ type LeaderboardCellProps = {
   history: HistoryEntry[];
   rowIndex: number;
   path: string | null;
+
 };
 
 const LeaderboardCell = ({ text, height, index, cell, characterClass, characterSpec, history, rowIndex, path }: LeaderboardCellProps) => {
+  const { currentPage } = useSearch();  // Added resultsPerPage to calculate the correct rank
+  const resultsPerPage = 50;  // Added resultsPerPage to calculate the correct rank
   const specClass = `${characterSpec} ${characterClass}`;
   const specIcon = specIconsMap[specClass as keyof typeof specIconsMap];
   const factionIcon = text === 'HORDE' ? horde : text === 'ALLIANCE' ? alliance : null;
@@ -71,11 +75,13 @@ const LeaderboardCell = ({ text, height, index, cell, characterClass, characterS
   const difference = calculateDifference(history, cell, text);
   const showDifference = difference !== 0;
 
+  const overallRank = (currentPage - 1) * resultsPerPage + rowIndex + 1;
+
   return (
     <div className={`relative flex items-center justify-center text-gray-300 h-[${height}px] w-full ${index === 0 ? '' : 'border-l-[1px] border-gray-700'}`}>
       {factionIcon ? (
         <Image src={factionIcon} alt={text} height={height / 2} width={height / 2} className='rounded-lg overflow-hidden' />
-      ) : cell === 'rating' || cell === 'rank' || cell === 'played' ? (
+      ) : cell === 'rating' || cell === 'played' ? (
         <div className=''>
           <span>{text}</span>
           {showDifference && (
@@ -94,8 +100,11 @@ const LeaderboardCell = ({ text, height, index, cell, characterClass, characterS
         <span className={` ${Number(text) >= 70 ? 'text-green-300' : Number(text) >= 55 ? 'text-yellow-300' : 'text-red-300'} `}>
           {text}%
         </span>
-      ) : cell === 'rank' ? (
-        <span>asdasda</span>
+      ) : cell === 'rank' && path?.includes('solo-shuffle') ? (
+        <div className='flex'>
+          <span>{overallRank}</span>
+          <span style={{ color: classColor }} className='absolute bottom-5 left-28 text-xs text-gray-500'>{text}</span> 
+        </div>
       ) : cell === 'realm_slug' ? (
         <span>{formatRealmName(text)}</span>
       ) : cell === 'updated_at' ? (

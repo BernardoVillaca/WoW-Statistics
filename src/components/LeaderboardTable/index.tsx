@@ -96,7 +96,7 @@ const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, results
 
   useEffect(() => {
     if (queryParams !== null && path !== null) {
-      void getData(); // Use the `void` operator to explicitly ignore the promise
+      void getData();
     }
   }, [queryParams, path]);
 
