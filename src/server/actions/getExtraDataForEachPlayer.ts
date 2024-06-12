@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { db } from '~/server/db';
 import { getAuthToken } from '~/server/actions/getAuthToken';
 import { eq } from 'drizzle-orm';
@@ -14,7 +14,9 @@ import type {
     eu3v3Leaderboard, eu2v2Leaderboard, euRBGLeaderboard,
     us3v3Leaderboard, us2v2Leaderboard, usRBGLeaderboard,
     classicUs3v3Leaderboard, classicUs2v2Leaderboard, classicUsRBGLeaderboard,
-    classicEu2v2Leaderboard, classicEu3v3Leaderboard, classicEuRBGLeaderboard
+    classicEu2v2Leaderboard, classicEu3v3Leaderboard, classicEuRBGLeaderboard,
+    euShuffleLeaderboard,
+    usShuffleLeaderboard
 } from '~/server/db/schema';
 
 interface CharacterData {
@@ -42,10 +44,11 @@ interface LeaderboardEntry {
     character_spec: string;
 }
 
-type LeaderboardTable = typeof eu3v3Leaderboard | typeof eu2v2Leaderboard | typeof euRBGLeaderboard
-    | typeof us3v3Leaderboard | typeof us2v2Leaderboard | typeof usRBGLeaderboard
-    | typeof classicUs3v3Leaderboard | typeof classicUs2v2Leaderboard | typeof classicUsRBGLeaderboard
-    | typeof classicEu2v2Leaderboard | typeof classicEu3v3Leaderboard | typeof classicEuRBGLeaderboard;
+type LeaderboardTable = typeof eu3v3Leaderboard | typeof eu2v2Leaderboard | typeof euRBGLeaderboard | typeof euShuffleLeaderboard |
+    typeof us3v3Leaderboard | typeof us2v2Leaderboard | typeof usRBGLeaderboard | typeof usShuffleLeaderboard |
+    typeof classicUs3v3Leaderboard | typeof classicUs2v2Leaderboard | typeof classicUsRBGLeaderboard |
+    typeof classicEu2v2Leaderboard | typeof classicEu3v3Leaderboard | typeof classicEuRBGLeaderboard;
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 export const getExtraDataForEachPlayer = async (version: keyof VersionMapping, region: keyof RegionMapping, bracket: keyof BracketMapping) => {
     const versionMapping = versionRegionBracketMapping[version];
@@ -53,11 +56,13 @@ export const getExtraDataForEachPlayer = async (version: keyof VersionMapping, r
         throw new Error(`Invalid version: ${version}`);
     }
     const regionMapping = versionMapping[region];
-    if ( !regionMapping?.[bracket]) {
+    const bracketMapping = regionMapping?.[bracket];
+
+    if (!bracketMapping) {
         throw new Error(`Invalid region or bracket: ${region} ${bracket}`);
     }
 
-    const { table, characterApiEndpoint, armoryEndpoint, profileParams } = regionMapping[bracket];
+    const { table, characterApiEndpoint, armoryEndpoint, profileParams } = bracketMapping;
     const requests: Promise<void>[] = [];
     console.log(`Updating extra data for ${version} ${region} ${bracket}...`);
 
@@ -71,15 +76,14 @@ export const getExtraDataForEachPlayer = async (version: keyof VersionMapping, r
         if (characterName && realmSlug) {
             requests.push(updateCharacterData(version, characterName, realmSlug, characterId, table, characterApiEndpoint, armoryEndpoint, profileParams));
 
-            // Process in batches of 30 requests
-            if (requests.length >= 30) {
+
+            if (requests.length >= 10) {
                 await Promise.all(requests);
-                requests.length = 0; // Clear the array after processing
+                requests.length = 0; 
             }
         }
     }
 
-    // Process any remaining requests
     if (requests.length > 0) {
         await Promise.all(requests);
     }
@@ -132,14 +136,19 @@ const updateCharacterData = async (
         }
     } catch (error: unknown) {
         console.error(`Failed to update for ${characterName}: ${(error as Error).message}`);
-    }
-};
+        if ((error as AxiosError).response?.status === 429) {
+            console.log(`Rate limited. Retrying ${characterName}-${realmSlug} after delay...`);
+            await delay(1000);
+            await updateCharacterData(version, characterName, realmSlug, characterId, table, characterApiEndpoint, armoryEndpoint, profileParams);
+        }
+    };
+}
 
 // Specified return type
 const getPlayerData = async (characterName: string, realmSlug: string, characterApiEndpoint: string, profileParams: LeaderboardParams): Promise<CharacterData | null> => {
     const authToken = await getAuthToken(false);
     const url = `${characterApiEndpoint}${realmSlug}/${characterName.toLowerCase()}`;
-    // console.log(`Fetching data for ${characterName}-${realmSlug} from ${url}`);
+   
     try {
         const response = await axios.get<CharacterData>(url, {
             params: {
@@ -152,7 +161,7 @@ const getPlayerData = async (characterName: string, realmSlug: string, character
         if (axios.isAxiosError(error) && error.response?.status === 401) {
             console.log('Token expired, refreshing token and retrying the request...');
             await getAuthToken(true);
-            return getPlayerData(characterName, realmSlug, characterApiEndpoint, profileParams); // Retry the request after refreshing the token
+            return getPlayerData(characterName, realmSlug, characterApiEndpoint, profileParams); 
         }
         return null;
     }
@@ -162,7 +171,7 @@ const getPlayerData = async (characterName: string, realmSlug: string, character
 const getSpecData = async (characterName: string, realmSlug: string, characterApiEndpoint: string, profileParams: LeaderboardParams): Promise<SpecData | null> => {
     const authToken = await getAuthToken(false);
     const specUrl = `${characterApiEndpoint}${realmSlug}/${characterName.toLowerCase()}/specializations`;
-    // console.log(`Fetching spec data for ${characterName}-${realmSlug} from ${specUrl}`);
+    
     try {
         const response = await axios.get<SpecData>(specUrl, {
             params: {

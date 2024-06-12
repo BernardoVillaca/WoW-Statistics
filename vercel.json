@@ -1,55 +1,75 @@
 {
     "crons": [
         {
-            "path": "/api/updateDb",
+            "path": "/api/updateDb/updateUS",
             "schedule": "0 * * * *"
         },
         {
-            "path": "/api/getExtraDataUs3v3",
+            "path": "/api/updateDb/updateEu",
             "schedule": "0 * * * *"
         },
         {
-            "path": "/api/getExtraDataUs2v2",
+            "path": "/api/updateDb/updateUsShuffle",
             "schedule": "0 * * * *"
         },
         {
-            "path": "/api/getExtraDataUsRbg",
+            "path": "/api/updateDb/updateEuShuffle",
             "schedule": "0 * * * *"
         },
         {
-            "path": "/api/getExtraDataEu3v3",
+            "path": "/api/updateDb/updateClassicUs",
             "schedule": "0 * * * *"
         },
         {
-            "path": "/api/getExtraDataEu2v2",
+            "path": "/api/updateDb/updateClassicEu",
             "schedule": "0 * * * *"
         },
         {
-            "path": "/api/getExtraDataEuRbg",
+            "path": "/api/getExtraData/getExtraDataUs3v3",
             "schedule": "0 * * * *"
         },
         {
-            "path": "/api/getExtraDataClassicUs3v3",
+            "path": "/api/getExtraData/getExtraDataUs2v2",
             "schedule": "0 * * * *"
         },
         {
-            "path": "/api/getExtraDataClassicUs2v2",
+            "path": "/api/getExtraData/getExtraDataUsRbg",
             "schedule": "0 * * * *"
         },
         {
-            "path": "/api/getExtraDataClassicUsRbg",
+            "path": "/api/getExtraData/getExtraDataEu3v3",
             "schedule": "0 * * * *"
         },
         {
-            "path": "/api/getExtraDataClassicEu3v3",
+            "path": "/api/getExtraData/getExtraDataEu2v2",
             "schedule": "0 * * * *"
         },
         {
-            "path": "/api/getExtraDataClassicEu2v2",
+            "path": "/api/getExtraData/getExtraDataEuRbg",
             "schedule": "0 * * * *"
         },
         {
-            "path": "/api/getExtraDataClassicEuRbg",
+            "path": "/api/getExtraData/getExtraDataClassicUs3v3",
+            "schedule": "0 * * * *"
+        },
+        {
+            "path": "/api/getExtraData/getExtraDataClassicUs2v2",
+            "schedule": "0 * * * *"
+        },
+        {
+            "path": "/api/getExtraData/getExtraDataClassicUsRbg",
+            "schedule": "0 * * * *"
+        },
+        {
+            "path": "/api/getExtraData/getExtraDataClassicEu3v3",
+            "schedule": "0 * * * *"
+        },
+        {
+            "path": "/api/getExtraData/getExtraDataClassicEu2v2",
+            "schedule": "0 * * * *"
+        },
+        {
+            "path": "/api/getExtraData/getExtraDataClassicEuRbg",
             "schedule": "0 * * * *"
         }
         

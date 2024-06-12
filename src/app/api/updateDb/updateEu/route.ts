@@ -16,27 +16,13 @@ export async function GET(req: NextRequest) {
 
     try { 
 
-        console.log('Running scheduled tasks...');
+        console.log('Running update us tables tasks...');
         await updateLeaderboard('retail', 'us', '3v3');
         await updateLeaderboard('retail', 'us', '2v2');
         await updateLeaderboard('retail', 'us', 'rbg');
-        await updateShuffle('us');
-
-        await updateLeaderboard('retail', 'eu', '3v3');
-        await updateLeaderboard('retail', 'eu', '2v2');
-        await updateLeaderboard('retail', 'eu', 'rbg');
-        await updateShuffle('eu');
-
-        await updateLeaderboard('classic', 'us', '3v3');
-        await updateLeaderboard('classic', 'us', '2v2');
-        await updateLeaderboard('classic', 'us', 'rbg');
         
-        await updateLeaderboard('classic', 'eu', '3v3');
-        await updateLeaderboard('classic', 'eu', '2v2');
-        await updateLeaderboard('classic', 'eu', 'rbg');
-
-        console.log('Scheduled tasks completed.');
-        return NextResponse.json({ message: 'Scheduled tasks completed.' });
+        console.log('Finished updating us tables tasks');
+        return NextResponse.json({ message: 'Finished updating us tables tasks' });
     } catch (error) {
         console.error('Error running scheduled tasks:', error);
         return NextResponse.json({ error: 'Error running scheduled tasks.' }, { status: 500 });
