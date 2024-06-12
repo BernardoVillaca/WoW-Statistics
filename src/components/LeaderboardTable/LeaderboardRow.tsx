@@ -34,7 +34,7 @@ const LeaderboardRow: React.FC<LeaderboardRowProps> = ({ characterData, searchTa
       {searchTabs.map((cell, index) => {
         const cellValue = characterData[cell.name];
         const text = typeof cellValue === 'string' || typeof cellValue === 'number' ? String(cellValue) : '';
-        console.log(cell)
+        
         return (
           <LeaderboardCell
             key={`${characterData.id}-${cell.name}`}

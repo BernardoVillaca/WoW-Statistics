@@ -58,7 +58,7 @@ const LeaderboardCell = ({ text, height, index, cell, characterClass, characterS
     const currentDate = new Date();
     const diffTime = Math.abs(currentDate.getTime() - updatedDate.getTime());
     const diffMinutes = Math.ceil(diffTime / (1000 * 60));
-console.log(cell)
+   
     if (diffMinutes < 60) {
       return `${diffMinutes} min`;
     } else if (diffMinutes < 1440) { // Less than 24 hours

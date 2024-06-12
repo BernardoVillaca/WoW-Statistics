@@ -81,13 +81,20 @@ interface ApiResponse {
 
 type LeaderboardTable = typeof euShuffleLeaderboard | typeof usShuffleLeaderboard;
 
-const capitalizeAndFormatString = (str: string): string => {
-    if (!str) return str;
-   
-    const formattedStr = str.replace(/([a-z])([A-Z])/g, '$1 $2');
-    // Capitalize the first character of each word
-    return formattedStr.split(' ')
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+const capitalizeAndFormatString = (str: string | undefined): string => {
+    if (!str) return '';
+
+    // Convert the string to lowercase for case-insensitive comparison
+    const lowerStr = str.toLowerCase();
+
+    // Handle specific cases
+    if (lowerStr === 'demonhunter') return 'Demon Hunter';
+    if (lowerStr === 'deathknight') return 'Death Knight';
+    if (lowerStr === 'beastmastery') return 'Beast Mastery';
+
+    // For general cases, capitalize the first character of each word
+    return lowerStr.split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
         .join(' ');
 };
 
