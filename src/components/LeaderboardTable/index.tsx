@@ -36,13 +36,21 @@ const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, results
   const [data, setData] = useState<CharacterData[]>([]);
   const [loading, setLoading] = useState(false);
   const queryParams = useURLChange();
+  const path = window.location.pathname;
+ 
 
   const getQueryParams = () => {
     const params = new URLSearchParams(queryParams ?? '');
+    let bracket = params.get('bracket') ?? '3v3';
+
+    if (path.includes('solo-shuffle')) {
+      bracket = 'shuffle';
+    }
+
     return {
       version: params.get('version') ?? 'retail',
       region: params.get('region') ?? 'us',
-      bracket: params.get('bracket') ?? '3v3',
+      bracket: bracket,
       page: params.get('page') ?? 1,
       search: params.get('search') ?? undefined,
       faction: params.get('faction') ?? undefined,

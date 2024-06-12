@@ -9,10 +9,8 @@ const useURLChange = () => {
         setSearch(window.location.search);
       };
 
-      
       setSearch(window.location.search);
 
-    
       const interval = setInterval(handleURLChange, 100);
 
       return () => {

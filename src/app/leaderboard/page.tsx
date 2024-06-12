@@ -7,15 +7,13 @@ import LeaderBoardTable from "~/components/LeaderboardTable";
 import VersionSearch from "~/components/SearchTab/VersionSearch";
 import { searchTabs} from '~/utils/helper/searchTabsMap';
 
-
-
-
 const resultsPerPage = 50
 const rowHeight = 40
 
-const HomePage = () => {
- 
-    
+const LeaderboardPage = () => {
+
+
+
 
   return (
     <main className="flex min-h-screen bg-gradient-to-b from-[#000080] to-black text-white relative">
@@ -41,7 +39,7 @@ const HomePage = () => {
 
 const LeaderboardWrapper = () => (
   <SearchProvider>
-    <HomePage />
+    <LeaderboardPage />
   </SearchProvider>
 );
 

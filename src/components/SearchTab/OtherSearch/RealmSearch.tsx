@@ -52,7 +52,6 @@ const RealmSearch: React.FC = () => {
                     setRealmList(response.data.realmList);
                     setFilteredRealmList(response.data.realmList);
                     setIsDataFetched(true);
-                    console.log('Realm data fetched:', response.data.realmList);
                 } else {
                     console.error('Invalid data format', response.data);
                 }
