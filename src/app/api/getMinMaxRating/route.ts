@@ -15,12 +15,15 @@ export async function GET(req: NextRequest) {
   if (!versionMapping) {
     return NextResponse.json({ error: `Invalid version: ${version}` }, { status: 400 });
   }
+
   const regionMapping = versionMapping?.[region];
-  if (!regionMapping?.[bracket]) {
+  const bracketMapping = regionMapping?.[bracket];
+
+  if (!bracketMapping) {
     return NextResponse.json({ error: `Invalid region or bracket: ${region} ${bracket}` }, { status: 400 });
   }
 
-  const { table } = regionMapping[bracket];
+  const { table } = bracketMapping;
 
   try {
     const [highestRatingResult, lowestRatingResult] = await Promise.all([
