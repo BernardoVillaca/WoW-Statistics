@@ -6,6 +6,7 @@ import { SearchProvider } from "~/components/Context/SearchContext";
 import LeaderBoardTable from "~/components/LeaderboardTable";
 import VersionSearch from "~/components/SearchTab/VersionSearch";
 import { searchTabs} from '~/utils/helper/searchTabsMap';
+import RatingsCuttoff from "~/components/Ratings Cuttoff";
 
 const resultsPerPage = 50
 const rowHeight = 40
@@ -18,6 +19,7 @@ const LeaderboardPage = () => {
         <VersionSearch />
         <SearchTab isShuffle={false}/>
         <ScrollTab resultsPerPage={resultsPerPage} />
+        <RatingsCuttoff />
         <div className="flex h-16 bg-black justify-between rounded-xl">
           {searchTabs.map((tab) => (
             <div key={tab.name} className={`flex items-center justify-center text-white text-center h-full w-full '} `}>{tab.label}</div>

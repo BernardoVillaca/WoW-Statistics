@@ -12,6 +12,18 @@ import {
 
 export const createTable = pgTableCreator((name) => `wowstats_${name}`);
 
+export const RatingsCutoff = createTable(
+  "ratings_cuttoff",
+  {
+    id: integer("id"),
+    us_cutoffs: jsonb("us_cutoffs"),
+    eu_cutoffs: jsonb("eu_cutoffs"),
+    classic_us_cutoffs: jsonb("classic_us_cutoffs"),
+    classic_eu_cutoffs: jsonb("classic_eu_cutoffs"),
+    updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
+   }  
+);
+
 export const us3v3Leaderboard = createTable(
   "us_3v3_leaderboard",
   {
@@ -48,6 +60,7 @@ export const us3v3Leaderboard = createTable(
     us3v3WinRatioIndex: index("us_3v3_win_ratio_idx").on(leaderboard.win_ratio),
   })
 );
+
 
 
 export const us2v2Leaderboard = createTable(
