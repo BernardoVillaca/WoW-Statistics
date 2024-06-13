@@ -203,6 +203,9 @@ const handleDataInsert = async (data: LeaderboardEntry, table: LeaderboardTable)
 
         updateData.updated_at = new Date();
         updateData.history = newHistory;
+    } else {
+        // If the played value hasn't changed, retain the existing updated_at value
+        updateData.updated_at = existingEntry.updated_at;
     }
 
     await db.update(table).set(updateData).where(eq((table as typeof eu3v3Leaderboard).character_id, data.character_id));
