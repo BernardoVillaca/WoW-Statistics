@@ -6,9 +6,11 @@ import havoc_demonhunter from '../../assets/Classes/DemonHunter/havoc_demonhunte
 import vengeance_demonhunter from '../../assets/Classes/DemonHunter/vengeance_demonhunter_spec.jpg';
 import preservation_evoker from '../../assets/Classes/Evoker/preservation_evoker_spec.jpg';
 import devastation_evoker from '../../assets/Classes/Evoker/devastation_evoker_spec.jpg';
+import augmentation_evoker from '../../assets/Classes/Evoker/augmentation_evoker_spec.jpg';
 import balance_druid from '../../assets/Classes/Druid/balance_druid_spec.jpg';
 import feral_druid from '../../assets/Classes/Druid/feral_druid_spec.jpg';
 import restoration_druid from '../../assets/Classes/Druid/restoration_druid_spec.jpg';
+import guardian_druid from '../../assets/Classes/Druid/guardian_druid_spec.jpg';
 import beastmastery_hunter from '../../assets/Classes/Hunter/beastmastery_hunter_spec.jpg';
 import marksmanship_hunter from '../../assets/Classes/Hunter/marksmanship_hunter_spec.jpg';
 import survival_hunter from '../../assets/Classes/Hunter/survival_hunter_spec.jpg';
@@ -45,10 +47,12 @@ const specIconsMap = {
     'Vengeance Demon Hunter': vengeance_demonhunter,
     'Preservation Evoker': preservation_evoker,
     'Devastation Evoker': devastation_evoker,
+    'Augmentation Evoker': augmentation_evoker,
     'Balance Druid': balance_druid,
     'Feral Druid': feral_druid,
     'Feral Combat Druid': feral_druid,
     'Restoration Druid': restoration_druid,
+    'Guardian Druid': guardian_druid,
     'Beast Mastery Hunter': beastmastery_hunter,
     'Marksmanship Hunter': marksmanship_hunter,
     'Survival Hunter': survival_hunter,

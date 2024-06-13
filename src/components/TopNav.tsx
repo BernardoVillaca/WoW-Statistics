@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 const TopNav = () => {
   return (
-    <nav className="bg-black h-16 flex items-center justify-center gap-12">
+    <nav className="bg-black h-16 flex items-center justify-center gap-12 z-30">
       <Link href="/">
         <div className="text-white cursor-pointer">Home</div>
       </Link>

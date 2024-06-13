@@ -35,8 +35,8 @@ const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, results
   const { setResultsCount } = useSearch();
   const [data, setData] = useState<CharacterData[]>([]);
   const [loading, setLoading] = useState(false);
-  const [path, setPath] = useState<string | null>(null);
   const queryParams = useURLChange();
+  const [path, setPath] = useState<string | null>(null);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -86,7 +86,6 @@ const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, results
       const responseData = response.data as { total: number; results: CharacterData[] };
       setResultsCount(responseData.total);
       setData(responseData.results);
-      console.log(data);
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {

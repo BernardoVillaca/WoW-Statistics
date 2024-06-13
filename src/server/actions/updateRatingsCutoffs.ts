@@ -99,9 +99,7 @@ export const updateRatingsCutoffs = async (): Promise<void> => {
 
             for (const reward of data.rewards) {
                 if (reward.specialization) {
-                    let count = 0;
                     const keyName = specIdMap[reward.specialization.id]?.name;
-
                     if (keyName && tableShuffle) {
                         const specName = specIdMap[reward.specialization.id]?.spec || '';
                         const className = specIdMap[reward.specialization.id]?.class || '';
@@ -155,8 +153,6 @@ export const updateRatingsCutoffs = async (): Promise<void> => {
                 }
             }
 
-            console.log(cutoffs);
-            // Push the cutoffs to the respective part of allCutoffs
             allCutoffs[`${region}_cutoffs`] = { ...allCutoffs[`${region}_cutoffs`], ...cutoffs };
 
             console.log(`Ratings cutoff collected for ${region.toUpperCase()} region!`);

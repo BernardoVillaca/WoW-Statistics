@@ -7,7 +7,7 @@ import { updateURL } from '~/utils/helper/updateURL';
 import useURLChange from '~/utils/hooks/useURLChange';
 
 const classSpecs: Record<string, string[]> = {
-    'Evoker': ['Preservation Evoker', 'Devastation Evoker'],
+    'Evoker': ['Preservation Evoker', 'Devastation Evoker', 'Augmentation Evoker'],
     'Death Knight': ['Blood Death Knight', 'Frost Death Knight', 'Unholy Death Knight'],
     'Druid': ['Balance Druid', 'Feral Druid', 'Restoration Druid'],
     'Hunter': ['Beast Mastery Hunter', 'Marksmanship Hunter', 'Survival Hunter'],
