@@ -1,54 +1,60 @@
- export const specIdMap: { [key: number]: string } = {
+interface SpecInfo {
+    name: string;
+    class: string;
+    spec: string;
+}
 
-    250: 'deathknight_blood_cutoff',
-    251: 'deathknight_frost_cutoff',
-    252: 'deathknight_unholy_cutoff',
+// Define specIdMap with numeric keys
+export const specIdMap: { [key: number]: SpecInfo } = {
+    250: { name: 'death_knight_blood_cutoff', class: 'Death Knight', spec: 'Blood' },
+    251: { name: 'death_knight_frost_cutoff', class: 'Death Knight', spec: 'Frost' },
+    252: { name: 'death_knight_unholy_cutoff', class: 'Death Knight', spec: 'Unholy' },
 
-    577: 'demonhunter_havoc_cutoff',
-    581: 'demonhunter_vengeance_cutoff',
+    577: { name: 'demon_hunter_havoc_cutoff', class: 'Demon Hunter', spec: 'Havoc' },
+    581: { name: 'demon_hunter_vengeance_cutoff', class: 'Demon Hunter', spec: 'Vengeance' },
 
-    102: 'druid_balance_cutoff',
-    103: 'druid_feral_cutoff',
-    104: 'druid_guardian_cutoff',
-    105: 'druid_restoration_cutoff',
+    102: { name: 'druid_balance_cutoff', class: 'Druid', spec: 'Balance' },
+    103: { name: 'druid_feral_cutoff', class: 'Druid', spec: 'Feral' },
+    104: { name: 'druid_guardian_cutoff', class: 'Druid', spec: 'Guardian' },
+    105: { name: 'druid_restoration_cutoff', class: 'Druid', spec: 'Restoration' },
 
-    253: 'hunter_beast_mastery_cutoff',
-    254: 'hunter_marksmanship_cutoff',
-    255: 'hunter_survival_cutoff',
+    253: { name: 'hunter_beast_mastery_cutoff', class: 'Hunter', spec: 'Beast Mastery' },
+    254: { name: 'hunter_marksmanship_cutoff', class: 'Hunter', spec: 'Marksmanship' },
+    255: { name: 'hunter_survival_cutoff', class: 'Hunter', spec: 'Survival' },
 
-    62: 'mage_arcane_cutoff',
-    63: 'mage_fire_cutoff',
-    64: 'mage_frost_cutoff',
+    62: { name: 'mage_arcane_cutoff', class: 'Mage', spec: 'Arcane' },
+    63: { name: 'mage_fire_cutoff', class: 'Mage', spec: 'Fire' },
+    64: { name: 'mage_frost_cutoff', class: 'Mage', spec: 'Frost' },
 
-    268: 'monk_brewmaster_cutoff',
-    270: 'monk_mistweaver_cutoff',
-    269: 'monk_windwalker_cutoff',
+    268: { name: 'monk_brewmaster_cutoff', class: 'Monk', spec: 'Brewmaster' },
+    270: { name: 'monk_mistweaver_cutoff', class: 'Monk', spec: 'Mistweaver' },
+    269: { name: 'monk_windwalker_cutoff', class: 'Monk', spec: 'Windwalker' },
 
-    65: 'paladin_holy_cutoff',
-    66: 'paladin_protection_cutoff',
-    70: 'paladin_retribution_cutoff',
+    65: { name: 'paladin_holy_cutoff', class: 'Paladin', spec: 'Holy' },
+    66: { name: 'paladin_protection_cutoff', class: 'Paladin', spec: 'Protection' },
+    70: { name: 'paladin_retribution_cutoff', class: 'Paladin', spec: 'Retribution' },
 
-    256: 'priest_discipline_cutoff',
-    257: 'priest_holy_cutoff',
-    258: 'priest_shadow_cutoff',
+    256: { name: 'priest_discipline_cutoff', class: 'Priest', spec: 'Discipline' },
+    257: { name: 'priest_holy_cutoff', class: 'Priest', spec: 'Holy' },
+    258: { name: 'priest_shadow_cutoff', class: 'Priest', spec: 'Shadow' },
 
-    259: 'rogue_assassination_cutoff',
-    260: 'rogue_outlaw_cutoff',
-    261: 'rogue_subtlety_cutoff',
+    259: { name: 'rogue_assassination_cutoff', class: 'Rogue', spec: 'Assassination' },
+    260: { name: 'rogue_outlaw_cutoff', class: 'Rogue', spec: 'Outlaw' },
+    261: { name: 'rogue_subtlety_cutoff', class: 'Rogue', spec: 'Subtlety' },
 
-    262: 'shaman_elemental_cutoff',
-    263: 'shaman_enhancement_cutoff',
-    264: 'shaman_restoration_cutoff',
+    262: { name: 'shaman_elemental_cutoff', class: 'Shaman', spec: 'Elemental' },
+    263: { name: 'shaman_enhancement_cutoff', class: 'Shaman', spec: 'Enhancement' },
+    264: { name: 'shaman_restoration_cutoff', class: 'Shaman', spec: 'Restoration' },
 
-    265: 'warlock_affliction_cutoff',
-    266: 'warlock_demonology_cutoff',
-    267: 'warlock_destruction_cutoff',
+    265: { name: 'warlock_affliction_cutoff', class: 'Warlock', spec: 'Affliction' },
+    266: { name: 'warlock_demonology_cutoff', class: 'Warlock', spec: 'Demonology' },
+    267: { name: 'warlock_destruction_cutoff', class: 'Warlock', spec: 'Destruction' },
 
-    71: 'warrior_arms_cutoff',
-    72: 'warrior_fury_cutoff',
-    73: 'warrior_protection_cutoff',
+    71: { name: 'warrior_arms_cutoff', class: 'Warrior', spec: 'Arms' },
+    72: { name: 'warrior_fury_cutoff', class: 'Warrior', spec: 'Fury' },
+    73: { name: 'warrior_protection_cutoff', class: 'Warrior', spec: 'Protection' },
 
-    1467: 'evoker_preservation_cutoff',
-    1473: 'evoker_augmentation_cutoff',
-    1477: 'evoker_devastation_cutoff',
+    1467: { name: 'evoker_preservation_cutoff', class: 'Evoker', spec: 'Preservation' },
+    1473: { name: 'evoker_augmentation_cutoff', class: 'Evoker', spec: 'Augmentation' },
+    1477: { name: 'evoker_devastation_cutoff', class: 'Evoker', spec: 'Devastation' },
 };

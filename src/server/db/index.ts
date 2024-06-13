@@ -1,7 +1,8 @@
 import { drizzle } from 'drizzle-orm/vercel-postgres';
 import { sql } from "@vercel/postgres";
 import * as schema from './schema'
-import { updateRatingsCutoffs } from '~/server/actions/updateRatingsCutoffs';   
+import { updateRatingsCutoffs } from '~/server/actions/updateRatingsCutoffs';
+import { getExtraDataForEachPlayer } from '../actions/getExtraDataForEachPlayer';
 
 
 
@@ -11,10 +12,9 @@ export const db = drizzle(sql, { schema });
 
 let firstRun = true;
 
-if(firstRun) {
+if (firstRun) {
+  await updateRatingsCutoffs();
 
-
-    await updateRatingsCutoffs();
 
 
     firstRun = false;

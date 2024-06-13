@@ -1,4 +1,4 @@
-// src/components/TopNav.tsx
+'use client'
 import Link from 'next/link';
 
 const TopNav = () => {

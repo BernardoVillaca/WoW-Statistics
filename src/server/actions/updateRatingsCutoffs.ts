@@ -1,12 +1,15 @@
 import axios from 'axios';
 import { db } from '~/server/db';
 import { getAuthToken } from '~/server/actions/getAuthToken';
-import { eq } from 'drizzle-orm/expressions';
-import { RatingsCutoff } from '../db/schema';
+import { and, eq, gt } from 'drizzle-orm/expressions';
+import { RatingsCutoff, eu3v3Leaderboard, euRBGLeaderboard, euShuffleLeaderboard, us3v3Leaderboard, usRBGLeaderboard, usShuffleLeaderboard } from '../db/schema';
 import { specIdMap } from '~/utils/helper/specIdMap';
 
 interface RegionParams {
     url: string;
+    db3v3: typeof eu3v3Leaderboard | typeof us3v3Leaderboard;
+    dbShuffle: typeof euShuffleLeaderboard | typeof usShuffleLeaderboard;
+    dbRbg: typeof euRBGLeaderboard | typeof usRBGLeaderboard;
     params: {
         namespace: string;
         locale: string;
@@ -16,6 +19,9 @@ interface RegionParams {
 const regionParams: { [key: string]: RegionParams } = {
     us: {
         url: 'https://us.api.blizzard.com/data/wow/pvp-season/37/pvp-reward/index',
+        db3v3: us3v3Leaderboard,
+        dbShuffle: usShuffleLeaderboard,
+        dbRbg: usRBGLeaderboard,
         params: {
             namespace: 'dynamic-us',
             locale: 'en_US',
@@ -23,6 +29,9 @@ const regionParams: { [key: string]: RegionParams } = {
     },
     eu: {
         url: 'https://eu.api.blizzard.com/data/wow/pvp-season/37/pvp-reward/index',
+        db3v3: eu3v3Leaderboard,
+        dbShuffle: euShuffleLeaderboard,
+        dbRbg: euRBGLeaderboard,
         params: {
             namespace: 'dynamic-eu',
             locale: 'en_GB',
@@ -47,12 +56,18 @@ interface ApiResponse {
 }
 
 interface Cutoffs {
-    [key: string]: number;
+    [key: string]: {
+        rating: number;
+        count: number;
+    }
 }
 
 interface AllCutoffs {
     [key: string]: {
-        [key: string]: number;
+        [key: string]: {
+            rating: number;
+            count: number;
+        }
     };
 }
 
@@ -67,6 +82,9 @@ export const updateRatingsCutoffs = async (): Promise<void> => {
     try {
         for (const region in regionParams) {
             const regionParam = regionParams[region];
+            const table3v3 = regionParam?.db3v3;
+            const tableShuffle = regionParam?.dbShuffle;
+            const tableRbg = regionParam?.dbRbg;
             if (!regionParam) continue;
             const { url, params } = regionParam;
             const response = await axios.get<ApiResponse>(url, {
@@ -81,25 +99,70 @@ export const updateRatingsCutoffs = async (): Promise<void> => {
 
             for (const reward of data.rewards) {
                 if (reward.specialization) {
-                    const specName = specIdMap[reward.specialization.id];
-                    if (specName) {
-                        cutoffs[`${specName}_cutoff`] = reward.rating_cutoff;
+                    let count = 0;
+                    const keyName = specIdMap[reward.specialization.id]?.name;
+
+                    if (keyName && tableShuffle) {
+                        const specName = specIdMap[reward.specialization.id]?.spec || '';
+                        const className = specIdMap[reward.specialization.id]?.class || '';
+                        const ratingCutoff = reward.rating_cutoff || 0;
+                        const data = await db
+                            .select()
+                            .from(tableShuffle)
+                            .where(and(
+                                eq(tableShuffle.character_spec, specName),
+                                eq(tableShuffle.character_class, className),
+                                gt(tableShuffle.rating, ratingCutoff)
+                            ))
+                        const count = data.length;
+                        cutoffs[keyName] = { rating: reward.rating_cutoff, count: count };
                     }
-                } else if (reward.faction) {
-                    cutoffs[`rbg_${reward.faction.type.toLowerCase()}_cutoff`] = reward.rating_cutoff;
+
+                } else if (reward.faction && tableRbg) {
+                    if (reward.faction.type === 'HORDE') {
+                        const data = await db
+                            .select()
+                            .from(tableRbg)
+                            .where(and(
+                                eq(tableRbg.faction_name, 'HORDE'),
+                                gt(tableRbg.rating, reward.rating_cutoff)
+                            ))
+                        const count = data.length;
+                        cutoffs['rbg_horde_cutoff'] = { rating: reward.rating_cutoff, count: count };
+                    } else if (reward.faction.type === 'ALLIANCE') {
+                        const data = await db
+                            .select()
+                            .from(tableRbg)
+                            .where(and(
+                                eq(tableRbg.faction_name, 'ALLIANCE'),
+                                gt(tableRbg.rating, reward.rating_cutoff)
+                            ))
+                        const count = data.length;
+                        cutoffs['rbg_alliance_cutoff'] = { rating: reward.rating_cutoff, count: count };
+                    }
                 } else {
-                    cutoffs[`${reward.bracket.type.toLowerCase()}_cutoff`] = reward.rating_cutoff;
+                    if (table3v3) {
+                        const data = await db
+                            .select()
+                            .from(table3v3)
+                            .where(and(
+                                gt(table3v3.rating, reward.rating_cutoff)
+                            ))
+                        const count = data.length;
+                        cutoffs[`${reward.bracket.type.toLowerCase()}_cutoff`] = { rating: reward.rating_cutoff, count: count };
+                    }
+
                 }
             }
 
+            console.log(cutoffs);
             // Push the cutoffs to the respective part of allCutoffs
             allCutoffs[`${region}_cutoffs`] = { ...allCutoffs[`${region}_cutoffs`], ...cutoffs };
 
             console.log(`Ratings cutoff collected for ${region.toUpperCase()} region!`);
         }
 
-        // Update the database with the collected cutoffs and set updated_at field
-        await db.update(RatingsCutoff).set({ ...allCutoffs, updated_at: new Date()}).where(eq(RatingsCutoff.id, 1));
+        await db.update(RatingsCutoff).set({ ...allCutoffs, updated_at: new Date() }).where(eq(RatingsCutoff.id, 1));
         console.log('Ratings cutoff updated successfully in the database!');
     } catch (error) {
         console.log('Failed to fetch or insert leaderboard data:', (error as Error).message);
