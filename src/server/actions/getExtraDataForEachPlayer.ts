@@ -11,12 +11,12 @@ import type {
 import { versionRegionBracketMapping } from '~/utils/helper/versionRegionBracketMapping';
 import { scrapPlayerArmory } from './scrapPlayerArmory';
 import type {
-    eu3v3Leaderboard, eu2v2Leaderboard, euRBGLeaderboard,
-    us3v3Leaderboard, us2v2Leaderboard, usRBGLeaderboard,
+    eu3v3Leaderboard, eu2v2Leaderboard, euRBGLeaderboard, euShuffleLeaderboard,
+    us3v3Leaderboard, us2v2Leaderboard, usRBGLeaderboard, usShuffleLeaderboard,
     classicUs3v3Leaderboard, classicUs2v2Leaderboard, classicUsRBGLeaderboard,
     classicEu2v2Leaderboard, classicEu3v3Leaderboard, classicEuRBGLeaderboard,
-    euShuffleLeaderboard,
-    usShuffleLeaderboard
+
+
 } from '~/server/db/schema';
 
 interface CharacterData {
@@ -77,9 +77,9 @@ export const getExtraDataForEachPlayer = async (version: keyof VersionMapping, r
             requests.push(updateCharacterData(version, characterName, realmSlug, characterId, table, characterApiEndpoint, armoryEndpoint, profileParams));
 
 
-            if (requests.length >= 30) {
+            if (requests.length >= 10) {
                 await Promise.all(requests);
-                requests.length = 0; 
+                requests.length = 0;
             }
         }
     }
@@ -119,7 +119,6 @@ const updateCharacterData = async (
                 })
                 .where(eq(table.character_id, characterId));
         } else if (version === 'retail') {
-            console.log(`${characterName} on realm: ${realmSlug} not found fetching from armory`);
             const playerArmoryData = await scrapPlayerArmory(characterName, realmSlug, armoryEndpoint);
             if (playerArmoryData) {
                 const { characterClass, characterSpec } = playerArmoryData;
@@ -136,19 +135,15 @@ const updateCharacterData = async (
         }
     } catch (error: unknown) {
         console.error(`Failed to update for ${characterName}: ${(error as Error).message}`);
-        if ((error as AxiosError).response?.status === 429) {
-            console.log(`Rate limited. Retrying ${characterName}-${realmSlug} after delay...`);
-            await delay(1000);
-            await updateCharacterData(version, characterName, realmSlug, characterId, table, characterApiEndpoint, armoryEndpoint, profileParams);
-        }
+        
     };
 }
 
-// Specified return type
+
 const getPlayerData = async (characterName: string, realmSlug: string, characterApiEndpoint: string, profileParams: LeaderboardParams): Promise<CharacterData | null> => {
     const authToken = await getAuthToken(false);
     const url = `${characterApiEndpoint}${realmSlug}/${characterName.toLowerCase()}`;
-   
+
     try {
         const response = await axios.get<CharacterData>(url, {
             params: {
@@ -161,17 +156,17 @@ const getPlayerData = async (characterName: string, realmSlug: string, character
         if (axios.isAxiosError(error) && error.response?.status === 401) {
             console.log('Token expired, refreshing token and retrying the request...');
             await getAuthToken(true);
-            return getPlayerData(characterName, realmSlug, characterApiEndpoint, profileParams); 
+            return getPlayerData(characterName, realmSlug, characterApiEndpoint, profileParams);
         }
         return null;
     }
 };
 
-// Specified return type
+
 const getSpecData = async (characterName: string, realmSlug: string, characterApiEndpoint: string, profileParams: LeaderboardParams): Promise<SpecData | null> => {
     const authToken = await getAuthToken(false);
     const specUrl = `${characterApiEndpoint}${realmSlug}/${characterName.toLowerCase()}/specializations`;
-    
+
     try {
         const response = await axios.get<SpecData>(specUrl, {
             params: {

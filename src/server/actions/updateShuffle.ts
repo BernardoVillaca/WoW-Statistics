@@ -179,6 +179,7 @@ export const updateShuffle = async (region: 'eu' | 'us'): Promise<void> => {
 };
 
 const handleDataInsert = async (data: LeaderboardEntry, table: LeaderboardTable): Promise<void> => {
+    console.log(`Inserting data for ${data.character_name} on ${data.realm_slug}...`);
     const existingRecord = await db
         .select()
         .from(table)

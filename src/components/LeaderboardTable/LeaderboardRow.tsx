@@ -34,7 +34,7 @@ const LeaderboardRow: React.FC<LeaderboardRowProps> = ({ characterData, searchTa
     <div className="bg-gray-800 flex border-b-[2px] border-gray-700" style={{ height: rowHeight }}>
       {searchTabs.map((cell, index) => {
         const cellValue = characterData[cell.name];
-        const text = typeof cellValue === 'string' || typeof cellValue === 'number' ? String(cellValue) : '';
+        const str = typeof cellValue === 'string' || typeof cellValue === 'number' ? String(cellValue) : '';
 
         return (
           <LeaderboardCell
@@ -43,7 +43,7 @@ const LeaderboardRow: React.FC<LeaderboardRowProps> = ({ characterData, searchTa
             rowIndex={rowIndex}
             path={path}
             index={index}
-            text={text}
+            str={str}
             cell={cell.name}
             characterClass={characterData.character_class}
             characterSpec={characterData.character_spec}

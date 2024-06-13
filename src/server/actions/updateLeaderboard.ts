@@ -179,6 +179,8 @@ const handleDataInsert = async (data: LeaderboardEntry, table: LeaderboardTable)
 
     const updateData: LeaderboardEntry = {
         ...data,
+        character_class: data.character_class || existingEntry.character_class,
+        character_spec: data.character_spec || existingEntry.character_spec,
         history: existingEntry.history
     };
 

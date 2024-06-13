@@ -28,7 +28,7 @@ type HistoryEntry = {
 };
 
 type LeaderboardCellProps = {
-  text: string;
+  str: string;
   height: number;
   index: number;
   cell: string;
@@ -40,12 +40,12 @@ type LeaderboardCellProps = {
 
 };
 
-const LeaderboardCell = ({ text, height, index, cell, characterClass, characterSpec, history, rowIndex, path }: LeaderboardCellProps) => {
+const LeaderboardCell = ({ str, height, index, cell, characterClass, characterSpec, history, rowIndex, path }: LeaderboardCellProps) => {
   const { currentPage } = useSearch();  // Added resultsPerPage to calculate the correct rank
   const resultsPerPage = 50;  // Added resultsPerPage to calculate the correct rank
   const specClass = `${characterSpec} ${characterClass}`;
   const specIcon = specIconsMap[specClass as keyof typeof specIconsMap];
-  const factionIcon = text === 'HORDE' ? horde : text === 'ALLIANCE' ? alliance : null;
+  const factionIcon = str === 'HORDE' ? horde : str === 'ALLIANCE' ? alliance : null;
 
   const classColor = classColors[characterClass as keyof typeof classColors];
 
@@ -72,7 +72,7 @@ const LeaderboardCell = ({ text, height, index, cell, characterClass, characterS
     }
   };
 
-  const difference = calculateDifference(history, cell, text);
+  const difference = calculateDifference(history, cell, str);
   const showDifference = difference !== 0;
 
   const overallRank = (currentPage - 1) * resultsPerPage + rowIndex + 1;
@@ -80,10 +80,10 @@ const LeaderboardCell = ({ text, height, index, cell, characterClass, characterS
   return (
     <div className={`relative flex items-center justify-center text-gray-300 h-[${height}px] w-full ${index === 0 ? '' : 'border-l-[1px] border-gray-700'}`}>
       {factionIcon ? (
-        <Image src={factionIcon} alt={text} height={height / 2} width={height / 2} className='rounded-lg overflow-hidden' />
+        <Image src={factionIcon} alt={str} height={height / 2} width={height / 2} className='rounded-lg overflow-hidden' />
       ) : cell === 'rating' || cell === 'played' ? (
         <div className=''>
-          <span>{text}</span>
+          <span>{str}</span>
           {showDifference && (
             <div className={`absolute bottom-3 left-24 text-xs ${difference > 0 ? 'text-green-600' : 'text-red-600'}`}>
               {difference !== 0 ? `(${difference > 0 ? '+' : ''}${difference})` : ''}
@@ -91,29 +91,29 @@ const LeaderboardCell = ({ text, height, index, cell, characterClass, characterS
           )}
         </div>
       ) : cell === 'character_spec' ? (
-        <Image src={specIcon} alt={text} height={height / 1.8} width={height / 1.8} className='rounded-lg overflow-none' />
+        <Image src={specIcon} alt={str} height={height / 1.8} width={height / 1.8} className='rounded-lg overflow-none' />
       ) : cell === 'character_name' ? (
         <span style={{ color: classColor }}>
-          {text}
+          {str}
         </span>
       ) : cell === 'win_ratio' ? (
-        <span className={` ${Number(text) >= 70 ? 'text-green-300' : Number(text) >= 55 ? 'text-yellow-300' : 'text-red-300'} `}>
-          {text}%
+        <span className={` ${Number(str) >= 70 ? 'text-green-300' : Number(str) >= 55 ? 'text-yellow-300' : 'text-red-300'} `}>
+          {str}%
         </span>
       ) : cell === 'rank' && path?.includes('solo-shuffle') ? (
         <div className='flex'>
           <span>{overallRank}</span>
-          <span style={{ color: classColor }} className='absolute bottom-5 left-28 text-xs text-gray-500'>{text}</span> 
+          <span style={{ color: classColor }} className='absolute bottom-5 left-28 text-xs text-gray-500'>{str}</span> 
         </div>
       ) : cell === 'realm_slug' ? (
-        <span>{formatRealmName(text)}</span>
+        <span>{formatRealmName(str)}</span>
       ) : cell === 'updated_at' ? (
         <div>
-          {getTimeSinceLastPlayed(text)}
+          {getTimeSinceLastPlayed(str)}
         </div>
       ) : (
         <span>
-          {text}
+          {str}
         </span>
       )}
     </div>
