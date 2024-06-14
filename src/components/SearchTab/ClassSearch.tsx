@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import specIconsMap from '~/utils/helper/specIconsMap';
 import classIconsMap from '~/utils/helper/classIconsMap';
@@ -19,7 +19,7 @@ const classSpecs: Record<string, string[]> = {
     'Mage': ['Arcane Mage', 'Fire Mage', 'Frost Mage'],
     'Rogue': ['Assassination Rogue', 'Outlaw Rogue', 'Subtlety Rogue'],
     'Warlock': ['Affliction Warlock', 'Demonology Warlock', 'Destruction Warlock'],
-    'Warrior': ['Arms Warrior', 'Fury Warrior', 'Protection Warrior'],
+    'Warrior': ['Protection Warrior', 'Arms Warrior', 'Fury Warrior'],
 };
 
 const grayedOutSpecs = [
@@ -31,6 +31,7 @@ const ClassSearch = () => {
     const { setCurrentPage } = useSearch();
     const [selectedSpecs, setSelectedSpecs] = useState<string[]>([]);
     const queryParams = useURLChange();
+    const prevVersionRef = useRef<string | null>(null);
 
     const getQueryParams = () => {
         const params = new URLSearchParams(queryParams ?? '');
@@ -83,7 +84,10 @@ const ClassSearch = () => {
     }, [selectedSpecs]);
 
     useEffect(() => {
-        setSelectedSpecs([]);
+        if (prevVersionRef.current && prevVersionRef.current !== version) {
+            setSelectedSpecs([]);
+        }
+        prevVersionRef.current = version;
     }, [version]);
 
     return (

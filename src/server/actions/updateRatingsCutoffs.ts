@@ -171,7 +171,7 @@ export const updateRatingsCutoffs = async (): Promise<void> => {
         const response = await db.select().from(RatingsCutoff).where(eq(RatingsCutoff.id, 1));
 
         // If no data is found, insert the new cutoffs
-        if(response.length === 0) {
+        if (response.length === 0) {
             await db.insert(RatingsCutoff).values({
                 id: 1,
                 history: [],
@@ -179,7 +179,7 @@ export const updateRatingsCutoffs = async (): Promise<void> => {
                 us_cutoffs: allCutoffs.us_cutoffs,
                 eu_cutoffs: allCutoffs.eu_cutoffs,
             });
-            
+
             console.log('Ratings cutoff inserted successfully in the database!');
             return;
         }
@@ -187,7 +187,7 @@ export const updateRatingsCutoffs = async (): Promise<void> => {
 
         // Initialize history as an array of HistoryEntry if it's not already
         let newHistory: HistoryEntry[] = currentData?.history ?? [];
-        
+
         // Check if either eu_cutoffs or us_cutoffs have changed
         const cutoffsChanged = !deepEqual(currentData.us_cutoffs, allCutoffs.us_cutoffs) || !deepEqual(currentData.eu_cutoffs, allCutoffs.eu_cutoffs);
 
@@ -254,10 +254,9 @@ const deepEqual = (obj1: Record<string, unknown> | undefined, obj2: Record<strin
     return false;
 };
 
-
-
 const logDifferences = (oldCutoffs: Cutoffs, newCutoffs: Cutoffs, region: string): string[] => {
-    const changedKeys = Object.keys(newCutoffs).filter(key => oldCutoffs[key] !== undefined && !deepEqual(oldCutoffs[key] as Record<string, unknown>, newCutoffs[key] as Record<string, unknown>));
+    const changedKeys = Object.keys(newCutoffs).filter(key =>
+        oldCutoffs[key] !== undefined && !deepEqual(oldCutoffs[key] as Record<string, unknown>, newCutoffs[key] as Record<string, unknown>));
     console.log(`Changes detected in ${region} cutoffs for keys:`, changedKeys);
     changedKeys.forEach(key => {
         console.log(`Old ${region} ${key}:`, oldCutoffs[key]);
