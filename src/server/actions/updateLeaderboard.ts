@@ -178,12 +178,16 @@ const handleDataInsert = async (formattedData: LeaderboardEntry, table: Leaderbo
         if (!existingEntry) {
             return;
         }
-        // Changes those values to the existing ones
-        if (formattedData.character_class === '') updateData.character_class = existingEntry.character_class;
-        if (formattedData.character_spec === '') updateData.character_spec = existingEntry.character_spec;
-        if (existingEntry.played === formattedData.played) updateData.updated_at = existingEntry.updated_at
-        if (history.length === 0) updateData.history = existingEntry.history;
-        formattedData.created_at = existingEntry.created_at;
+
+        // Preserve existing data in some fields and changed updated_at if played is different
+        updateData = {
+            ...formattedData,
+            character_class: existingEntry.character_class,
+            character_spec: existingEntry.character_spec,
+            created_at: existingEntry.created_at,
+            updated_at: existingEntry.played === formattedData.played ? existingEntry.updated_at : new Date(),
+            history: existingEntry.history
+        };
 
         // If the played value is different, update the history and updated_at
         if (existingEntry.played !== formattedData.played) {
@@ -203,12 +207,7 @@ const handleDataInsert = async (formattedData: LeaderboardEntry, table: Leaderbo
             if (newHistory.length > 40) {
                 newHistory = newHistory.slice(newHistory.length - 20);
             }
-            updateData = {
-                ...formattedData,
-                history: newHistory,
-                updated_at: new Date()
 
-            };
         }
     } catch (error) {
         console.log('Error fetching existing data', (error as Error).message);

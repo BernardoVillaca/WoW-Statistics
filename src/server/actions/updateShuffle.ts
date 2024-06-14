@@ -178,59 +178,71 @@ export const updateShuffle = async (region: 'eu' | 'us'): Promise<void> => {
     }
 };
 
-const handleDataInsert = async (data: LeaderboardEntry, table: LeaderboardTable): Promise<void> => {
-    const existingRecord = await db
-        .select()
-        .from(table)
-        .where(and(
-            eq(table.character_name, data.character_name),
-            eq(table.realm_slug, data.realm_slug),
-            eq(table.character_spec, data.character_spec)
-        ))
-        .limit(1);
+const handleDataInsert = async (formattedData: LeaderboardEntry, table: LeaderboardTable): Promise<void> => {
 
-    if (existingRecord.length === 0) {
-        await db.insert(table).values(data);
-        return;
-    }
+    let updateData: LeaderboardEntry = { ...formattedData };
 
-    const existingEntry = existingRecord[0] as LeaderboardEntry | undefined;
-    if (!existingEntry) {
-        return;
-    }
+    try {
+        const existingRecord = await db
+            .select()
+            .from(table)
+            .where(and(
+                eq(table.character_name, formattedData.character_name),
+                eq(table.realm_slug, formattedData.realm_slug),
+                eq(table.character_spec, formattedData.character_spec)
+            ))
+            .limit(1);
 
-    const updateData: LeaderboardEntry = {
-        ...data,
-        created_at: existingEntry.created_at,
-        updated_at: existingEntry.updated_at,
-        history: existingEntry.history
-    };
-
-    if (existingEntry.played !== data.played) {
-        const historyEntry: HistoryEntry = {
-            played: existingEntry.played,
-            won: existingEntry.won,
-            lost: existingEntry.lost,
-            rating: existingEntry.rating,
-            rank: existingEntry.rank,
-            updated_at: existingEntry.updated_at,
-        };
-
-        let newHistory: HistoryEntry[] = existingEntry.history ?? [];
-        newHistory.push(historyEntry);
-
-        if (newHistory.length > 20) {
-            newHistory = newHistory.slice(newHistory.length - 20);
+        if (existingRecord.length === 0) {
+            await db.insert(table).values(formattedData);
+            return;
         }
 
-        updateData.updated_at = new Date();
-        updateData.history = newHistory;
+        const existingEntry = existingRecord[0] as LeaderboardEntry | undefined;
+        if (!existingEntry) {
+            return;
+        }
+        // Preserve existing data in some fields and changed updated_at if played is different
+        updateData = {
+            ...formattedData,
+            created_at: existingEntry.created_at,
+            updated_at: existingEntry.played === formattedData.played ? existingEntry.updated_at : new Date(),
+            history: existingEntry.history
+        };
+
+        if (existingEntry.played !== formattedData.played) {
+            const historyEntry: HistoryEntry = {
+                played: existingEntry.played,
+                won: existingEntry.won,
+                lost: existingEntry.lost,
+                rating: existingEntry.rating,
+                rank: existingEntry.rank,
+                updated_at: existingEntry.updated_at,
+            };
+
+            let newHistory: HistoryEntry[] = existingEntry.history ?? [];
+            newHistory.push(historyEntry);
+
+            if (newHistory.length > 20) {
+                newHistory = newHistory.slice(newHistory.length - 20);
+            }
+
+            updateData.history = newHistory;
+        }
+
+    } catch (error) {
+        console.log('Error fetching existing data:', (error as Error).message);
+    }
+    try {
+        await db.update(table).set(updateData).where(and(
+            eq(table.character_name, formattedData.character_name),
+            eq(table.realm_slug, formattedData.realm_slug),
+            eq(table.character_spec, formattedData.character_spec)
+        ));
+    } catch (error) {
+        console.log('Error updating data:', (error as Error).message);
+
     }
 
-    await db.update(table).set(updateData).where(and(
-        eq(table.character_name, data.character_name),
-        eq(table.realm_slug, data.realm_slug),
-        eq(table.character_spec, data.character_spec)
-    ));
 };
 
