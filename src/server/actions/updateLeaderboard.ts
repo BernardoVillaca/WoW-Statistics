@@ -183,6 +183,7 @@ const handleDataInsert = async (formattedData: LeaderboardEntry, table: Leaderbo
         if (formattedData.character_spec === '') updateData.character_spec = existingEntry.character_spec;
         if (existingEntry.played === formattedData.played) updateData.updated_at = existingEntry.updated_at
         if (history.length === 0) updateData.history = existingEntry.history;
+        formattedData.created_at = existingEntry.created_at;
 
         // If the played value is different, update the history and updated_at
         if (existingEntry.played !== formattedData.played) {
