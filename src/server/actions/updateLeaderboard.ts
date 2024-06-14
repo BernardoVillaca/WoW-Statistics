@@ -168,6 +168,7 @@ const handleDataInsert = async (data: LeaderboardEntry, table: LeaderboardTable)
 
     if (existingRecord.length === 0) {
         await db.insert(table).values(data);
+        console.log(`Inserted new entry for character_id: ${data.character_id}`);
         return;
     }
 
@@ -177,6 +178,9 @@ const handleDataInsert = async (data: LeaderboardEntry, table: LeaderboardTable)
         return;
     }
 
+    console.log(`Existing entry found for character_id: ${data.character_id}`);
+    console.log(`Existing played: ${existingEntry.played}, New played: ${data.played}`);
+
     const updateData: LeaderboardEntry = {
         ...data,
         character_class: data.character_class || existingEntry.character_class,
@@ -184,7 +188,9 @@ const handleDataInsert = async (data: LeaderboardEntry, table: LeaderboardTable)
         history: existingEntry.history
     };
 
+    // Check if the played value has changed
     if (existingEntry.played !== data.played) {
+        console.log(`Played value changed for character_id: ${data.character_id}`);
         const historyEntry: HistoryEntry = {
             played: existingEntry.played,
             won: existingEntry.won,
@@ -197,16 +203,21 @@ const handleDataInsert = async (data: LeaderboardEntry, table: LeaderboardTable)
         let newHistory: HistoryEntry[] = existingEntry.history ?? [];
         newHistory.push(historyEntry);
 
+        // Limit history to 20 entries
         if (newHistory.length > 20) {
             newHistory = newHistory.slice(newHistory.length - 20);
         }
 
+        // Update updated_at only when played value has changed
         updateData.updated_at = new Date();
         updateData.history = newHistory;
     } else {
         // If the played value hasn't changed, retain the existing updated_at value
+        console.log(`Played value did not change for character_id: ${data.character_name} ${data.realm_slug}`);
         updateData.updated_at = existingEntry.updated_at;
     }
 
     await db.update(table).set(updateData).where(eq((table as typeof eu3v3Leaderboard).character_id, data.character_id));
+    console.log(`Updated entry for character_id: ${data.character_id}`);
 };
+
