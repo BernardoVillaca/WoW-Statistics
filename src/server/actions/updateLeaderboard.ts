@@ -160,55 +160,63 @@ export const updateLeaderboard = async (version: keyof VersionMapping, region: k
 };
 
 const handleDataInsert = async (formattedData: LeaderboardEntry, table: LeaderboardTable): Promise<void> => {
-    const existingRecord = await db
-        .select()
-        .from(table)
-        .where(eq((table as typeof eu3v3Leaderboard).character_id, formattedData.character_id))
-        .limit(1);
-
-    if (existingRecord.length === 0) {
-        await db.insert(table).values(formattedData);
-        return;
-    }
-
-    const existingEntry = existingRecord[0] as LeaderboardEntry;
-    if (!existingEntry) {
-        return;
-    }
 
     let updateData: LeaderboardEntry = { ...formattedData };
 
-    // Changes those values to the existing ones
-    if (formattedData.character_class === '') updateData.character_class = existingEntry.character_class;
-    if (formattedData.character_spec === '') updateData.character_spec = existingEntry.character_spec;
-    if (existingEntry.played === formattedData.played) updateData.updated_at = existingEntry.updated_at
-
-    // If the played value is different, update the history and updated_at
-    if (existingEntry.played !== formattedData.played) {
-        const historyEntry: HistoryEntry = {
-            played: existingEntry.played,
-            won: existingEntry.won,
-            lost: existingEntry.lost,
-            rating: existingEntry.rating,
-            rank: existingEntry.rank,
-            updated_at: existingEntry.updated_at,
-        };
-
-        let newHistory: HistoryEntry[] = existingEntry.history ?? [];
-        newHistory.push(historyEntry);
-
-        // Limit history to 40 entries
-        if (newHistory.length > 40) {
-            newHistory = newHistory.slice(newHistory.length - 20);
+    try {
+        const existingRecord = await db
+            .select()
+            .from(table)
+            .where(eq((table as typeof eu3v3Leaderboard).character_id, formattedData.character_id))
+            .limit(1);
+        if (existingRecord.length === 0) {
+            await db.insert(table).values(formattedData);
+            return;
         }
-        updateData = {
-            ...formattedData,
-            history: newHistory,
-            updated_at: new Date()
 
-        };
+        const existingEntry = existingRecord[0] as LeaderboardEntry;
+        if (!existingEntry) {
+            return;
+        }
+        // Changes those values to the existing ones
+        if (formattedData.character_class === '') updateData.character_class = existingEntry.character_class;
+        if (formattedData.character_spec === '') updateData.character_spec = existingEntry.character_spec;
+        if (existingEntry.played === formattedData.played) updateData.updated_at = existingEntry.updated_at
+        if (history.length === 0) updateData.history = existingEntry.history;
+
+        // If the played value is different, update the history and updated_at
+        if (existingEntry.played !== formattedData.played) {
+            const historyEntry: HistoryEntry = {
+                played: existingEntry.played,
+                won: existingEntry.won,
+                lost: existingEntry.lost,
+                rating: existingEntry.rating,
+                rank: existingEntry.rank,
+                updated_at: existingEntry.updated_at,
+            };
+
+            let newHistory: HistoryEntry[] = existingEntry.history ?? [];
+            newHistory.push(historyEntry);
+
+            // Limit history to 40 entries
+            if (newHistory.length > 40) {
+                newHistory = newHistory.slice(newHistory.length - 20);
+            }
+            updateData = {
+                ...formattedData,
+                history: newHistory,
+                updated_at: new Date()
+
+            };
+        }
+    } catch (error) {
+        console.log('Error fetching existing data', (error as Error).message);
+
     }
-    await db.update(table).set(updateData).where(eq((table as typeof eu3v3Leaderboard).character_id, formattedData.character_id));
-
+    try {
+        await db.update(table).set(updateData).where(eq((table as typeof eu3v3Leaderboard).character_id, formattedData.character_id));
+    } catch (error) {
+        console.log('Error updating leaderboard data:', (error as Error).message);
+    }
 };
 
