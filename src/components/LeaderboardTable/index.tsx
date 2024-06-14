@@ -6,7 +6,7 @@ import LeaderboardRow from './LeaderboardRow';
 import axios from 'axios';
 import { useSearch } from '../Context/SearchContext';
 import useURLChange from '~/utils/hooks/useURLChange';
-import { Cutoffs } from '~/utils/helper/ratingCutoffsInterface';
+import type { Cutoffs } from '~/utils/helper/ratingCutoffsInterface';
 
 type SearchTab = {
   name: string;
@@ -35,10 +35,9 @@ type LeaderBoardTableProps = {
 type RatingCutoffs = {
   id: number;
   eu_cutoffs: Cutoffs;
-  us_cutoffs: Cutoffs
+  us_cutoffs: Cutoffs;
   classic_us_cutoffs: Cutoffs;
   classic_eu_cutoffs: Cutoffs;
-
 };
 
 const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, resultsPerPage, rowHeight }) => {
@@ -97,10 +96,9 @@ const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, results
       setResultsCount(firstResponseData.total);
       setData(firstResponseData.results);
 
-      const secondResponse = await axios.get(`/api/getRatingCutoffs`)
-      const secondResponseData = secondResponse.data.cutoffs as RatingCutoffs
-      console.log(secondResponseData)
-      setRatingCutoffs(secondResponseData);
+      const secondResponse = await axios.get(`/api/getRatingCutoffs`);
+      const secondResponseData = secondResponse.data as { cutoffs: RatingCutoffs };
+      setRatingCutoffs(secondResponseData.cutoffs);
 
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -113,7 +111,7 @@ const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, results
     if (queryParams !== null && path !== null) {
       void getData();
     }
-  }, [queryParams, path]);
+  }, [queryParams, path, getData]);
 
   const containerHeight = resultsPerPage * rowHeight;
 
