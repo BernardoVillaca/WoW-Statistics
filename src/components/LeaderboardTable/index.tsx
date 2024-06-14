@@ -6,6 +6,7 @@ import LeaderboardRow from './LeaderboardRow';
 import axios from 'axios';
 import { useSearch } from '../Context/SearchContext';
 import useURLChange from '~/utils/hooks/useURLChange';
+import { Cutoffs } from '~/utils/helper/ratingCutoffsInterface';
 
 type SearchTab = {
   name: string;
@@ -31,8 +32,17 @@ type LeaderBoardTableProps = {
   rowHeight: number;
 };
 
+type RatingCutoffs = {
+  id: number;
+  eu_cutoffs: Cutoffs;
+  us_cutoffs: Cutoffs
+  classic_us_cutoffs: Cutoffs;
+  classic_eu_cutoffs: Cutoffs;
+
+};
+
 const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, resultsPerPage, rowHeight }) => {
-  const { setResultsCount } = useSearch();
+  const { setResultsCount, setRatingCutoffs } = useSearch();
   const [data, setData] = useState<CharacterData[]>([]);
   const [loading, setLoading] = useState(false);
   const queryParams = useURLChange();
@@ -80,12 +90,18 @@ const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, results
     );
 
     try {
-      const response = await axios.get(`/api/get50Results`, {
+      const firstResponse = await axios.get(`/api/get50Results`, {
         params: filteredParams
       });
-      const responseData = response.data as { total: number; results: CharacterData[] };
-      setResultsCount(responseData.total);
-      setData(responseData.results);
+      const firstResponseData = firstResponse.data as { total: number; results: CharacterData[] };
+      setResultsCount(firstResponseData.total);
+      setData(firstResponseData.results);
+
+      const secondResponse = await axios.get(`/api/getRatingCutoffs`)
+      const secondResponseData = secondResponse.data.cutoffs as RatingCutoffs
+      console.log(secondResponseData)
+      setRatingCutoffs(secondResponseData);
+
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {

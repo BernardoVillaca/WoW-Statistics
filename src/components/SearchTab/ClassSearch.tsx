@@ -7,19 +7,19 @@ import { updateURL } from '~/utils/helper/updateURL';
 import useURLChange from '~/utils/hooks/useURLChange';
 
 const classSpecs: Record<string, string[]> = {
-    'Evoker': ['Preservation Evoker', 'Devastation Evoker', 'Augmentation Evoker'],
-    'Death Knight': ['Blood Death Knight', 'Frost Death Knight', 'Unholy Death Knight'],
+    'Evoker': ['Devastation Evoker', 'Augmentation Evoker', 'Preservation Evoker'],
     'Druid': ['Balance Druid', 'Feral Druid', 'Restoration Druid'],
+    'Paladin': ['Protection Paladin', 'Retribution Paladin', 'Holy Paladin'],
+    'Shaman': ['Elemental Shaman', 'Enhancement Shaman', 'Restoration Shaman'],
+    'Monk': ['Brewmaster Monk', 'Windwalker Monk', 'Mistweaver Monk'],
+    'Priest': ['Shadow Priest', 'Discipline Priest', 'Holy Priest'],
+    'Demon Hunter': ['Havoc Demon Hunter', 'Vengeance Demon Hunter'],
+    'Death Knight': ['Blood Death Knight', 'Frost Death Knight', 'Unholy Death Knight'],
     'Hunter': ['Beast Mastery Hunter', 'Marksmanship Hunter', 'Survival Hunter'],
     'Mage': ['Arcane Mage', 'Fire Mage', 'Frost Mage'],
-    'Monk': ['Brewmaster Monk', 'Mistweaver Monk', 'Windwalker Monk'],
-    'Paladin': ['Holy Paladin', 'Protection Paladin', 'Retribution Paladin'],
-    'Priest': ['Discipline Priest', 'Holy Priest', 'Shadow Priest'],
     'Rogue': ['Assassination Rogue', 'Outlaw Rogue', 'Subtlety Rogue'],
-    'Shaman': ['Elemental Shaman', 'Enhancement Shaman', 'Restoration Shaman'],
     'Warlock': ['Affliction Warlock', 'Demonology Warlock', 'Destruction Warlock'],
     'Warrior': ['Arms Warrior', 'Fury Warrior', 'Protection Warrior'],
-    'Demon Hunter': ['Havoc Demon Hunter', 'Vengeance Demon Hunter'],
 };
 
 const grayedOutSpecs = [
