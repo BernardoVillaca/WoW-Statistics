@@ -159,38 +159,32 @@ export const updateLeaderboard = async (version: keyof VersionMapping, region: k
     }
 };
 
-const handleDataInsert = async (data: LeaderboardEntry, table: LeaderboardTable): Promise<void> => {
+const handleDataInsert = async (formattedData: LeaderboardEntry, table: LeaderboardTable): Promise<void> => {
     const existingRecord = await db
         .select()
         .from(table)
-        .where(eq((table as typeof eu3v3Leaderboard).character_id, data.character_id))
+        .where(eq((table as typeof eu3v3Leaderboard).character_id, formattedData.character_id))
         .limit(1);
 
     if (existingRecord.length === 0) {
-        await db.insert(table).values(data);
-        console.log(`Inserted new entry for character_id: ${data.character_id}`);
+        await db.insert(table).values(formattedData);
         return;
     }
 
-    const existingEntry = existingRecord[0] as LeaderboardEntry | undefined;
-
+    const existingEntry = existingRecord[0] as LeaderboardEntry;
     if (!existingEntry) {
         return;
     }
 
-    console.log(`Existing entry found for character_id: ${data.character_id}`);
-    console.log(`Existing played: ${existingEntry.played}, New played: ${data.played}`);
+    let updateData: LeaderboardEntry = { ...formattedData };
 
-    const updateData: LeaderboardEntry = {
-        ...data,
-        character_class: data.character_class || existingEntry.character_class,
-        character_spec: data.character_spec || existingEntry.character_spec,
-        history: existingEntry.history
-    };
+    // Changes those values to the existing ones
+    if (formattedData.character_class === '') updateData.character_class = existingEntry.character_class;
+    if (formattedData.character_spec === '') updateData.character_spec = existingEntry.character_spec;
+    if (existingEntry.played === formattedData.played) updateData.updated_at = existingEntry.updated_at
 
-    // Check if the played value has changed
-    if (existingEntry.played !== data.played) {
-        console.log(`Played value changed for character_id: ${data.character_id}`);
+    // If the played value is different, update the history and updated_at
+    if (existingEntry.played !== formattedData.played) {
         const historyEntry: HistoryEntry = {
             played: existingEntry.played,
             won: existingEntry.won,
@@ -203,21 +197,18 @@ const handleDataInsert = async (data: LeaderboardEntry, table: LeaderboardTable)
         let newHistory: HistoryEntry[] = existingEntry.history ?? [];
         newHistory.push(historyEntry);
 
-        // Limit history to 20 entries
-        if (newHistory.length > 20) {
+        // Limit history to 40 entries
+        if (newHistory.length > 40) {
             newHistory = newHistory.slice(newHistory.length - 20);
         }
+        updateData = {
+            ...formattedData,
+            history: newHistory,
+            updated_at: new Date()
 
-        // Update updated_at only when played value has changed
-        updateData.updated_at = new Date();
-        updateData.history = newHistory;
-    } else {
-        // If the played value hasn't changed, retain the existing updated_at value
-        console.log(`Played value did not change for character_id: ${data.character_name} ${data.realm_slug}`);
-        updateData.updated_at = existingEntry.updated_at;
+        };
     }
+    await db.update(table).set(updateData).where(eq((table as typeof eu3v3Leaderboard).character_id, formattedData.character_id));
 
-    await db.update(table).set(updateData).where(eq((table as typeof eu3v3Leaderboard).character_id, data.character_id));
-    console.log(`Updated entry for character_id: ${data.character_id}`);
 };
 
