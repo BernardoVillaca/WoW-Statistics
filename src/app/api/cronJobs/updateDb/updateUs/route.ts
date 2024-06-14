@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getExtraDataForEachPlayer } from '~/server/actions/getExtraDataForEachPlayer';
 import { updateLeaderboard } from '~/server/actions/updateLeaderboard';
+import { updateShuffle } from '~/server/actions/updateShuffle';
 export const maxDuration = 300;
 export const dynamic = 'force-dynamic';
 
