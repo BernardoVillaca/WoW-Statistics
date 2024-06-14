@@ -16,7 +16,7 @@ interface RegionParams {
     };
 }
 
-const regionParams: { [key: string]: RegionParams } = {
+const regionParams: Record<string, RegionParams> = {
     us: {
         url: 'https://us.api.blizzard.com/data/wow/pvp-season/37/pvp-reward/index',
         db3v3: us3v3Leaderboard,
@@ -59,22 +59,62 @@ interface Cutoffs {
     [key: string]: {
         rating: number;
         count: number;
-    }
-}
-
-interface AllCutoffs {
-    [key: string]: {
-        [key: string]: {
-            rating: number;
-            count: number;
-        }
     };
 }
+
+type AllCutoffs = Record<string, Record<string, { rating: number; count: number }>>;
+
+const getCutoffsForSpec = async (reward: ApiResponse['rewards'][0], tableShuffle: typeof euShuffleLeaderboard | typeof usShuffleLeaderboard) => {
+    const keyName = specIdMap[reward.specialization!.id]?.name;
+    if (keyName && tableShuffle) {
+        const specName = specIdMap[reward.specialization!.id]?.spec || '';
+        const className = specIdMap[reward.specialization!.id]?.class || '';
+        const ratingCutoff = reward.rating_cutoff ?? 0;
+        const data = await db
+            .select()
+            .from(tableShuffle)
+            .where(and(
+                eq(tableShuffle.character_spec, specName),
+                eq(tableShuffle.character_class, className),
+                gt(tableShuffle.rating, ratingCutoff)
+            ));
+        const count = data.length;
+        return { [keyName]: { rating: ratingCutoff, count: count } };
+    }
+    return {};
+};
+
+const getCutoffsForFaction = async (reward: ApiResponse['rewards'][0], tableRbg: typeof euRBGLeaderboard | typeof usRBGLeaderboard) => {
+    if (!reward.faction || !tableRbg) return {};
+
+    const faction = reward.faction.type;
+    const factionName = faction === 'HORDE' ? 'HORDE' : 'ALLIANCE';
+    const data = await db
+        .select()
+        .from(tableRbg)
+        .where(and(
+            eq(tableRbg.faction_name, factionName),
+            gt(tableRbg.rating, reward.rating_cutoff ?? 0)
+        ));
+    const count = data.length;
+    return { [`rbg_${faction.toLowerCase()}_cutoff`]: { rating: reward.rating_cutoff ?? 0, count: count } };
+};
+
+const getCutoffsForBracket = async (reward: ApiResponse['rewards'][0], table3v3: typeof eu3v3Leaderboard | typeof us3v3Leaderboard) => {
+    if (!table3v3) return {};
+    
+    const data = await db
+        .select()
+        .from(table3v3)
+        .where(gt(table3v3.rating, reward.rating_cutoff ?? 0));
+    const count = data.length;
+    return { [`${reward.bracket.type.toLowerCase()}_cutoff`]: { rating: reward.rating_cutoff ?? 0, count: count } };
+};
 
 export const updateRatingsCutoffs = async (): Promise<void> => {
     console.log('Updating ratings cutoffs...');
     const authToken = await getAuthToken(false);
-    let allCutoffs: AllCutoffs = {
+    const allCutoffs: AllCutoffs = {
         us_cutoffs: {},
         eu_cutoffs: {},
     };
@@ -82,11 +122,9 @@ export const updateRatingsCutoffs = async (): Promise<void> => {
     try {
         for (const region in regionParams) {
             const regionParam = regionParams[region];
-            const table3v3 = regionParam?.db3v3;
-            const tableShuffle = regionParam?.dbShuffle;
-            const tableRbg = regionParam?.dbRbg;
             if (!regionParam) continue;
-            const { url, params } = regionParam;
+
+            const { url, params, db3v3, dbShuffle, dbRbg } = regionParam;
             const response = await axios.get<ApiResponse>(url, {
                 params: {
                     ...params,
@@ -98,59 +136,11 @@ export const updateRatingsCutoffs = async (): Promise<void> => {
             const cutoffs: Cutoffs = {};
 
             for (const reward of data.rewards) {
-                if (reward.specialization) {
-                    const keyName = specIdMap[reward.specialization.id]?.name;
-                    if (keyName && tableShuffle) {
-                        const specName = specIdMap[reward.specialization.id]?.spec || '';
-                        const className = specIdMap[reward.specialization.id]?.class || '';
-                        const ratingCutoff = reward.rating_cutoff || 0;
-                        const data = await db
-                            .select()
-                            .from(tableShuffle)
-                            .where(and(
-                                eq(tableShuffle.character_spec, specName),
-                                eq(tableShuffle.character_class, className),
-                                gt(tableShuffle.rating, ratingCutoff)
-                            ))
-                        const count = data.length;
-                        cutoffs[keyName] = { rating: reward.rating_cutoff, count: count };
-                    }
+                const specCutoffs = reward.specialization ? await getCutoffsForSpec(reward, dbShuffle) : {};
+                const factionCutoffs = reward.faction ? await getCutoffsForFaction(reward, dbRbg) : {};
+                const bracketCutoffs = !reward.specialization && !reward.faction ? await getCutoffsForBracket(reward, db3v3) : {};
 
-                } else if (reward.faction && tableRbg) {
-                    if (reward.faction.type === 'HORDE') {
-                        const data = await db
-                            .select()
-                            .from(tableRbg)
-                            .where(and(
-                                eq(tableRbg.faction_name, 'HORDE'),
-                                gt(tableRbg.rating, reward.rating_cutoff)
-                            ))
-                        const count = data.length;
-                        cutoffs['rbg_horde_cutoff'] = { rating: reward.rating_cutoff, count: count };
-                    } else if (reward.faction.type === 'ALLIANCE') {
-                        const data = await db
-                            .select()
-                            .from(tableRbg)
-                            .where(and(
-                                eq(tableRbg.faction_name, 'ALLIANCE'),
-                                gt(tableRbg.rating, reward.rating_cutoff)
-                            ))
-                        const count = data.length;
-                        cutoffs['rbg_alliance_cutoff'] = { rating: reward.rating_cutoff, count: count };
-                    }
-                } else {
-                    if (table3v3) {
-                        const data = await db
-                            .select()
-                            .from(table3v3)
-                            .where(and(
-                                gt(table3v3.rating, reward.rating_cutoff)
-                            ))
-                        const count = data.length;
-                        cutoffs[`${reward.bracket.type.toLowerCase()}_cutoff`] = { rating: reward.rating_cutoff, count: count };
-                    }
-
-                }
+                Object.assign(cutoffs, specCutoffs, factionCutoffs, bracketCutoffs);
             }
 
             allCutoffs[`${region}_cutoffs`] = { ...allCutoffs[`${region}_cutoffs`], ...cutoffs };
@@ -168,4 +158,4 @@ export const updateRatingsCutoffs = async (): Promise<void> => {
             return updateRatingsCutoffs();
         }
     }
-};
+};``
