@@ -6,11 +6,11 @@ import { updateRatingsCutoffs } from '../actions/updateRatingsCutoffs';
 
 export const db = drizzle(sql, { schema });
 
-let first = true;
+// let first = true;
 
-if(first) {
+// if(first) {
 
-    await updateRatingsCutoffs();
-    // await updateLeaderboard('retail', 'us', '3v3')
-    first = false;
-}
+//     await updateRatingsCutoffs();
+//     // await updateLeaderboard('retail', 'us', '3v3')
+//     first = false;
+// }
