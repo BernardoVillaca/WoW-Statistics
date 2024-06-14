@@ -1,11 +1,7 @@
 {
     "crons": [
         {
-            "path": "/api/cronJobs/updateDb/updateUS",
-            "schedule": "0 * * * *"
-        },
-        {
-            "path": "/api/cronJobs/updateDb/updateEu",
+            "path": "/api/cronJobs/updateDb/updateRetail",
             "schedule": "0 * * * *"
         },
         {
@@ -76,6 +72,5 @@
             "path": "/api/cronJobs/getPossibleRealms",
             "schedule": "0 * * * *"
         }
-        
     ]
 }
