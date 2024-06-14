@@ -4,6 +4,7 @@ import { getAuthToken } from '~/server/actions/getAuthToken';
 import { and, eq, gt } from 'drizzle-orm/expressions';
 import { RatingsCutoff, eu3v3Leaderboard, euRBGLeaderboard, euShuffleLeaderboard, us3v3Leaderboard, usRBGLeaderboard, usShuffleLeaderboard } from '../db/schema';
 import { specIdMap } from '~/utils/helper/specIdMap';
+import { sql } from 'drizzle-orm';
 
 interface RegionParams {
     url: string;
@@ -14,6 +15,22 @@ interface RegionParams {
         namespace: string;
         locale: string;
     };
+}
+
+interface HistoryEntry {
+    us_changes: string[];
+    eu_changes: string[];
+    us_cutoffs: Cutoffs | undefined;
+    eu_cutoffs: Cutoffs | undefined;
+    updated_at: Date;
+}
+
+interface RatingsCutoffType {
+    id: number;
+    history: HistoryEntry[];
+    updated_at: Date;
+    us_cutoffs: Cutoffs;
+    eu_cutoffs: Cutoffs;
 }
 
 const regionParams: Record<string, RegionParams> = {
@@ -57,7 +74,10 @@ interface ApiResponse {
 
 type Cutoffs = Record<string, { rating: number; count: number }>;
 
-type AllCutoffs = Record<string, Record<string, { rating: number; count: number }>>;
+type AllCutoffs = {
+    us_cutoffs: Cutoffs;
+    eu_cutoffs: Cutoffs;
+};
 
 const getCutoffsForSpec = async (reward: ApiResponse['rewards'][0], tableShuffle: typeof euShuffleLeaderboard | typeof usShuffleLeaderboard) => {
     const keyName = specIdMap[reward.specialization!.id]?.name;
@@ -97,7 +117,7 @@ const getCutoffsForFaction = async (reward: ApiResponse['rewards'][0], tableRbg:
 
 const getCutoffsForBracket = async (reward: ApiResponse['rewards'][0], table3v3: typeof eu3v3Leaderboard | typeof us3v3Leaderboard) => {
     if (!table3v3) return {};
-    
+
     const data = await db
         .select()
         .from(table3v3)
@@ -138,13 +158,77 @@ export const updateRatingsCutoffs = async (): Promise<void> => {
                 Object.assign(cutoffs, specCutoffs, factionCutoffs, bracketCutoffs);
             }
 
-            allCutoffs[`${region}_cutoffs`] = { ...allCutoffs[`${region}_cutoffs`], ...cutoffs };
+            if (region === 'us') {
+                allCutoffs.us_cutoffs = { ...allCutoffs.us_cutoffs, ...cutoffs };
+            } else if (region === 'eu') {
+                allCutoffs.eu_cutoffs = { ...allCutoffs.eu_cutoffs, ...cutoffs };
+            }
 
             console.log(`Ratings cutoff collected for ${region.toUpperCase()} region!`);
         }
 
-        await db.update(RatingsCutoff).set({ ...allCutoffs, updated_at: new Date() }).where(eq(RatingsCutoff.id, 1));
-        console.log('Ratings cutoff updated successfully in the database!');
+        // Fetch current history from the database
+        const response = await db.select().from(RatingsCutoff).where(eq(RatingsCutoff.id, 1));
+
+        // If no data is found, insert the new cutoffs
+        if(response.length === 0) {
+            await db.insert(RatingsCutoff).values({
+                id: 1,
+                history: [],
+                updated_at: new Date(),
+                us_cutoffs: allCutoffs.us_cutoffs,
+                eu_cutoffs: allCutoffs.eu_cutoffs,
+            });
+            
+            console.log('Ratings cutoff inserted successfully in the database!');
+            return;
+        }
+        const currentData: RatingsCutoffType = response[0] as RatingsCutoffType;
+
+        // Initialize history as an array of HistoryEntry if it's not already
+        let newHistory: HistoryEntry[] = currentData?.history ?? [];
+        
+        // Check if either eu_cutoffs or us_cutoffs have changed
+        const cutoffsChanged = !deepEqual(currentData.us_cutoffs, allCutoffs.us_cutoffs) || !deepEqual(currentData.eu_cutoffs, allCutoffs.eu_cutoffs);
+
+        if (cutoffsChanged) {
+            let usChanges: string[] = [];
+            let euChanges: string[] = [];
+
+            if (!deepEqual(currentData.us_cutoffs, allCutoffs.us_cutoffs)) {
+                usChanges = logDifferences(currentData.us_cutoffs, allCutoffs.us_cutoffs, 'us');
+            }
+            if (!deepEqual(currentData.eu_cutoffs, allCutoffs.eu_cutoffs)) {
+                euChanges = logDifferences(currentData.eu_cutoffs, allCutoffs.eu_cutoffs, 'eu');
+            }
+
+            // Append the new cutoffs to the history
+            const newEntry: HistoryEntry = {
+                us_changes: usChanges,
+                eu_changes: euChanges,
+                us_cutoffs: currentData?.us_cutoffs,
+                eu_cutoffs: currentData?.eu_cutoffs,
+                updated_at: currentData?.updated_at
+            };
+            newHistory.push(newEntry);
+
+            // Ensure history length does not exceed 40 entries
+            if (newHistory.length > 40) {
+                newHistory = newHistory.slice(newHistory.length - 40);
+            }
+
+            await db.update(RatingsCutoff)
+                .set({
+                    ...allCutoffs,
+                    updated_at: new Date(),
+                    history: sql`jsonb '${JSON.stringify(newHistory)}'`,
+                })
+                .where(eq(RatingsCutoff.id, 1));
+
+            console.log('Ratings cutoff updated successfully in the database!');
+        } else {
+            console.log('No changes in cutoffs, no update needed.');
+        }
     } catch (error) {
         console.log('Failed to fetch or insert leaderboard data:', (error as Error).message);
         if (axios.isAxiosError(error) && error.response?.status === 401) {
@@ -154,3 +238,31 @@ export const updateRatingsCutoffs = async (): Promise<void> => {
         }
     }
 };
+
+const deepEqual = (obj1: Record<string, unknown> | undefined, obj2: Record<string, unknown> | undefined): boolean => {
+    if (obj1 === obj2) {
+        return true;
+    }
+    if (obj1 && obj2 && typeof obj1 === 'object' && typeof obj2 === 'object') {
+        const keys1 = Object.keys(obj1);
+        const keys2 = Object.keys(obj2);
+        if (keys1.length !== keys2.length) {
+            return false;
+        }
+        return keys1.every(key => deepEqual(obj1[key] as Record<string, unknown>, obj2[key] as Record<string, unknown>));
+    }
+    return false;
+};
+
+
+
+const logDifferences = (oldCutoffs: Cutoffs, newCutoffs: Cutoffs, region: string): string[] => {
+    const changedKeys = Object.keys(newCutoffs).filter(key => oldCutoffs[key] !== undefined && !deepEqual(oldCutoffs[key] as Record<string, unknown>, newCutoffs[key] as Record<string, unknown>));
+    console.log(`Changes detected in ${region} cutoffs for keys:`, changedKeys);
+    changedKeys.forEach(key => {
+        console.log(`Old ${region} ${key}:`, oldCutoffs[key]);
+        console.log(`New ${region} ${key}:`, newCutoffs[key]);
+    });
+    return changedKeys;
+};
+

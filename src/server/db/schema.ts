@@ -15,12 +15,13 @@ export const createTable = pgTableCreator((name) => `wowstats_${name}`);
 export const RatingsCutoff = createTable(
   "ratings_cuttoff",
   {
-    id: integer("id"),
+    id: integer("id").primaryKey(),
     us_cutoffs: jsonb("us_cutoffs"),
     eu_cutoffs: jsonb("eu_cutoffs"),
     classic_us_cutoffs: jsonb("classic_us_cutoffs"),
     classic_eu_cutoffs: jsonb("classic_eu_cutoffs"),
     updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
+    history: jsonb("history").default(sql`'[]'::jsonb`)
    }  
 );
 
