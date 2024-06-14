@@ -2,23 +2,23 @@
     "crons": [
         {
             "path": "/api/cronJobs/updateDb/updateRetail",
-            "schedule": "0 * * * *"
+            "schedule": "*/30 * * * *"
         },
         {
             "path": "/api/cronJobs/updateDb/updateUsShuffle",
-            "schedule": "0 * * * *"
+            "schedule": "*/30 * * * *"
         },
         {
             "path": "/api/cronJobs/updateDb/updateEuShuffle",
-            "schedule": "0 * * * *"
+            "schedule": "*/30 * * * *"
         },
         {
             "path": "/api/cronJobs/updateDb/updateClassicUs",
-            "schedule": "0 * * * *"
+            "schedule": "*/30 * * * *"
         },
         {
             "path": "/api/cronJobs/updateDb/updateClassicEu",
-            "schedule": "0 * * * *"
+            "schedule": "*/30 * * * *"
         },
         {
             "path": "/api/cronJobs/getExtraData/getExtraDataUs3v3",
@@ -70,7 +70,11 @@
         },
         {
             "path": "/api/cronJobs/getPossibleRealms",
-            "schedule": "0 * * * *"
+            "schedule": "0 */4 * * *"
+        },
+        {
+            "path": "/api/cronJobs/updateRatingCutoffs",
+            "schedule": "0 */4 * * *"
         }
     ]
 }
