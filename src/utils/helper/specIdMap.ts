@@ -5,7 +5,7 @@ interface SpecInfo {
 }
 
 // Define specIdMap with numeric keys
-export const specIdMap: { [key: number]: SpecInfo } = {
+export const specIdMap: Record<number, SpecInfo> = {
     250: { name: 'death_knight_blood_cutoff', class: 'Death Knight', spec: 'Blood' },
     251: { name: 'death_knight_frost_cutoff', class: 'Death Knight', spec: 'Frost' },
     252: { name: 'death_knight_unholy_cutoff', class: 'Death Knight', spec: 'Unholy' },

@@ -55,20 +55,15 @@ interface ApiResponse {
     }[];
 }
 
-interface Cutoffs {
-    [key: string]: {
-        rating: number;
-        count: number;
-    };
-}
+type Cutoffs = Record<string, { rating: number; count: number }>;
 
 type AllCutoffs = Record<string, Record<string, { rating: number; count: number }>>;
 
 const getCutoffsForSpec = async (reward: ApiResponse['rewards'][0], tableShuffle: typeof euShuffleLeaderboard | typeof usShuffleLeaderboard) => {
     const keyName = specIdMap[reward.specialization!.id]?.name;
     if (keyName && tableShuffle) {
-        const specName = specIdMap[reward.specialization!.id]?.spec || '';
-        const className = specIdMap[reward.specialization!.id]?.class || '';
+        const specName = specIdMap[reward.specialization!.id]?.spec ?? '';
+        const className = specIdMap[reward.specialization!.id]?.class ?? '';
         const ratingCutoff = reward.rating_cutoff ?? 0;
         const data = await db
             .select()
@@ -158,4 +153,4 @@ export const updateRatingsCutoffs = async (): Promise<void> => {
             return updateRatingsCutoffs();
         }
     }
-};``
+};

@@ -1,4 +1,4 @@
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import { db } from '~/server/db';
 import { getAuthToken } from '~/server/actions/getAuthToken';
 import { eq } from 'drizzle-orm';
@@ -48,7 +48,7 @@ type LeaderboardTable = typeof eu3v3Leaderboard | typeof eu2v2Leaderboard | type
     typeof us3v3Leaderboard | typeof us2v2Leaderboard | typeof usRBGLeaderboard | typeof usShuffleLeaderboard |
     typeof classicUs3v3Leaderboard | typeof classicUs2v2Leaderboard | typeof classicUsRBGLeaderboard |
     typeof classicEu2v2Leaderboard | typeof classicEu3v3Leaderboard | typeof classicEuRBGLeaderboard;
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 
 export const getExtraDataForEachPlayer = async (version: keyof VersionMapping, region: keyof RegionMapping, bracket: keyof BracketMapping) => {
     const versionMapping = versionRegionBracketMapping[version];
