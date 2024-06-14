@@ -201,6 +201,7 @@ const handleDataInsert = async (data: LeaderboardEntry, table: LeaderboardTable)
 
     const updateData: LeaderboardEntry = {
         ...data,
+        updated_at: existingEntry.updated_at,
         history: existingEntry.history
     };
 
