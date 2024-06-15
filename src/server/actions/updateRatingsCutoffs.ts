@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { db } from '~/server/db';
 import { getAuthToken } from '~/server/actions/getAuthToken';
-import { and, eq, gt } from 'drizzle-orm/expressions';
+import { and, eq, gte } from 'drizzle-orm/expressions';
 import { RatingsCutoff, eu3v3Leaderboard, euRBGLeaderboard, euShuffleLeaderboard, us3v3Leaderboard, usRBGLeaderboard, usShuffleLeaderboard } from '../db/schema';
 import { specIdMap } from '~/utils/helper/specIdMap';
 import { sql } from 'drizzle-orm';
@@ -91,7 +91,7 @@ const getCutoffsForSpec = async (reward: ApiResponse['rewards'][0], tableShuffle
             .where(and(
                 eq(tableShuffle.character_spec, specName),
                 eq(tableShuffle.character_class, className),
-                gt(tableShuffle.rating, ratingCutoff)
+                gte(tableShuffle.rating, ratingCutoff)
             ));
         const count = data.length;
         return { [keyName]: { rating: ratingCutoff, count: count } };
@@ -109,7 +109,7 @@ const getCutoffsForFaction = async (reward: ApiResponse['rewards'][0], tableRbg:
         .from(tableRbg)
         .where(and(
             eq(tableRbg.faction_name, factionName),
-            gt(tableRbg.rating, reward.rating_cutoff ?? 0)
+            gte(tableRbg.rating, reward.rating_cutoff ?? 0)
         ));
     const count = data.length;
     return { [`rbg_${faction.toLowerCase()}_cutoff`]: { rating: reward.rating_cutoff ?? 0, count: count } };
@@ -121,7 +121,7 @@ const getCutoffsForBracket = async (reward: ApiResponse['rewards'][0], table3v3:
     const data = await db
         .select()
         .from(table3v3)
-        .where(gt(table3v3.rating, reward.rating_cutoff ?? 0));
+        .where(gte(table3v3.rating, reward.rating_cutoff ?? 0));
     const count = data.length;
     return { [`${reward.bracket.type.toLowerCase()}_cutoff`]: { rating: reward.rating_cutoff ?? 0, count: count } };
 };

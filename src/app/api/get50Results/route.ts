@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import { db } from '~/server/db';
 import type { VersionMapping, RegionMapping, BracketMapping } from '~/utils/helper/versionRegionBracketMapping';
 import { versionRegionBracketMapping } from '~/utils/helper/versionRegionBracketMapping';
-import { asc, count, eq, and, gte, lte, or, desc } from 'drizzle-orm';
+import { count, eq, and, gte, lte, or, desc } from 'drizzle-orm';
 import type { SQL } from 'drizzle-orm';
 
 export async function GET(req: NextRequest) {
@@ -48,16 +48,12 @@ export async function GET(req: NextRequest) {
     if (search) {
       const decodedSearch = decodeURIComponent(search).trim();
       const searchTerms = decodedSearch.split(',').map(term => term.trim());
-      console.log('searchTerms:', searchTerms)
 
       searchTerms.forEach(term => {
-        let [specName, ...classNames] = term.split(' ');
-        let className = classNames.join(' ');
-        // Handle special case
-        if (term.includes('Beast')) {
-          specName = 'Beast Mastery';
-          className = 'Hunter';
-        }       
+        const [specName, ...classNames] = term.includes('Beast')
+          ? ['Beast Mastery', 'Hunter']
+          : term.split(' ');
+        const className = classNames.join(' ');
         if (specName && className) {
           orConditions.push(
             and(
@@ -69,18 +65,13 @@ export async function GET(req: NextRequest) {
       });
     }
 
-    if (faction) {
-      andConditions.push(eq(table.faction_name, faction.toUpperCase()));
-    }
-    if (realm) {
-      andConditions.push(eq(table.realm_slug, realm.toLowerCase()));
-    }
-    if (minRating) {
-      andConditions.push(gte(table.rating, minRating));
-    }
-    if (maxRating) {
-      andConditions.push(lte(table.rating, maxRating));
-    }
+    if (faction) andConditions.push(eq(table.faction_name, faction.toUpperCase()));
+
+    if (realm) andConditions.push(eq(table.realm_slug, realm.toLowerCase()));
+
+    if (minRating) andConditions.push(gte(table.rating, minRating));
+
+    if (maxRating) andConditions.push(lte(table.rating, maxRating));
 
     const combinedConditions = orConditions.length > 0
       ? and(...andConditions, or(...orConditions))
