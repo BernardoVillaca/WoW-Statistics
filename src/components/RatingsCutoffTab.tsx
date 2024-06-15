@@ -9,11 +9,20 @@ interface RatingCountObj {
   rating: number;
 }
 
+interface Cutoffs {
+  [key: string]: RatingCountObj;
+}
+
+interface RatingCutoffs {
+  us_cutoffs: Cutoffs;
+  eu_cutoffs: Cutoffs;
+}
+
 const RatingsCutoffTab = () => {
   const queryParams = useURLChange()
 
   const [cutoff, setCutoff] = useState<RatingCountObj | null>(null)
-  const { ratingCutoffs } = useSearch()
+  const { ratingCutoffs } = useSearch() as { ratingCutoffs: RatingCutoffs | null }
   const [path, setPath] = useState<string | null>(null);
 
   useEffect(() => {
@@ -51,28 +60,50 @@ const RatingsCutoffTab = () => {
     if (!ratingCutoffs) return;
 
     const queryParams = getQueryParams();
-    const { region, bracket } = queryParams;
+    const { region, bracket, faction, version, search } = queryParams;
 
     let specificCutoff: RatingCountObj | null = null;
 
-    if (bracket === '3v3') {
-      specificCutoff = region === 'us' ? ratingCutoffs.us_cutoffs.arena_3v3_cutoff : ratingCutoffs.eu_cutoffs.arena_3v3_cutoff;
+    if (version === 'retail' && !path?.includes('solo-shuffle')) {
+      if (bracket === '3v3') {
+        specificCutoff = (region === 'us' ? ratingCutoffs.us_cutoffs.arena_3v3_cutoff : ratingCutoffs.eu_cutoffs.arena_3v3_cutoff) ?? null;
+      }
+      if (bracket === 'rbg' && faction === 'alliance') {
+        specificCutoff = (region === 'us' ? ratingCutoffs.us_cutoffs.rbg_alliance_cutoff : ratingCutoffs.eu_cutoffs.rbg_alliance_cutoff) ?? null;
+      }
+      if (bracket === 'rbg' && faction === 'horde') {
+        specificCutoff = (region === 'us' ? ratingCutoffs.us_cutoffs.rbg_horde_cutoff : ratingCutoffs.eu_cutoffs.rbg_horde_cutoff) ?? null;
+      }
     }
-    // Add additional logic for other brackets if needed
+
+    if (path?.includes('solo-shuffle')) {
+      const classSearch: string[] = search?.split(',') ?? [];
+
+      if (classSearch.length === 1) {
+        const spec = classSearch[0]?.toLowerCase().replace(' ', '_');
+        const specKey = `${spec}_cutoff` as keyof Cutoffs;
+        console.log(specKey)
+        specificCutoff = (region === 'us' ? ratingCutoffs.us_cutoffs[specKey] : ratingCutoffs.eu_cutoffs[specKey]) ?? null;
+      }
+    }
 
     setCutoff(specificCutoff);
   }
 
   return (
-    <div className='flex h-10 bg-gray-800 rounded-xl justify-center items-center gap-48 '>
-      <div>
-        <span>Rank one cut: </span>
-        <span>{cutoff?.rating}</span>
-      </div>
-      <div>
-        <span>Spots: </span>
-        <span>{cutoff?.count}</span>
-      </div>
+    <div className={`flex w-48 h-5 ${cutoff ? 'bg-gray-800' : 'bg-transparent'} rounded-md justify-between text-sm px-2 mb-1`}>
+      {cutoff && (
+        <>
+          <div>
+            <span>Rank1 cut: </span>
+            <span>{cutoff?.rating}</span>
+          </div>
+          <div>
+            <span>Spots: </span>
+            <span>{cutoff?.count}</span>
+          </div>
+        </>
+      )}
     </div>
   )
 }

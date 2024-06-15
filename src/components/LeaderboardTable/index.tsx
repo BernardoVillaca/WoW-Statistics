@@ -7,6 +7,7 @@ import axios from 'axios';
 import { useSearch } from '../Context/SearchContext';
 import useURLChange from '~/utils/hooks/useURLChange';
 import { Cutoffs } from '~/utils/helper/ratingCutoffsInterface';
+import RatingsCutoffTab from '../RatingsCutoffTab';
 
 type SearchTab = {
   name: string;
@@ -118,23 +119,28 @@ const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, results
 
   return (
     <div className="flex flex-col w-full" style={{ height: containerHeight }}>
-      {loading && (
+      {/* {loading && (
         <div className="h-full flex flex-col justify-center items-center bg-black bg-opacity-50">
           <FiLoader className="animate-spin text-white" size={50} />
         </div>
-      )}
-      {!loading && data.map((characterData, index) => (
-        characterData.character_class !== '' ? (
-          <LeaderboardRow
-            path={path}
-            rowIndex={index}
-            key={`${characterData.id}-${index}`}
-            characterData={characterData}
-            searchTabs={searchTabs}
-            rowHeight={rowHeight}
-          />
-        ) : null
-      ))}
+      )} */}
+
+      <div className=''>
+        <RatingsCutoffTab />
+        {data.map((characterData, index) => (
+          characterData.character_class !== '' ? (
+            <LeaderboardRow
+              path={path}
+              rowIndex={index}
+              key={`${characterData.id}-${index}`}
+              characterData={characterData}
+              searchTabs={searchTabs}
+              rowHeight={rowHeight}
+            />
+          ) : null
+        ))}
+      </div>
+
     </div>
   );
 };
