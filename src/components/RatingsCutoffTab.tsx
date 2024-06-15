@@ -10,7 +10,10 @@ interface RatingCountObj {
 }
 
 interface Cutoffs {
-  [key: string]: RatingCountObj;
+  arena_3v3_cutoff?: RatingCountObj;
+  rbg_alliance_cutoff?: RatingCountObj;
+  rbg_horde_cutoff?: RatingCountObj;
+  [key: string]: RatingCountObj | undefined;
 }
 
 interface RatingCutoffs {
