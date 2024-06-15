@@ -17,6 +17,9 @@ interface SearchContextType {
   setCurrentPage: Dispatch<SetStateAction<number>>;
   resultsCount: number;
   setResultsCount: Dispatch<SetStateAction<number>>;
+  classSearch: string[] | null;
+  setClassSearch: Dispatch<SetStateAction<string[] | null>>;
+
 }
 
 const SearchContext = createContext<SearchContextType | undefined>(undefined);
@@ -25,6 +28,7 @@ export const SearchProvider = ({ children }: { children: ReactNode }) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [resultsCount, setResultsCount] = useState<number>(0);
   const [ratingCutoffs, setRatingCutoffs] = useState<RatingCutoffs | null>(null);
+  const [classSearch, setClassSearch] = useState<string[] | null>(null);
 
   return (
     <SearchContext.Provider
@@ -35,6 +39,8 @@ export const SearchProvider = ({ children }: { children: ReactNode }) => {
         setResultsCount,
         ratingCutoffs,
         setRatingCutoffs,
+        classSearch,
+        setClassSearch
       }}
     >
       {children}

@@ -43,7 +43,8 @@ type RatingCutoffs = {
 };
 
 const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, resultsPerPage, rowHeight }) => {
-  const { setResultsCount, setRatingCutoffs } = useSearch();
+  const { setResultsCount, setRatingCutoffs, setClassSearch } = useSearch();
+
   const [data, setData] = useState<CharacterData[]>([]);
   const [loading, setLoading] = useState(false);
   const queryParams = useURLChange();
@@ -57,8 +58,11 @@ const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, results
 
   const getQueryParams = () => {
     const params = new URLSearchParams(queryParams ?? '');
+    const classSearchParam = params.get('search');
     let bracket = params.get('bracket') ?? '3v3';
-
+    if (classSearchParam) {
+      setClassSearch(classSearchParam.split(',') ?? null);
+    }
     if (path?.includes('solo-shuffle')) {
       bracket = 'shuffle';
     }
@@ -117,30 +121,36 @@ const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, results
 
   const containerHeight = resultsPerPage * rowHeight;
 
+
+
+
+
   return (
     <div className="flex flex-col w-full" style={{ height: containerHeight }}>
-      {/* {loading && (
-        <div className="h-full flex flex-col justify-center items-center bg-black bg-opacity-50">
+      {loading ? (
+        <div className="h-full flex flex-col justify-between items-center bg-black bg-opacity-50 py-24">
+          <FiLoader className="animate-spin text-white" size={50} />
+          <FiLoader className="animate-spin text-white" size={50} />
+          <FiLoader className="animate-spin text-white" size={50} />
           <FiLoader className="animate-spin text-white" size={50} />
         </div>
-      )} */}
-
-      <div className=''>
-        <RatingsCutoffTab />
-        {data.map((characterData, index) => (
-          characterData.character_class !== '' ? (
-            <LeaderboardRow
-              path={path}
-              rowIndex={index}
-              key={`${characterData.id}-${index}`}
-              characterData={characterData}
-              searchTabs={searchTabs}
-              rowHeight={rowHeight}
-            />
-          ) : null
-        ))}
-      </div>
-
+      ) : (
+        <div className=''>
+          <RatingsCutoffTab />
+          {data.map((characterData, index) => (
+            characterData.character_class !== '' ? (
+              <LeaderboardRow
+                path={path}
+                rowIndex={index}
+                key={`${characterData.id}-${index}`}
+                characterData={characterData}
+                searchTabs={searchTabs}
+                rowHeight={rowHeight}
+              />
+            ) : null
+          ))}
+        </div>
+      )}
     </div>
   );
 };

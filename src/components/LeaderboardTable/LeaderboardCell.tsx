@@ -4,6 +4,7 @@ import horde from '../../assets/Factions/horde.png';
 import alliance from '../../assets/Factions/alliance.png'
 import { calculateDifference } from '~/utils/helper/calculateDifference';
 import { useSearch } from '../Context/SearchContext';
+import useURLChange from '~/utils/hooks/useURLChange';
 
 const classColors = {
   'Death Knight': "#C41E3A",
@@ -41,7 +42,8 @@ type LeaderboardCellProps = {
 };
 
 const LeaderboardCell = ({ str, height, index, cell, characterClass, characterSpec, history, rowIndex, path }: LeaderboardCellProps) => {
-  const { currentPage } = useSearch();  // Added resultsPerPage to calculate the correct rank
+  const { currentPage, classSearch } = useSearch();  // Added resultsPerPage to calculate the correct rank
+  
   const resultsPerPage = 50;  // Added resultsPerPage to calculate the correct rank
   const specClass = `${characterSpec} ${characterClass}`;
   const specIcon = specIconsMap[specClass as keyof typeof specIconsMap];
@@ -103,7 +105,9 @@ const LeaderboardCell = ({ str, height, index, cell, characterClass, characterSp
       ) : cell === 'rank' && path?.includes('solo-shuffle') ? (
         <div className='flex'>
           <span>{overallRank}</span>
-          <span style={{ color: classColor }} className='absolute bottom-5 left-28 text-xs text-gray-500'>{str}</span> 
+          {classSearch?.length !== 1 && (
+            <span style={{ color: classColor }} className='absolute bottom-5 left-28 text-xs text-gray-500'>{str}</span>
+          )}
         </div>
       ) : cell === 'realm_slug' ? (
         <span>{formatRealmName(str)}</span>

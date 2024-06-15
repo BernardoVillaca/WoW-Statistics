@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import { db } from '~/server/db';
 import type { VersionMapping, RegionMapping, BracketMapping } from '~/utils/helper/versionRegionBracketMapping';
 import { versionRegionBracketMapping } from '~/utils/helper/versionRegionBracketMapping';
-import { asc, count, eq, and, gte, lte, or, desc} from 'drizzle-orm';
+import { asc, count, eq, and, gte, lte, or, desc } from 'drizzle-orm';
 import type { SQL } from 'drizzle-orm';
 
 export async function GET(req: NextRequest) {
@@ -48,11 +48,16 @@ export async function GET(req: NextRequest) {
     if (search) {
       const decodedSearch = decodeURIComponent(search).trim();
       const searchTerms = decodedSearch.split(',').map(term => term.trim());
+      console.log('searchTerms:', searchTerms)
 
       searchTerms.forEach(term => {
-        const [specName, ...classNames] = term.split(' ');
-        const className = classNames.join(' ');
-
+        let [specName, ...classNames] = term.split(' ');
+        let className = classNames.join(' ');
+        // Handle special case
+        if (term.includes('Beast')) {
+          specName = 'Beast Mastery';
+          className = 'Hunter';
+        }       
         if (specName && className) {
           orConditions.push(
             and(
