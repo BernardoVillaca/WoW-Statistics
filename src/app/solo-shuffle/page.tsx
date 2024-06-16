@@ -16,7 +16,13 @@ const SoloShuffle = () => {
             <div className="flex flex-col w-full gap-4 pt-4">
                 <SearchTab isShuffle={true} />
                 <ScrollTab resultsPerPage={resultsPerPage} />
+                <div className="flex h-16 bg-black justify-between rounded-xl">
+                    {searchTabs.map((tab) => (
+                        <div key={tab.name} className={`flex items-center justify-center text-white text-center h-full w-full '} `}>{tab.label}</div>
+                    ))}
+                </div>
                 <LeaderBoardTable resultsPerPage={resultsPerPage} rowHeight={rowHeight} searchTabs={searchTabs} />
+                <ScrollTab resultsPerPage={resultsPerPage} />
             </div>
         </main>
     )
@@ -24,7 +30,7 @@ const SoloShuffle = () => {
 
 const SoloShuffleWrapper = () => (
     <SearchProvider>
-        <SoloShuffle/>
+        <SoloShuffle />
     </SearchProvider>
 );
 

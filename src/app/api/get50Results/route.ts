@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
   const version = (searchParams.get('version') ?? 'retail') as keyof VersionMapping;
   const region = (searchParams.get('region') ?? 'us') as keyof RegionMapping;
   const bracket = (searchParams.get('bracket') ?? '3v3') as keyof BracketMapping;
-
+  
   // Other parameters
   const search = searchParams.get('search') ?? '';
   const faction = searchParams.get('faction') ?? ''; // faction_name on the db
@@ -41,7 +41,7 @@ export async function GET(req: NextRequest) {
     }
 
     const { table } = bracketMapping;
-
+    
     const andConditions: SQL[] = [];
     const orConditions: SQL[] = [];
 

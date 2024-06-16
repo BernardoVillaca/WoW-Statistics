@@ -43,7 +43,7 @@ type LeaderboardCellProps = {
 
 const LeaderboardCell = ({ str, height, index, cell, characterClass, characterSpec, history, rowIndex, path }: LeaderboardCellProps) => {
   const { currentPage, classSearch } = useSearch();  // Added resultsPerPage to calculate the correct rank
-  
+
   const resultsPerPage = 50;  // Added resultsPerPage to calculate the correct rank
   const specClass = `${characterSpec} ${characterClass}`;
   const specIcon = specIconsMap[specClass as keyof typeof specIconsMap];
@@ -51,10 +51,14 @@ const LeaderboardCell = ({ str, height, index, cell, characterClass, characterSp
 
   const classColor = classColors[characterClass as keyof typeof classColors];
 
-  const formatRealmName = (realmName: string) => {
-    let formattedName = realmName.replace('-', ' ').split(' ');
-    formattedName = formattedName.map(word => word.charAt(0).toUpperCase() + word.slice(1));
-    return formattedName.join(' ');
+  const formatRealmName = (formattedText: string) => {
+    if (formattedText.length > 13) {
+      formattedText = formattedText.slice(0, 13);
+    }
+    const wordsArray = formattedText.replace(/-/g, ' ').split(' ');
+    formattedText = wordsArray.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+  
+    return formattedText;
   };
 
   const getTimeSinceLastPlayed = (dateString: string) => {
@@ -74,7 +78,7 @@ const LeaderboardCell = ({ str, height, index, cell, characterClass, characterSp
     }
   };
 
-  const difference = calculateDifference(history, cell, str);
+   const difference = calculateDifference(history, cell, str);
   const showDifference = difference !== 0;
 
   const overallRank = (currentPage - 1) * resultsPerPage + rowIndex + 1;
