@@ -56,6 +56,19 @@
             "path": "/api/cronJobs/getExtraData/getExtraDataClassicUsRbg",
             "schedule": "0 * * * *"
         },
+        
+        {
+            "path": "/api/cronJobs/getExtraData/getExtraDataClassicUS3v3",
+            "schedule": "0 * * * *"
+        },
+        {
+            "path": "/api/cronJobs/getExtraData/getExtraDataClassicUS2v2",
+            "schedule": "0 * * * *"
+        },
+        {
+            "path": "/api/cronJobs/getExtraData/getExtraDataClassicUSRbg",
+            "schedule": "0 * * * *"
+        },
         {
             "path": "/api/cronJobs/getExtraData/getExtraDataClassicEu3v3",
             "schedule": "0 * * * *"
