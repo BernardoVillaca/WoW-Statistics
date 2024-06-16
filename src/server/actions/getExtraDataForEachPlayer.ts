@@ -200,7 +200,6 @@ const determineSpecWithMostPoints = (specData: SpecData | null): string => {
             }
         }
     }
-    console.log(`Main spec: ${mainSpecName}`, maxPoints)
-
+    
     return mainSpecName;
 };

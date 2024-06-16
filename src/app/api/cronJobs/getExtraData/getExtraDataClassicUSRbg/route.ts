@@ -15,10 +15,10 @@ export async function GET(req: NextRequest) {
 
     try {
         console.log('Getting extra data for us classic rbg.');
-         
+
         await getExtraDataForEachPlayer('classic', 'us', 'rbg');
-             
-        console.log('Fishing getting extra data for us classic rbg.');
+        
+        console.log('Finished getting extra data for us classic rbg.');
         return NextResponse.json({ message: 'Scheduled tasks completed.' });
     } catch (error) {
         console.error('Error running scheduled tasks:', error);
