@@ -5,6 +5,7 @@ import alliance from '../../assets/Factions/alliance.png'
 import { calculateDifference } from '~/utils/helper/calculateDifference';
 import { useSearch } from '../Context/SearchContext';
 import useURLChange from '~/utils/hooks/useURLChange';
+import { useEffect } from 'react';
 
 const classColors = {
   'Death Knight': "#C41E3A",
@@ -50,6 +51,7 @@ const LeaderboardCell = ({ str, height, index, cell, characterClass, characterSp
   const factionIcon = str === 'HORDE' ? horde : str === 'ALLIANCE' ? alliance : null;
 
   const classColor = classColors[characterClass as keyof typeof classColors];
+  console.log(classSearch)
 
   const formatRealmName = (formattedText: string) => {
     if (formattedText.length > 13) {
@@ -57,7 +59,7 @@ const LeaderboardCell = ({ str, height, index, cell, characterClass, characterSp
     }
     const wordsArray = formattedText.replace(/-/g, ' ').split(' ');
     formattedText = wordsArray.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-  
+
     return formattedText;
   };
 
@@ -78,7 +80,8 @@ const LeaderboardCell = ({ str, height, index, cell, characterClass, characterSp
     }
   };
 
-   const difference = calculateDifference(history, cell, str);
+
+  const difference = calculateDifference(history, cell, str);
   const showDifference = difference !== 0;
 
   const overallRank = (currentPage - 1) * resultsPerPage + rowIndex + 1;
@@ -106,12 +109,18 @@ const LeaderboardCell = ({ str, height, index, cell, characterClass, characterSp
         <span className={` ${Number(str) >= 70 ? 'text-green-300' : Number(str) >= 55 ? 'text-yellow-300' : 'text-red-300'} `}>
           {str}%
         </span>
-      ) : cell === 'rank' && path?.includes('solo-shuffle') ? (
+      ) : cell === 'rank' ? (
         <div className='flex'>
           <span>{overallRank}</span>
-          {classSearch?.length !== 1 && (
-            <span style={{ color: classColor }} className='absolute bottom-5 left-28 text-xs text-gray-500'>{str}</span>
+          {classSearch?.length !== 1 && path === '/solo-shuffle' && (
+            <span style={{ color: classColor }} className='absolute bottom-5 right-32 text-xs text-gray-500'>{str}</span>
           )}
+          {showDifference && (
+            <div className={`absolute bottom-3 left-24 text-xs ${difference > 0 ? 'text-green-600' : 'text-red-600'}`}>
+              {difference !== 0 ? `(${difference > 0 ? '+' : ''}${difference})` : ''}
+            </div>
+          )}
+
         </div>
       ) : cell === 'realm_slug' ? (
         <span>{formatRealmName(str)}</span>

@@ -28,8 +28,7 @@ const grayedOutSpecs = [
 ];
 
 const ClassSearch = () => {
-    const { setCurrentPage } = useSearch();
-    const [selectedSpecs, setSelectedSpecs] = useState<string[]>([]);
+    const { setCurrentPage, classSearch, setClassSearch } = useSearch();
     const queryParams = useURLChange();
     const prevVersionRef = useRef<string | null>(null);
 
@@ -48,11 +47,12 @@ const ClassSearch = () => {
         }
         const specs = classSpecs[className];
         if (specs) {
-            const allSelected = specs.every(spec => selectedSpecs.includes(spec));
+            const allSelected = specs.every(spec => classSearch.includes(spec));
             if (allSelected) {
-                setSelectedSpecs(selectedSpecs.filter(spec => !specs.includes(spec)));
+                const updatedSearch = classSearch.filter(spec => !specs.includes(spec));
+                setClassSearch(updatedSearch);
             } else {
-                setSelectedSpecs([...selectedSpecs, ...specs.filter(spec => !selectedSpecs.includes(spec))]);
+                setClassSearch([...classSearch, ...specs.filter(spec => !classSearch.includes(spec))]);
             }
         }
     };
@@ -61,31 +61,33 @@ const ClassSearch = () => {
         if (version === 'classic' && grayedOutSpecs.includes(spec)) {
             return;
         }
-        if (selectedSpecs.includes(spec)) {
-            setSelectedSpecs(selectedSpecs.filter(selected => selected !== spec));
+        if (classSearch.includes(spec)) {
+            const updatedSearch = classSearch.filter(selected => selected !== spec);
+            setClassSearch(updatedSearch);
         } else {
-            setSelectedSpecs([...selectedSpecs, spec]);
+            setClassSearch([...classSearch, spec]);
         }
     };
+    
 
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
         const initialSearch = urlParams.get('search');
         if (initialSearch) {
-            setSelectedSpecs(initialSearch.split(','));
+            setClassSearch(initialSearch.split(','));
         }
     }, []);
 
     useEffect(() => {
-        if (selectedSpecs) {
+        if (classSearch) {
             setCurrentPage(1);
-            updateURL('search', selectedSpecs.length > 0 ? selectedSpecs.join(',') : null, true);
+            updateURL('search', classSearch.length > 0 ? classSearch.join(',') : null, true);
         }
-    }, [selectedSpecs]);
+    }, [classSearch]);
 
     useEffect(() => {
         if (prevVersionRef.current && prevVersionRef.current !== version) {
-            setSelectedSpecs([]);
+            setClassSearch([]);
         }
         prevVersionRef.current = version;
     }, [version]);
@@ -101,7 +103,7 @@ const ClassSearch = () => {
                         height={30}
                         className={`
                             rounded-lg overflow-hidden cursor-pointer 
-                            ${classSpecs[className]?.every(spec => selectedSpecs.includes(spec)) ? 'border-2 border-blue-500' : ''} 
+                            ${classSpecs[className]?.every(spec => classSearch.includes(spec)) ? 'border-2 border-blue-500' : ''} 
                             ${version === 'classic' && ['Evoker', 'Demon Hunter', 'Monk'].includes(className) ? 'grayed-out' : ''}
                             `}
                         onClick={() => toggleClassSelection(className)}
@@ -116,7 +118,7 @@ const ClassSearch = () => {
                                 height={30}
                                 className={`
                                     rounded-lg overflow-hidden cursor-pointer 
-                                    ${selectedSpecs.includes(spec) ? 'border-2 border-blue-500' : ''} 
+                                    ${classSearch.includes(spec) ? 'border-2 border-blue-500' : ''} 
                                     ${version === 'classic' && ['Evoker', 'Demon Hunter', 'Monk'].includes(className) ? 'grayed-out' : ''}
                                     `}
                                 onClick={() => toggleSpecSelection(spec)}
