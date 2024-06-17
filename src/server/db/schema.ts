@@ -22,7 +22,29 @@ export const RatingsCutoff = createTable(
     classic_eu_cutoffs: jsonb("classic_eu_cutoffs"),
     updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
     history: jsonb("history").default(sql`'[]'::jsonb`)
-   }  
+  }
+);
+
+export const wowStatistics = createTable(
+  "wow_statistics",
+  {
+    id: integer("id").primaryKey(),
+    classic_us_rbg: jsonb("classic_us_rbg").default(sql`'[]'::jsonb`),
+    classic_us_2v2: jsonb("classic_us_2v2").default(sql`'[]'::jsonb`),
+    classic_us_3v3: jsonb("classic_us_3v3").default(sql`'[]'::jsonb`),
+
+    classic_eu_rbg: jsonb("classic_eu_rbg").default(sql`'[]'::jsonb`),
+    classic_eu_2v2: jsonb("classic_eu_2v2").default(sql`'[]'::jsonb`),
+    classic_eu_3v3: jsonb("classic_eu_3v3").default(sql`'[]'::jsonb`),
+
+    retail_us_rbg: jsonb("retail_us_rbg").default(sql`'[]'::jsonb`),
+    retail_us_2v2: jsonb("retail_us_2v2").default(sql`'[]'::jsonb`),
+    retail_us_3v3: jsonb("retail_us_3v3").default(sql`'[]'::jsonb`),
+
+    retail_eu_rbg: jsonb("retail_eu_rbg").default(sql`'[]'::jsonb`),
+    retail_eu_2v2: jsonb("retail_eu_2v2").default(sql`'[]'::jsonb`),
+    retail_eu_3v3: jsonb("retail_eu_3v3").default(sql`'[]'::jsonb`),
+  }
 );
 
 export const us3v3Leaderboard = createTable(
@@ -140,40 +162,40 @@ export const usRBGLeaderboard = createTable(
 export const usShuffleLeaderboard = createTable(
   "us_Shuffle_leaderboard",
   {
-      character_name: varchar("character_name", { length: 256 }),
-      character_id: integer("character_id"),
-      character_class: varchar("character_class", { length: 256 }).default(''),
-      character_spec: varchar("character_spec", { length: 256 }).default(''),
-      realm_id: integer("realm_id"),
-      realm_slug: varchar("realm_slug", { length: 256 }),
-      faction_name: varchar("faction_name", { length: 256 }),
-      rank: integer("rank"),
-      rating: integer("rating"),
-      played: integer("played"),
-      win_ratio: varchar("win_ratio", { length: 10 }),
-      won: integer("won"),
-      lost: integer("lost"),
-      tier_id: integer("tier_id"),
-      tier_href: varchar("tier_href", { length: 512 }),
-      created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
-      updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
-      history: jsonb("history").default(sql`'[]'::jsonb`)
+    character_name: varchar("character_name", { length: 256 }),
+    character_id: integer("character_id"),
+    character_class: varchar("character_class", { length: 256 }).default(''),
+    character_spec: varchar("character_spec", { length: 256 }).default(''),
+    realm_id: integer("realm_id"),
+    realm_slug: varchar("realm_slug", { length: 256 }),
+    faction_name: varchar("faction_name", { length: 256 }),
+    rank: integer("rank"),
+    rating: integer("rating"),
+    played: integer("played"),
+    win_ratio: varchar("win_ratio", { length: 10 }),
+    won: integer("won"),
+    lost: integer("lost"),
+    tier_id: integer("tier_id"),
+    tier_href: varchar("tier_href", { length: 512 }),
+    created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
+    updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
+    history: jsonb("history").default(sql`'[]'::jsonb`)
   },
   (leaderboard) => ({
-      usShufflePrimaryIndex: index("us_shuffle_primary_idx").on(
-          leaderboard.character_name,
-          leaderboard.realm_slug,
-          leaderboard.character_spec
-      ),
-      usShuffleCharacterNameIndex: index("us_shuffle_character_name_idx").on(leaderboard.character_name),
-      usShuffleCharacterIdIndex: index("us_shuffle_character_id_idx").on(leaderboard.character_id),
-      usShuffleCharacterClassIndex: index("us_shuffle_character_class_idx").on(leaderboard.character_class),
-      usShuffleCharacterSpecIndex: index("us_shuffle_character_spec_idx").on(leaderboard.character_spec),
-      usShuffleFactionNameIndex: index("us_shuffle_faction_name_idx").on(leaderboard.faction_name),
-      usShuffleRankIndex: index("us_shuffle_rank_idx").on(leaderboard.rank),
-      usShuffleRatingIndex: index("us_shuffle_rating_idx").on(leaderboard.rating),
-      usShufflePlayedIndex: index("us_shuffle_played_idx").on(leaderboard.played),
-      usShuffleWinRatioIndex: index("us_shuffle_win_ratio_idx").on(leaderboard.win_ratio),
+    usShufflePrimaryIndex: index("us_shuffle_primary_idx").on(
+      leaderboard.character_name,
+      leaderboard.realm_slug,
+      leaderboard.character_spec
+    ),
+    usShuffleCharacterNameIndex: index("us_shuffle_character_name_idx").on(leaderboard.character_name),
+    usShuffleCharacterIdIndex: index("us_shuffle_character_id_idx").on(leaderboard.character_id),
+    usShuffleCharacterClassIndex: index("us_shuffle_character_class_idx").on(leaderboard.character_class),
+    usShuffleCharacterSpecIndex: index("us_shuffle_character_spec_idx").on(leaderboard.character_spec),
+    usShuffleFactionNameIndex: index("us_shuffle_faction_name_idx").on(leaderboard.faction_name),
+    usShuffleRankIndex: index("us_shuffle_rank_idx").on(leaderboard.rank),
+    usShuffleRatingIndex: index("us_shuffle_rating_idx").on(leaderboard.rating),
+    usShufflePlayedIndex: index("us_shuffle_played_idx").on(leaderboard.played),
+    usShuffleWinRatioIndex: index("us_shuffle_win_ratio_idx").on(leaderboard.win_ratio),
   })
 );
 
@@ -287,44 +309,44 @@ export const euRBGLeaderboard = createTable(
     euRBGWinRatioIndex: index("eu_RBG_win_ratio_idx").on(leaderboard.win_ratio),
   }))
 
- export const euShuffleLeaderboard = createTable(
-    "eu_Shuffle_leaderboard",
-    {
-        character_name: varchar("character_name", { length: 256 }),
-        character_id: integer("character_id"),
-        character_class: varchar("character_class", { length: 256 }).default(''),
-        character_spec: varchar("character_spec", { length: 256 }).default(''),
-        realm_id: integer("realm_id"),
-        realm_slug: varchar("realm_slug", { length: 256 }),
-        faction_name: varchar("faction_name", { length: 256 }),
-        rank: integer("rank"),
-        rating: integer("rating"),
-        played: integer("played"),
-        win_ratio: varchar("win_ratio", { length: 10 }),
-        won: integer("won"),
-        lost: integer("lost"),
-        tier_id: integer("tier_id"),
-        tier_href: varchar("tier_href", { length: 512 }),
-        created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
-        updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
-        history: jsonb("history").default(sql`'[]'::jsonb`)
-    },
-    (leaderboard) => ({
-        euShufflePrimaryIndex: index("eu_shuffle_primary_idx").on(
-            leaderboard.character_name,
-            leaderboard.realm_slug,
-            leaderboard.character_spec
-        ),
-        euShuffleCharacterNameIndex: index("eu_shuffle_character_name_idx").on(leaderboard.character_name),
-        euShuffleCharacterIdIndex: index("eu_shuffle_character_id_idx").on(leaderboard.character_id),
-        euShuffleCharacterClassIndex: index("eu_shuffle_character_class_idx").on(leaderboard.character_class),
-        euShuffleCharacterSpecIndex: index("eu_shuffle_character_spec_idx").on(leaderboard.character_spec),
-        euShuffleFactionNameIndex: index("eu_shuffle_faction_name_idx").on(leaderboard.faction_name),
-        euShuffleRankIndex: index("eu_shuffle_rank_idx").on(leaderboard.rank),
-        euShuffleRatingIndex: index("eu_shuffle_rating_idx").on(leaderboard.rating),
-        euShufflePlayedIndex: index("eu_shuffle_played_idx").on(leaderboard.played),
-        euShuffleWinRatioIndex: index("eu_shuffle_win_ratio_idx").on(leaderboard.win_ratio),
-    })
+export const euShuffleLeaderboard = createTable(
+  "eu_Shuffle_leaderboard",
+  {
+    character_name: varchar("character_name", { length: 256 }),
+    character_id: integer("character_id"),
+    character_class: varchar("character_class", { length: 256 }).default(''),
+    character_spec: varchar("character_spec", { length: 256 }).default(''),
+    realm_id: integer("realm_id"),
+    realm_slug: varchar("realm_slug", { length: 256 }),
+    faction_name: varchar("faction_name", { length: 256 }),
+    rank: integer("rank"),
+    rating: integer("rating"),
+    played: integer("played"),
+    win_ratio: varchar("win_ratio", { length: 10 }),
+    won: integer("won"),
+    lost: integer("lost"),
+    tier_id: integer("tier_id"),
+    tier_href: varchar("tier_href", { length: 512 }),
+    created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
+    updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
+    history: jsonb("history").default(sql`'[]'::jsonb`)
+  },
+  (leaderboard) => ({
+    euShufflePrimaryIndex: index("eu_shuffle_primary_idx").on(
+      leaderboard.character_name,
+      leaderboard.realm_slug,
+      leaderboard.character_spec
+    ),
+    euShuffleCharacterNameIndex: index("eu_shuffle_character_name_idx").on(leaderboard.character_name),
+    euShuffleCharacterIdIndex: index("eu_shuffle_character_id_idx").on(leaderboard.character_id),
+    euShuffleCharacterClassIndex: index("eu_shuffle_character_class_idx").on(leaderboard.character_class),
+    euShuffleCharacterSpecIndex: index("eu_shuffle_character_spec_idx").on(leaderboard.character_spec),
+    euShuffleFactionNameIndex: index("eu_shuffle_faction_name_idx").on(leaderboard.faction_name),
+    euShuffleRankIndex: index("eu_shuffle_rank_idx").on(leaderboard.rank),
+    euShuffleRatingIndex: index("eu_shuffle_rating_idx").on(leaderboard.rating),
+    euShufflePlayedIndex: index("eu_shuffle_played_idx").on(leaderboard.played),
+    euShuffleWinRatioIndex: index("eu_shuffle_win_ratio_idx").on(leaderboard.win_ratio),
+  })
 );
 
 
