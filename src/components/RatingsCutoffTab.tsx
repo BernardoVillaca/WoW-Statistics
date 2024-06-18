@@ -84,9 +84,8 @@ const RatingsCutoffTab = () => {
 
       if (classSearch.length === 1) {
         const spec = classSearch.join(' ').toLowerCase().replace(/\s+/g, '_');
-        console.log(spec)
         const specKey = `${spec}_cutoff` as keyof Cutoffs;
-                
+
         specificCutoff = (region === 'us' ? ratingCutoffs.us_cutoffs[specKey] : ratingCutoffs.eu_cutoffs[specKey]) ?? null;
       }
     }

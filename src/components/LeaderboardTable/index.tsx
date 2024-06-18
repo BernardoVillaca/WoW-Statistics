@@ -8,6 +8,7 @@ import { useSearch } from '../Context/SearchContext';
 import useURLChange from '~/utils/hooks/useURLChange';
 import { Cutoffs } from '~/utils/helper/ratingCutoffsInterface';
 import RatingsCutoffTab from '../RatingsCutoffTab';
+import { RatingsCutoff } from '~/server/db/schema';
 
 type SearchTab = {
   name: string;
@@ -18,6 +19,7 @@ type CharacterData = {
   name: string;
   character_class: string;
   character_spec: string;
+  rank: number;
   history: HistoryEntry[];
 };
 
@@ -43,10 +45,11 @@ type RatingCutoffs = {
 };
 
 const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, resultsPerPage, rowHeight }) => {
-  const { setResultsCount, setRatingCutoffs, setClassSearch } = useSearch();
+  const { setResultsCount, setRatingCutoffs, setClassSearch, ratingCutoffs } = useSearch();
 
   const [data, setData] = useState<CharacterData[]>([]);
   const [loading, setLoading] = useState(false);
+  const [paramsToUse, setParamsToUse] = useState({} as any);
   const queryParams = useURLChange();
   const [path, setPath] = useState<string | null>(null);
 
@@ -55,6 +58,7 @@ const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, results
       setPath(window.location.pathname);
     }
   }, []);
+
 
   const getQueryParams = () => {
     const params = new URLSearchParams(queryParams ?? '');
@@ -83,6 +87,7 @@ const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, results
   const getData = async () => {
     setLoading(true);
     const queryParams = getQueryParams();
+    setParamsToUse(queryParams);
 
     // Filter out empty parameters and default min/max ratings
     const filteredParams = Object.fromEntries(
@@ -106,6 +111,7 @@ const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, results
       const secondResponseData = secondResponse.data as { cutoffs: RatingCutoffs };
       setRatingCutoffs(secondResponseData.cutoffs);
 
+
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -118,17 +124,15 @@ const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, results
       void getData();
     }
   }, [queryParams, path]);
-
-  const containerHeight = resultsPerPage * rowHeight;
-
-
-
-
+  
+  // dont blame yourself for this
+  const containerHeight = (resultsPerPage + 0.5) * rowHeight;
 
   return (
     <div className="flex flex-col w-full" style={{ height: containerHeight }}>
+      <RatingsCutoffTab />
       {loading ? (
-        <div className="h-full flex flex-col justify-between items-center bg-black bg-opacity-50 py-24">
+        <div className="h-full flex flex-col justify-between items-center bg-gray-800 bg-opacity-50 py-24">
           <FiLoader className="animate-spin text-white" size={50} />
           <FiLoader className="animate-spin text-white" size={50} />
           <FiLoader className="animate-spin text-white" size={50} />
@@ -136,10 +140,11 @@ const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, results
         </div>
       ) : (
         <div className=''>
-          <RatingsCutoffTab />
           {data.map((characterData, index) => (
             characterData.character_class !== '' ? (
               <LeaderboardRow
+                highlightedLines={ratingCutoffs && ratingCutoffs.us_cutoffs.arena_3v3_cutoff.count +1}
+                queryParams={paramsToUse}
                 path={path}
                 rowIndex={index}
                 key={`${characterData.id}-${index}`}

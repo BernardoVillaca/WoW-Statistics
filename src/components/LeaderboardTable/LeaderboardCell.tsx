@@ -29,6 +29,16 @@ type HistoryEntry = {
   updated_at: string;
 };
 
+type CharacterData = {
+  id: string;
+  name: string;
+  character_class: string;
+  character_spec: string;
+  rank: number;
+  history: HistoryEntry[];
+  [key: string]: string | number | HistoryEntry[] | undefined;
+};
+
 type LeaderboardCellProps = {
   str: string;
   height: number;
@@ -39,19 +49,18 @@ type LeaderboardCellProps = {
   history: HistoryEntry[];
   rowIndex: number;
   path: string | null;
+  characterData: CharacterData
 
 };
 
-const LeaderboardCell = ({ str, height, index, cell, characterClass, characterSpec, history, rowIndex, path }: LeaderboardCellProps) => {
+const LeaderboardCell = ({ str, height, index, cell, characterClass, characterSpec, history, rowIndex, path, characterData }: LeaderboardCellProps) => {
   const { currentPage, classSearch } = useSearch();  // Added resultsPerPage to calculate the correct rank
-
   const resultsPerPage = 50;  // Added resultsPerPage to calculate the correct rank
   const specClass = `${characterSpec} ${characterClass}`;
   const specIcon = specIconsMap[specClass as keyof typeof specIconsMap];
   const factionIcon = str === 'HORDE' ? horde : str === 'ALLIANCE' ? alliance : null;
 
   const classColor = classColors[characterClass as keyof typeof classColors];
-  
 
   const formatRealmName = (formattedText: string) => {
     if (formattedText.length > 13) {
@@ -102,9 +111,14 @@ const LeaderboardCell = ({ str, height, index, cell, characterClass, characterSp
       ) : cell === 'character_spec' ? (
         <Image src={specIcon} alt={str} height={height / 1.8} width={height / 1.8} className='rounded-lg overflow-none' />
       ) : cell === 'character_name' ? (
-        <span style={{ color: classColor }}>
-          {str}
-        </span>
+        <div>
+          <span style={{ color: classColor }}>
+            {str}
+          </span>
+          {classSearch?.length !== 1 && path === '/solo-shuffle' && (
+            <span style={{ color: classColor }} className='absolute top-6 right-[133px] text-xs text-gray-500'>{characterData.rank < 99 ? characterData.rank : ''}</span>
+          )}
+        </div>
       ) : cell === 'win_ratio' ? (
         <span className={` ${Number(str) >= 70 ? 'text-green-300' : Number(str) >= 55 ? 'text-yellow-300' : 'text-red-300'} `}>
           {str}%
@@ -112,9 +126,6 @@ const LeaderboardCell = ({ str, height, index, cell, characterClass, characterSp
       ) : cell === 'rank' ? (
         <div className='flex'>
           <span>{overallRank}</span>
-          {classSearch?.length !== 1 && path === '/solo-shuffle' && (
-            <span style={{ color: classColor }} className='absolute bottom-5 right-32 text-xs text-gray-500'>{str}</span>
-          )}
           {showDifference && (
             <div className={`absolute bottom-3 left-24 text-xs ${difference > 0 ? 'text-green-600' : 'text-red-600'}`}>
               {difference !== 0 ? `(${difference > 0 ? '+' : ''}${difference})` : ''}
