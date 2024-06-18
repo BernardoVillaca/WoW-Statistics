@@ -1,7 +1,7 @@
 import React from 'react';
 import LeaderboardCell from './LeaderboardCell';
 import Image from 'next/image';
-import Rank1 from '~/assets/other/rankOneIcon.png';
+import Rank1 from '~/assets/Other/rankOneIcon.png';
 
 type CharacterData = {
   id: string;

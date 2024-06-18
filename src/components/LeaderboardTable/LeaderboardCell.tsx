@@ -116,7 +116,9 @@ const LeaderboardCell = ({ str, height, index, cell, characterClass, characterSp
             {str}
           </span>
           {classSearch?.length !== 1 && path === '/solo-shuffle' && (
-            <span style={{ color: classColor }} className='absolute top-6 right-[133px] text-xs text-gray-500'>{characterData.rank < 99 ? characterData.rank : ''}</span>
+            <div className='flex absolute top-[24px] right-[123px] w-4 h-4 place-content-star items-end'>
+              <span style={{ color: classColor }} className='text-xs text-gray-500'>{characterData.rank < 99 ? characterData.rank : ''}</span>
+            </div>
           )}
         </div>
       ) : cell === 'win_ratio' ? (
