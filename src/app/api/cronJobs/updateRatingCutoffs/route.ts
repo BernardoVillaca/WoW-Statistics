@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getLeaderboardsStatistics } from '~/server/actions/getLeaderboardsStatistics';
 import { updateLeaderboard } from '~/server/actions/updateLeaderboard';
 import { updateRatingsCutoffs } from '~/server/actions/updateRatingsCutoffs';
 
@@ -17,6 +18,7 @@ export async function GET(req: NextRequest) {
 
     try {
         console.log('Updating rating cutoffs.');
+            await getLeaderboardsStatistics();
             await updateRatingsCutoffs();
         console.log('Finished updating rating cutoffs.');
         return NextResponse.json({ message: 'Finished updating rating cutoffs.' });

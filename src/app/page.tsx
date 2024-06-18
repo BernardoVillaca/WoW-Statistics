@@ -8,7 +8,7 @@ import { SearchProvider } from '~/components/Context/SearchContext'
 import BracketSearch from '~/components/SearchTab/OtherSearch/BracketSearch'
 import RegionSearch from '~/components/SearchTab/OtherSearch/RegionSearch'
 import VersionSearch from '~/components/SearchTab/VersionSearch'
-import type { IClassStatisticsMap } from '~/utils/helper/classStatisticsMap'
+import type { IClassStatisticsMap, ISpecStatistics } from '~/utils/helper/classStatisticsMap'
 import useURLChange from '~/utils/hooks/useURLChange'
 
 interface wowStatistics {
@@ -26,18 +26,11 @@ interface wowStatistics {
   retail_us_2v2: IClassStatisticsMap,
   retail_us_3v3: IClassStatisticsMap,
 }
-type DataKey = keyof wowStatistics;
 type RegionType = 'us' | 'eu';
 type BracketType = '3v3' | '2v2' | 'rbg';
 type VersionType = 'retail' | 'classic';
 
-type LocalDataMapType = {
-  [version in VersionType]: {
-    [region in RegionType]: {
-      [bracket in BracketType]: string;
-    }
-  }
-};
+type LocalDataMapType = Record<VersionType, Record<RegionType, Record<BracketType, string>>>;
 
 const localDataMap: LocalDataMapType = {
   retail: {
@@ -57,12 +50,12 @@ const Home = () => {
   const [title, setTitle] = useState<string | null>(null)
   const [ratingFilter, setRatingFilter] = useState<string | null>(null)
   const [uniqueRatings, setUniqueRatings] = useState<{ label: string, key: string, total: number }[] | null>(null)
-  const [localData, setLocalData] = useState<{ [key: string]: any } | null>(null)
+  const [localData, setLocalData] = useState<IClassStatisticsMap | null>(null)
   const queryParams = useURLChange()
 
-  let allClassesCount: number = 0
-  let healerSpecsCount: number = 0
-  let dpsSpecsCount: number = 0
+  let allClassesCount = 0
+  let healerSpecsCount = 0
+  let dpsSpecsCount = 0
 
   const getQueryParams = (): { version: VersionType, region: RegionType, bracket: BracketType } => {
     const params = new URLSearchParams(queryParams ?? '')
@@ -82,15 +75,16 @@ const Home = () => {
   let countAbove2200 = 0
   let countAbove2400 = 0
 
-  const getFilteredCount = (item: any, filter: string | null) => {
+  const getFilteredCount = (item: ISpecStatistics, filter: string | null): number => {
     if (!filter) return item.totalCount;
-    const key = `countAbove${filter.replace('+', '')}`;
+    const key = `countAbove${filter.replace('+', '')}` as keyof ISpecStatistics;
     return item[key];
   };
 
   if (localData) {
     for (const className in localData) {
-      const classData = localData[className].AllSpecs;
+      const classData = localData?.[className]?.AllSpecs
+      if(!classData) continue
       const classCount = getFilteredCount(classData, ratingFilter);
 
       allClassesCount += Number(classCount);
@@ -98,15 +92,16 @@ const Home = () => {
 
       for (const specName in localData[className]) {
         if (specName === 'AllSpecs') {
-          countAbove1600 += Number(classData.countAbove1600);
-          countAbove1800 += Number(classData.countAbove1800);
-          countAbove2000 += Number(classData.countAbove2000);
-          countAbove2200 += Number(classData.countAbove2200);
-          countAbove2400 += Number(classData.countAbove2400);
+          countAbove1600 += Number(classData?.countAbove1600);
+          countAbove1800 += Number(classData?.countAbove1800);
+          countAbove2000 += Number(classData?.countAbove2000);
+          countAbove2200 += Number(classData?.countAbove2200);
+          countAbove2400 += Number(classData?.countAbove2400);
           continue;
         }
 
-        const specData = (localData[className] as any)[specName];
+        const specData = localData?.[className]?.[specName]
+        if(!specData) continue
         const specCount = getFilteredCount(specData, ratingFilter);
 
         if (healerSpecsArray.includes(`${specName} ${className}`)) {
@@ -119,9 +114,6 @@ const Home = () => {
       }
     }
   }
-
-
-
   const sortedClassCount = [...classCountMap.entries()].sort((a, b) => b[1] - a[1])
   const sortedHealerCount = [...healerCountMap.entries()].sort((a, b) => b[1] - a[1])
   const sortedDpsCount = [...dpsCountMap.entries()].sort((a, b) => b[1] - a[1])
@@ -154,23 +146,19 @@ const Home = () => {
     return uniqueCounts;
   };
 
-  const clickHandler = (rating: string) => {
+  const onClickHandler = (rating: string) => {
     if (rating === ratingFilter) {
       setRatingFilter(null)
     } else {
       setRatingFilter(rating)
     }
-
-
-
   }
-
   useEffect(() => {
     const fetchData = async () => {
       const response = await axios.get('/api/getWowStatistics')
-      setData(response.data)
+      setData(response.data as wowStatistics)
     }
-    fetchData()
+    void fetchData()
   }, [])
 
   useEffect(() => {
@@ -182,7 +170,7 @@ const Home = () => {
     
     if (newData && typeof newData === 'object') {
       setTitle(`${version.toUpperCase()} ${region.toUpperCase()} ${bracket.toUpperCase()}`);
-      setLocalData(newData as { [key: string]: any });
+      setLocalData(newData);
     } else {
       setLocalData(null);
     }
@@ -213,8 +201,7 @@ const Home = () => {
             <div
               key={rating.key}
               className={`flex w-15 h-8 place-content-center items-center select-none cursor-pointer rounded-xl px-1 ${ratingFilter === rating.label ? 'text-gray-800 bg-gray-300' : 'text-gray-300 bg-gray-800 '}`}
-              onClick={() => clickHandler(rating.label)}
-
+              onClick={() => onClickHandler(rating.label)}
             >
               {rating.label}
             </div>
