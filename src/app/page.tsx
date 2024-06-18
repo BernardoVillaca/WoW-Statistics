@@ -51,6 +51,7 @@ const Home = () => {
   const [ratingFilter, setRatingFilter] = useState<string | null>(null)
   const [uniqueRatings, setUniqueRatings] = useState<{ label: string, key: string, total: number }[] | null>(null)
   const [localData, setLocalData] = useState<IClassStatisticsMap | null>(null)
+  const [loading, setLoading] = useState<boolean>(true)
   const queryParams = useURLChange()
 
   let allClassesCount = 0
@@ -69,11 +70,14 @@ const Home = () => {
   const classCountMap = new Map<string, number>()
   const healerCountMap = new Map<string, number>()
   const dpsCountMap = new Map<string, number>()
+  let totalCount = 0
   let countAbove1600 = 0
   let countAbove1800 = 0
   let countAbove2000 = 0
   let countAbove2200 = 0
   let countAbove2400 = 0
+  let countAbove2600 = 0
+  let countAbove2800 = 0
 
   const getFilteredCount = (item: ISpecStatistics, filter: string | null): number => {
     if (!filter) return item.totalCount;
@@ -84,7 +88,7 @@ const Home = () => {
   if (localData) {
     for (const className in localData) {
       const classData = localData?.[className]?.AllSpecs
-      if(!classData) continue
+      if (!classData) continue
       const classCount = getFilteredCount(classData, ratingFilter);
 
       allClassesCount += Number(classCount);
@@ -92,16 +96,19 @@ const Home = () => {
 
       for (const specName in localData[className]) {
         if (specName === 'AllSpecs') {
+          totalCount += Number(classData?.totalCount);
           countAbove1600 += Number(classData?.countAbove1600);
           countAbove1800 += Number(classData?.countAbove1800);
           countAbove2000 += Number(classData?.countAbove2000);
           countAbove2200 += Number(classData?.countAbove2200);
           countAbove2400 += Number(classData?.countAbove2400);
+          countAbove2600 += Number(classData?.countAbove2600);
+          countAbove2800 += Number(classData?.countAbove2800);
           continue;
         }
 
         const specData = localData?.[className]?.[specName]
-        if(!specData) continue
+        if (!specData) continue
         const specCount = getFilteredCount(specData, ratingFilter);
 
         if (healerSpecsArray.includes(`${specName} ${className}`)) {
@@ -125,10 +132,12 @@ const Home = () => {
       { label: '2000+', key: 'countAbove2000', total: countAbove2000 },
       { label: '2200+', key: 'countAbove2200', total: countAbove2200 },
       { label: '2400+', key: 'countAbove2400', total: countAbove2400 },
+      { label: '2600+', key: 'countAbove2600', total: countAbove2600 },
+      { label: '2800+', key: 'countAbove2800', total: countAbove2800 },
     ];
-
-    const filteredCounts = ratingLevels.filter(count => count.total > 10);
-
+  
+    const filteredCounts = ratingLevels.filter(count => count.total > 5 && count.total !== totalCount);
+  
     const uniqueCounts = filteredCounts.reduce((acc, current) => {
       const existing = acc.find(item => item.total === current.total);
       if (existing) {
@@ -142,9 +151,11 @@ const Home = () => {
       }
       return acc;
     }, [] as { label: string, key: string, total: number }[]);
-
+  
     return uniqueCounts;
   };
+  
+
 
   const onClickHandler = (rating: string) => {
     if (rating === ratingFilter) {
@@ -154,9 +165,11 @@ const Home = () => {
     }
   }
   useEffect(() => {
+    setLoading(true)
     const fetchData = async () => {
       const response = await axios.get('/api/getWowStatistics')
       setData(response.data as wowStatistics)
+      setLoading(false)
     }
     void fetchData()
   }, [])
@@ -165,22 +178,23 @@ const Home = () => {
     if (data === null) return;
     const { version, region, bracket } = getQueryParams();
     const dataKey = localDataMap[version][region][bracket] as keyof wowStatistics;
-    
+
     const newData = data?.[dataKey];
-    
+
     if (newData && typeof newData === 'object') {
       setTitle(`${version.toUpperCase()} ${region.toUpperCase()} ${bracket.toUpperCase()}`);
       setLocalData(newData);
     } else {
       setLocalData(null);
     }
-    
+
     setRatingFilter(null);
-    setUniqueRatings(generateUniqueRatings());
   }, [queryParams, data]);
-  
-  
-  
+
+  useEffect(() => {
+    setUniqueRatings(generateUniqueRatings());
+  }, [localData]);
+
 
   const highestClass = sortedClassCount?.[0]?.[1] ?? 0
   const highestHealer = sortedHealerCount?.[0]?.[1] ?? 0
@@ -209,7 +223,7 @@ const Home = () => {
         </div>
       </div>
       <div className='flex gap-2'>
-        <BarChart highestValue={highestClass} sortedArray={sortedClassCount} specificCount={allClassesCount} classChart={true} title='Classes' />
+        <BarChart highestValue={highestClass} sortedArray={sortedClassCount} specificCount={allClassesCount} classChart={true} title='Classes' loading={loading} />
         <div className='flex flex-col w-1/2 h-full pt-2 '>
           <div className='flex flex-col h-10 w-full items-center place-content-center bg-gray-800 rounded-xl'>
             <span>Activity</span>
@@ -217,8 +231,8 @@ const Home = () => {
         </div>
       </div>
       <div className='flex gap-2'>
-        <BarChart highestValue={highestDps} sortedArray={sortedDpsCount} specificCount={dpsSpecsCount} classChart={false} title='Dps Specs' />
-        <BarChart highestValue={highestHealer} sortedArray={sortedHealerCount} specificCount={healerSpecsCount} classChart={false} title='Healer Specs' />
+        <BarChart highestValue={highestDps} sortedArray={sortedDpsCount} specificCount={dpsSpecsCount} classChart={false} title='Dps Specs' loading={loading} />
+        <BarChart highestValue={highestHealer} sortedArray={sortedHealerCount} specificCount={healerSpecsCount} classChart={false} title='Healer Specs' loading={loading} />
       </div>
     </main >
   )
