@@ -8,7 +8,6 @@ import { useSearch } from '../Context/SearchContext';
 import useURLChange from '~/utils/hooks/useURLChange';
 import { Cutoffs } from '~/utils/helper/ratingCutoffsInterface';
 import RatingsCutoffTab from '../RatingsCutoffTab';
-import { RatingsCutoff } from '~/server/db/schema';
 
 type SearchTab = {
   name: string;
@@ -44,12 +43,25 @@ type RatingCutoffs = {
 
 };
 
+
+type QueryParams = {
+  version: string;
+  region: string;
+  bracket: string;
+  page: string | number;
+  search: string | undefined;
+  faction: string | undefined;
+  realm: string | undefined;
+  minRating: number;
+  maxRating: number;
+}
+
 const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, resultsPerPage, rowHeight }) => {
   const { setResultsCount, setRatingCutoffs, setClassSearch, ratingCutoffs } = useSearch();
 
   const [data, setData] = useState<CharacterData[]>([]);
   const [loading, setLoading] = useState(false);
-  const [paramsToUse, setParamsToUse] = useState({} as any);
+  const [paramsToUse, setParamsToUse] = useState({} as QueryParams);
   const queryParams = useURLChange();
   const [path, setPath] = useState<string | null>(null);
 
