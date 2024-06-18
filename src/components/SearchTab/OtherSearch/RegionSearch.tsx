@@ -5,7 +5,7 @@ import usImage from '../../../assets/Regions/us.png';
 import euImage from '../../../assets/Regions/eu.png';
 import { updateURL } from '~/utils/helper/updateURL';
 
-const RegionSearch = () => {
+const RegionSearch = ({partofLeadeboard} : {partofLeadeboard: boolean}) => {
     const { setCurrentPage } = useSearch();
     const [region, setRegion] = useState('');
 
@@ -29,7 +29,7 @@ const RegionSearch = () => {
     }, [region]);
 
     return (
-        <div className='flex text-black items-center justify-center w-1/5 rounded-lg gap-8 border-[1px] border-gray-700'>
+        <div className={`flex text-black items-center justify-center ${partofLeadeboard ? 'w-1/5 border-[1px]' : ''} rounded-lg gap-8  border-gray-700`}>
             <div
                 className={`cursor-pointer rounded-full w-12 h-12 items-center justify-center ${region === 'us' ? 'border-2 border-blue-500' : ''}`}
                 onClick={() => handleClick('us')}

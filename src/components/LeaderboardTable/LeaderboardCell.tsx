@@ -51,7 +51,7 @@ const LeaderboardCell = ({ str, height, index, cell, characterClass, characterSp
   const factionIcon = str === 'HORDE' ? horde : str === 'ALLIANCE' ? alliance : null;
 
   const classColor = classColors[characterClass as keyof typeof classColors];
-  console.log(classSearch)
+  
 
   const formatRealmName = (formattedText: string) => {
     if (formattedText.length > 13) {
@@ -87,7 +87,7 @@ const LeaderboardCell = ({ str, height, index, cell, characterClass, characterSp
   const overallRank = (currentPage - 1) * resultsPerPage + rowIndex + 1;
 
   return (
-    <div className={`relative flex items-center justify-center text-gray-300 h-[${height}px] w-full ${index === 0 ? '' : 'border-l-[1px] border-gray-700'}`}>
+    <div className={`relative flex items-center justify-center text-gray-300 w-full ${index === 0 ? '' : 'border-l-[1px] border-gray-700'}`}>
       {factionIcon ? (
         <Image src={factionIcon} alt={str} height={height / 2} width={height / 2} className='rounded-lg overflow-hidden' />
       ) : cell === 'rating' || cell === 'played' ? (

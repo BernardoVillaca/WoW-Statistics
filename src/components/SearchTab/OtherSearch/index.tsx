@@ -8,9 +8,9 @@ const OtherSearch = ({ isShuffle }: { isShuffle: boolean }) => {
 
     return (
         <div className='flex h-20 w-full bg-gray-800 rounded-lg justify-between gap-4 p-1'>
-            <RegionSearch />
+            <RegionSearch partofLeadeboard={true}/>
             <FactionSearch />
-            {!isShuffle ? <BracketSearch/>: null}
+            {!isShuffle ? <BracketSearch partofLeadeboard={true}/>: null}
             <RealmSearch />
             <RatingSearch />
 

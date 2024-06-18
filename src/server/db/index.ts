@@ -6,9 +6,9 @@ import { getLeaderboardsStatistics } from '../actions/getLeaderboardsStatistics'
 export const db = drizzle(sql, { schema });
 
 
-let firstRun = true;
+// let firstRun = true;
 
-if(db && firstRun) {
-    await getLeaderboardsStatistics();
-    firstRun = false;
-}
+// if(db && firstRun) {
+//     await getLeaderboardsStatistics();
+//     firstRun = false;
+// }
