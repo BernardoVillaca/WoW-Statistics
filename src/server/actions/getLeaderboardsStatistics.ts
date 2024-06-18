@@ -1,7 +1,7 @@
 import { db } from '~/server/db';
 import { desc, eq } from "drizzle-orm";
 import { leaderboardTablesMap } from "~/utils/helper/leaderboardTablesMap";
-import type { IClassStatisticsMap } from "~/utils/helper/classStatisticsMap";   
+import type { IClassStatisticsMap } from "~/utils/helper/classStatisticsMap";
 import { wowStatistics } from '../db/schema';
 
 export const getLeaderboardsStatistics = async () => {
@@ -57,22 +57,28 @@ export const getLeaderboardsStatistics = async () => {
             if (rating >= 2800) {
                 currentClassStatisticsMap[className]![specName]!.countAbove2800 += 1;
                 currentClassStatisticsMap[className]!.AllSpecs!.countAbove2800 += 1;
-            } else if (rating >= 2600) {
+            }
+            if (rating >= 2600) {
                 currentClassStatisticsMap[className]![specName]!.countAbove2600 += 1;
                 currentClassStatisticsMap[className]!.AllSpecs!.countAbove2600 += 1;
-            } else if (rating >= 2400) {
+            }
+            if (rating >= 2400) {
                 currentClassStatisticsMap[className]![specName]!.countAbove2400 += 1;
                 currentClassStatisticsMap[className]!.AllSpecs!.countAbove2400 += 1;
-            } else if (rating >= 2200) {
+            }
+            if (rating >= 2200) {
                 currentClassStatisticsMap[className]![specName]!.countAbove2200 += 1;
                 currentClassStatisticsMap[className]!.AllSpecs!.countAbove2200 += 1;
-            } else if (rating >= 2000) {
+            }
+            if (rating >= 2000) {
                 currentClassStatisticsMap[className]![specName]!.countAbove2000 += 1;
                 currentClassStatisticsMap[className]!.AllSpecs!.countAbove2000 += 1;
-            } else if (rating >= 1800) {
+            }
+            if (rating >= 1800) {
                 currentClassStatisticsMap[className]![specName]!.countAbove1800 += 1;
                 currentClassStatisticsMap[className]!.AllSpecs!.countAbove1800 += 1;
-            } else if (rating >= 1600) {
+            }
+            if (rating >= 1600) {
                 currentClassStatisticsMap[className]![specName]!.countAbove1600 += 1;
                 currentClassStatisticsMap[className]!.AllSpecs!.countAbove1600 += 1;
             }
