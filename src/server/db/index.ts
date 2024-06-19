@@ -7,9 +7,9 @@ import { updateRatingsCutoffs } from '../actions/updateRatingsCutoffs';
 export const db = drizzle(sql, { schema });
 
 
-let firstRun = true;
+// let firstRun = true;
 
-if(db && firstRun) {
-    await updateRatingsCutoffs();
-    firstRun = false;
-}
+// if(db && firstRun) {
+//     await updateRatingsCutoffs();
+//     firstRun = false;
+// }
