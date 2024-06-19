@@ -6,6 +6,7 @@ import { wowStatistics } from '../db/schema';
 
 export const getLeaderboardsStatistics = async () => {
     for (const [key, { version, column, table }] of Object.entries(leaderboardTablesMap)) {
+
         // Create a new map for the current loop iteration
         const currentClassStatisticsMap: IClassStatisticsMap = {};
 
@@ -17,6 +18,7 @@ export const getLeaderboardsStatistics = async () => {
             }
             const className = row.character_class;
             const specName = row.character_spec;
+            
             // If the class doesn't exist in the current map, create it
             if (!currentClassStatisticsMap[className]) {
                 currentClassStatisticsMap[className] = {};

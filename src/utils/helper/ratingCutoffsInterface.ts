@@ -163,4 +163,8 @@ export interface Cutoffs {
       count: number;
       rating: number;
     };
+    [key: string]: {
+      count: number;
+      rating: number;
+    } | undefined;
   }

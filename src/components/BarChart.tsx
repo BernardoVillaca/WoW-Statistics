@@ -21,11 +21,11 @@ const BarChart: React.FC<BarChartProps> = ({ highestValue, sortedArray, specific
                 <span>{title}</span>
             </div>
             {loading ? (
-                <div className='flex items-center h-[300px] justify-center p-4 rounded-lg '>
+                <div className='flex items-center h-[356px] justify-center p-4 rounded-lg '>
                     <FiLoader className="animate-spin text-white" size={50} />
                 </div>
             ) : (
-                <div className='h-[300px]'>
+                <div className='flex flex-col gap-1'>
                     {highestValue && sortedArray
                         ?.slice(0, 10)
                         .filter(([_, count]) => (count / specificCount) * 100 >= 2)

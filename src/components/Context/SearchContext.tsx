@@ -4,6 +4,7 @@ import type { Cutoffs } from '~/utils/helper/ratingCutoffsInterface';
 
 
 interface RatingCutoffs {
+  id: number;
   eu_cutoffs: Cutoffs;
   us_cutoffs: Cutoffs;
   classic_us_cutoffs: Cutoffs;

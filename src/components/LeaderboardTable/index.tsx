@@ -136,7 +136,7 @@ const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, results
       void getData();
     }
   }, [queryParams, path]);
-  
+
   // dont blame yourself for this
   const containerHeight = (resultsPerPage + 0.5) * rowHeight;
 
@@ -155,7 +155,7 @@ const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, results
           {data.map((characterData, index) => (
             characterData.character_class !== '' ? (
               <LeaderboardRow
-                highlightedLines={ratingCutoffs && ratingCutoffs.us_cutoffs.arena_3v3_cutoff.count +1}
+                ratingCutoffs={ratingCutoffs}
                 queryParams={paramsToUse}
                 path={path}
                 rowIndex={index}
