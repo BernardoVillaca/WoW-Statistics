@@ -217,11 +217,12 @@ export const updateRatingsCutoffs = async (): Promise<void> => {
                 newHistory = newHistory.slice(newHistory.length - 40);
             }
 
+            // Ensure JSON data is valid
             await db.update(RatingsCutoff)
                 .set({
                     ...allCutoffs,
                     updated_at: new Date(),
-                    history: sql`jsonb '${JSON.stringify(newHistory)}'`,
+                    history: newHistory
                 })
                 .where(eq(RatingsCutoff.id, 1));
 
@@ -264,4 +265,3 @@ const logDifferences = (oldCutoffs: Cutoffs, newCutoffs: Cutoffs, region: string
     });
     return changedKeys;
 };
-

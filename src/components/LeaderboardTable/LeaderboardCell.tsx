@@ -4,8 +4,8 @@ import horde from '../../assets/Factions/horde.png';
 import alliance from '../../assets/Factions/alliance.png'
 import { calculateDifference } from '~/utils/helper/calculateDifference';
 import { useSearch } from '../Context/SearchContext';
-import useURLChange from '~/utils/hooks/useURLChange';
-import { useEffect } from 'react';
+import { last } from 'node_modules/cheerio/lib/esm/api/traversing';
+
 
 const classColors = {
   'Death Knight': "#C41E3A",
@@ -77,23 +77,44 @@ const LeaderboardCell = ({ str, height, index, cell, characterClass, characterSp
     const currentDate = new Date();
     const diffTime = Math.abs(currentDate.getTime() - updatedDate.getTime());
     const diffMinutes = Math.ceil(diffTime / (1000 * 60));
-
+    let timeString = '';
+    let className = '';
+  
     if (diffMinutes < 60) {
-      return `${diffMinutes} min`;
+      timeString = `${diffMinutes} min`;
+      className = 'text-green-500';
     } else if (diffMinutes < 1440) { // Less than 24 hours
       const diffHours = Math.floor(diffMinutes / 60);
-      return `${diffHours}h`;
+      timeString = `${diffHours}h`;
+      className = 'text-green-600';
+    } else if (diffMinutes < 2880) { // Less than 2 days
+      const diffDays = Math.floor(diffMinutes / 1440);
+      timeString = `${diffDays} day${diffDays > 1 ? 's' : ''}`;
+      className = 'text-green-700';
+    } else if (diffMinutes < 4320) { // Less than 3 days
+      const diffDays = Math.floor(diffMinutes / 1440);
+      timeString = `${diffDays} day${diffDays > 1 ? 's' : ''}`;
+      className = 'text-yellow-400';
+    } else if (diffMinutes < 5760) { // Less than 4 days
+      const diffDays = Math.floor(diffMinutes / 1440);
+      timeString = `${diffDays} day${diffDays > 1 ? 's' : ''}`;
+      className = 'text-yellow-500'
     } else {
       const diffDays = Math.floor(diffMinutes / 1440);
-      return `${diffDays} day${diffDays > 1 ? 's' : ''}`;
+      timeString = `${diffDays} day${diffDays > 1 ? 's' : ''}`;
+      className = 'text-red-500';
     }
+  
+    return { timeString, className };
   };
-
-
+  
   const difference = calculateDifference(history, cell, str);
   const showDifference = difference !== 0;
-
+  
   const overallRank = (currentPage - 1) * resultsPerPage + rowIndex + 1;
+     
+  const { timeString, className } = getTimeSinceLastPlayed(str);
+
 
   return (
     <div className={`relative flex items-center justify-center text-gray-300 w-full ${index === 0 ? '' : 'border-l-[1px] border-gray-700'}`}>
@@ -125,7 +146,7 @@ const LeaderboardCell = ({ str, height, index, cell, characterClass, characterSp
         <span className={` ${Number(str) >= 70 ? 'text-green-300' : Number(str) >= 55 ? 'text-yellow-300' : 'text-red-300'} `}>
           {str}%
         </span>
-      ) : cell === 'rank' ? (
+      ) : cell === 'rank' && path === '/solo-shuffle' ?(
         <div className='flex'>
           <span>{overallRank}</span>
           {showDifference && (
@@ -138,13 +159,18 @@ const LeaderboardCell = ({ str, height, index, cell, characterClass, characterSp
       ) : cell === 'realm_slug' ? (
         <span>{formatRealmName(str)}</span>
       ) : cell === 'updated_at' ? (
-        <div>
-          {getTimeSinceLastPlayed(str)}
+        <div className={className}>
+          {timeString}
         </div>
       ) : (
-        <span>
+        <div >
           {str}
-        </span>
+          {showDifference && (
+            <div className={`absolute bottom-3 left-24 text-xs ${difference > 0 ? 'text-green-600' : 'text-red-600'}`}>
+              {difference !== 0 ? `(${difference > 0 ? '+' : ''}${difference})` : ''}
+            </div>
+          )}
+        </div>
       )}
     </div>
   );
