@@ -5,6 +5,7 @@ import type { VersionMapping, RegionMapping, BracketMapping } from '~/utils/help
 import { versionRegionBracketMapping } from '~/utils/helper/versionRegionBracketMapping';
 import { count, eq, and, gte, lte, or, desc } from 'drizzle-orm';
 import type { SQL } from 'drizzle-orm';
+import { retailLegacyLeaderboard } from '~/server/db/schema';
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -12,13 +13,17 @@ export async function GET(req: NextRequest) {
   const version = (searchParams.get('version') ?? 'retail') as keyof VersionMapping;
   const region = (searchParams.get('region') ?? 'us') as keyof RegionMapping;
   const bracket = (searchParams.get('bracket') ?? '3v3') as keyof BracketMapping;
-  
+
   // Other parameters
+  const path = searchParams.get('path') ?? '';
+  const pvpSeasonIndex = searchParams.has('pvpSeasonIndex')
+    ? Number(searchParams.get('pvpSeasonIndex'))
+    : 36;
   const search = searchParams.get('search') ?? '';
-  const faction = searchParams.get('faction') ?? ''; // faction_name on the db
-  const realm = searchParams.get('realm') ?? ''; // realm_slug on the db
-  const minRating = parseInt(searchParams.get('minRating') ?? '0', 10); // rating on the db
-  const maxRating = parseInt(searchParams.get('maxRating') ?? '4000', 10); // rating on the db
+  const faction = searchParams.get('faction') ?? '';
+  const realm = searchParams.get('realm') ?? '';
+  const minRating = parseInt(searchParams.get('minRating') ?? '0', 10);
+  const maxRating = parseInt(searchParams.get('maxRating') ?? '4000', 10);
   const page = parseInt(searchParams.get('page') ?? '1', 10);
   const limit = 50;
   const offset = (page - 1) * limit;
@@ -41,7 +46,7 @@ export async function GET(req: NextRequest) {
     }
 
     const { table } = bracketMapping;
-    
+
     const andConditions: SQL[] = [];
     const orConditions: SQL[] = [];
 
@@ -64,22 +69,30 @@ export async function GET(req: NextRequest) {
         }
       });
     }
+    const queryTable = path === '/legacy' ? retailLegacyLeaderboard : table;
 
-    if (faction) andConditions.push(eq(table.faction_name, faction.toUpperCase()));
+    if (path === '/legacy') {
+      if (pvpSeasonIndex) andConditions.push(eq(retailLegacyLeaderboard.pvp_season_index, pvpSeasonIndex));
+      andConditions.push(eq(retailLegacyLeaderboard.bracket, bracket));
+      andConditions.push(eq(retailLegacyLeaderboard.region, region));
 
-    if (realm) andConditions.push(eq(table.realm_slug, realm.toLowerCase()));
+    }
 
-    if (minRating) andConditions.push(gte(table.rating, minRating));
+    if (faction) andConditions.push(eq(queryTable.faction_name, faction.toUpperCase()));
 
-    if (maxRating) andConditions.push(lte(table.rating, maxRating));
+    if (realm) andConditions.push(eq(queryTable.realm_slug, realm.toLowerCase()));
+
+    if (minRating) andConditions.push(gte(queryTable.rating, minRating));
+
+    if (maxRating) andConditions.push(lte(queryTable.rating, maxRating));
 
     const combinedConditions = orConditions.length > 0
       ? and(...andConditions, or(...orConditions))
       : and(...andConditions);
 
     const [results, totalResult] = await Promise.all([
-      db.select().from(table).where(combinedConditions).limit(limit).offset(offset).orderBy(desc(table.rating)),
-      db.select({ count: count() }).from(table).where(combinedConditions)
+      db.select().from(queryTable).where(combinedConditions).limit(limit).offset(offset).orderBy(desc(queryTable.rating)),
+      db.select({ count: count() }).from(queryTable).where(combinedConditions)
     ]);
 
     const total = totalResult[0]?.count ?? 0;

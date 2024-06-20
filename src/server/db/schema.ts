@@ -51,7 +51,7 @@ export const us3v3Leaderboard = createTable(
   "us_3v3_leaderboard",
   {
     character_name: varchar("character_name", { length: 256 }),
-    character_id: integer("character_id").primaryKey(),
+    character_id: integer("character_id"),
     character_class: varchar("character_class", { length: 256 }).default(''),
     character_spec: varchar("character_spec", { length: 256 }).default(''),
     realm_id: integer("realm_id"),
@@ -81,6 +81,50 @@ export const us3v3Leaderboard = createTable(
     us3v3RatingIndex: index("us_3v3_rating_idx").on(leaderboard.rating),
     us3v3PlayedIndex: index("us_3v3_played_idx").on(leaderboard.played),
     us3v3WinRatioIndex: index("us_3v3_win_ratio_idx").on(leaderboard.win_ratio),
+  })
+);
+
+export const retailLegacyLeaderboard = createTable(
+  "retail_legacy_leaderboards",
+  {
+    character_name: varchar("character_name", { length: 256 }),
+    character_id: integer("character_id"),
+    character_class: varchar("character_class", { length: 256 }).default(''),
+    character_spec: varchar("character_spec", { length: 256 }).default(''),
+    realm_id: integer("realm_id"),
+    realm_slug: varchar("realm_slug", { length: 256 }),
+    faction_name: varchar("faction_name", { length: 256 }),
+    bracket: varchar("bracket", { length: 256 }),
+    pvp_season_index: integer("pvp_season_index"),
+    region: varchar("region", { length: 256 }),
+    rank: integer("rank"),
+    rating: integer("rating"),
+    played: integer("played"),
+    win_ratio: varchar("win_ratio", { length: 10 }),
+    won: integer("won"),
+    lost: integer("lost"),
+    tier_id: integer("tier_id"),
+    tier_href: varchar("tier_href", { length: 512 }),
+    created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`)
+  },
+  (leaderboard) => ({
+    retailLegacyPrimaryIndex: index("retail_legacy_primary_idx").on(
+      leaderboard.character_id,
+      leaderboard.bracket,
+      leaderboard.pvp_season_index,
+      leaderboard.region),
+      retailLegacyCharacterNameIndex: index("retail_legacy_character_name_idx").on(leaderboard.character_name),
+      retailLegacyCharacterIdIndex: index("retail_legacy_character_id_idx").on(leaderboard.character_id),
+      retailLegacyCharacterClassIndex: index("retail_legacy_character_class_idx").on(leaderboard.character_class),
+      retailLegacyCharacterSpecIndex: index("retail_legacy_character_spec_idx").on(leaderboard.character_spec),
+      retailLegacyFactionNameIndex: index("retail_legacy_faction_name_idx").on(leaderboard.faction_name),
+      retailLegacyRankIndex: index("retail_legacy_rank_idx").on(leaderboard.rank),
+      retailLegacyRatingIndex: index("retail_legacy_rating_idx").on(leaderboard.rating),
+      retailLegacyPlayedIndex: index("retail_legacy_played_idx").on(leaderboard.played),
+      retailLegacyWinRatioIndex: index("retail_legacy_win_ratio_idx").on(leaderboard.win_ratio),
+      retailLegacyBracketIndex: index("retail_legacy_bracket_idx").on(leaderboard.bracket),
+      retailLegacyPvpSeasonIndexIndex: index("retail_legacy_pvp_season_index_idx").on(leaderboard.pvp_season_index),
+      retailLegacyRegionIndex: index("retail_legacy_region_idx").on(leaderboard.region),
   })
 );
 

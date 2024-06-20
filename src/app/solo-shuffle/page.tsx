@@ -21,7 +21,7 @@ const SoloShuffle = () => {
                         <div key={tab.name} className={`flex items-center justify-center text-white text-center h-full w-full '} `}>{tab.label}</div>
                     ))}
                 </div>
-                <LeaderBoardTable resultsPerPage={resultsPerPage} rowHeight={rowHeight} searchTabs={searchTabs} />
+                <LeaderBoardTable resultsPerPage={resultsPerPage} rowHeight={rowHeight} searchTabs={searchTabs} legacy={false}/>
                 <ScrollTab resultsPerPage={resultsPerPage} />
             </div>
         </main>

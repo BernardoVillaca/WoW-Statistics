@@ -21,6 +21,7 @@ const classColors = {
   'Warlock': "#8788EE",
   'Warrior': "#C69B6D",
   'Evoker': "#33937F",
+  '': 'gray',
 };
 
 type HistoryEntry = {

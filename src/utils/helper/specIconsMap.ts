@@ -38,6 +38,7 @@ import destruction_warlock from '../../assets/Classes/Warlock/destruction_warloc
 import arms_warrior from '../../assets/Classes/Warrior/arms_warrior_spec.jpg';
 import fury_warrior from '../../assets/Classes/Warrior/fury_warrior_spec.jpg';
 import protection_warrior from '../../assets/Classes/Warrior/protection_warrior_spec.jpg';
+import questionMark from '../../assets/Other/questionMark.jpg';
 
 const specIconsMap = {
     'Blood Death Knight': blood_deathknight,
@@ -80,6 +81,7 @@ const specIconsMap = {
     'Arms Warrior': arms_warrior,
     'Fury Warrior': fury_warrior,
     'Protection Warrior': protection_warrior,
+    ' ': questionMark
 };
 
 export default specIconsMap;

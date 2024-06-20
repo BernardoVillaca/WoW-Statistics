@@ -38,6 +38,7 @@ type LeaderboardRowProps = {
   rowHeight: number;
   path: string | null;
   rowIndex: number;
+  legacy: boolean;
   queryParams: {
     bracket: string;
   };
@@ -52,6 +53,7 @@ const LeaderboardRow: React.FC<LeaderboardRowProps> = ({
   path,
   queryParams,
   ratingCutoffs,
+  legacy
 }) => {
   const getClassSpecKey = (character_class: string, character_spec: string): string => {
     const lowerCaseClass = character_class.toLowerCase();
@@ -96,6 +98,11 @@ const LeaderboardRow: React.FC<LeaderboardRowProps> = ({
     }
     return null;
   };
+
+ if(legacy) {
+  searchTabs = searchTabs.filter((tab) => tab.name !== 'updated_at');
+ }
+
 
   return (
     <div className={`relative bg-gray-800 flex border-b-[1px] ${getBorderClass()}`} style={{ height: rowHeight }}>

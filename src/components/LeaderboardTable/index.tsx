@@ -32,6 +32,7 @@ type LeaderBoardTableProps = {
   searchTabs: SearchTab[];
   resultsPerPage: number;
   rowHeight: number;
+  legacy: boolean;
 };
 
 type RatingCutoffs = {
@@ -56,7 +57,7 @@ type QueryParams = {
   maxRating: number;
 }
 
-const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, resultsPerPage, rowHeight }) => {
+const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, resultsPerPage, rowHeight, legacy }) => {
   const { setResultsCount, setRatingCutoffs, setClassSearch, ratingCutoffs } = useSearch();
 
   const [data, setData] = useState<CharacterData[]>([]);
@@ -84,6 +85,8 @@ const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, results
     }
 
     return {
+      path: path,
+      pvpSeasonIndex: params.get('pvpSeasonIndex') ?? '37',
       version: params.get('version') ?? 'retail',
       region: params.get('region') ?? 'us',
       bracket: bracket,
@@ -104,6 +107,9 @@ const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, results
     // Filter out empty parameters and default min/max ratings
     const filteredParams = Object.fromEntries(
       Object.entries(queryParams).filter(([key, value]) => {
+        if (key === 'pvpSeasonIndex' && value === '37') return false
+        if (key === 'path' && value === '/leaderboard') return false
+        if (key === 'path' && value === '/solo-shuffle') return false
         if (key === 'page' && value === 1) return false;
         if (key === 'minRating' && value === 0) return false;
         if (key === 'maxRating' && value === 4000) return false;
@@ -151,10 +157,11 @@ const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, results
           <FiLoader className="animate-spin text-white" size={50} />
         </div>
       ) : (
-        <div className=''>
+        <div>
           {data.map((characterData, index) => (
-            characterData.character_class !== '' ? (
+            true ? (
               <LeaderboardRow
+                legacy={legacy}
                 ratingCutoffs={ratingCutoffs}
                 queryParams={paramsToUse}
                 path={path}

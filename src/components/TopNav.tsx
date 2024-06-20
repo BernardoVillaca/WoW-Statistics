@@ -13,6 +13,9 @@ const TopNav = () => {
       <Link href="/solo-shuffle">
         <div className="text-white cursor-pointer">Solo Shuffle</div>
       </Link>
+      <Link href="/legacy">
+        <div className="text-white cursor-pointer">Legacy</div>
+      </Link>
       <Link href="/about">
         <div className="text-white cursor-pointer">About</div>
       </Link>
