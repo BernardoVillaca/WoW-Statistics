@@ -22,7 +22,7 @@ interface LeaderboardEntry {
     lost: number;
     tier_id: number;
     tier_href: string;
-    created_at: Date;    
+    created_at: Date;
     win_ratio: string;
 }
 
@@ -55,14 +55,14 @@ interface ApiResponse {
     }[];
 }
 
-const seasons = [36]
+const seasons = [27, 28, 29, 30, 31, 32, 33, 34, 35, 36];
 const brackets = ['2v2', '3v3', 'rbg'];
-const regions = ['us', 'eu'];
+const regions = ['us',];
 
 export const updateLegacyLeaderboard = async (): Promise<void> => {
     try {
         const authToken = await getAuthToken(false);
-        
+
         for (const season of seasons) {
             for (const bracket of brackets) {
                 for (const region of regions) {
@@ -144,7 +144,6 @@ const processEntries = async (entries: LeaderboardEntry[]): Promise<void> => {
 };
 
 const handleDataInsert = async (formattedData: LeaderboardEntry): Promise<void> => {
-    const updateData: LeaderboardEntry = { ...formattedData };
     const table = retailLegacyLeaderboard;
     try {
         const existingRecord = await db
@@ -154,21 +153,18 @@ const handleDataInsert = async (formattedData: LeaderboardEntry): Promise<void> 
                 eq(table.character_id, formattedData.character_id),
                 eq(table.bracket, formattedData.bracket),
                 eq(table.region, formattedData.region),
-                eq(table.pvp_season_index, formattedData.pvp_season_index)
+                eq(table.pvp_season_index, formattedData.pvp_season_index),
+                eq(table.realm_id, formattedData.realm_id)
             ))
-            .limit(1);
+            .limit(1)
+            .execute();
 
         if (existingRecord.length === 0) {
-            await db.insert(table).values(formattedData);
-            return;
+            console.log(`Inserting new record for ${formattedData.character_name}`);
+            await db.insert(table).values(formattedData).execute();
         }
-    } catch (error) {
-        console.log('Error fetching existing data', (error as Error).message);
-    }
 
-    try {
-        await db.update(table).set(updateData).where(eq(table.character_id, formattedData.character_id));
     } catch (error) {
-        console.log('Error updating leaderboard data:', (error as Error).message);
+        console.log('Error handling data insert:', (error as Error).message);
     }
 };

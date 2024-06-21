@@ -2,75 +2,75 @@
     "crons": [
         {
             "path": "/api/cronJobs/updateDb/updateRetail",
-            "schedule": "*/30 * * * *"
+            "schedule": "0 */2 * * *"
         },
         {
             "path": "/api/cronJobs/updateDb/updateUsShuffle",
-            "schedule": "*/30 * * * *"
+            "schedule": "0 */2 * * *"
         },
         {
             "path": "/api/cronJobs/updateDb/updateEuShuffle",
-            "schedule": "*/30 * * * *"
+            "schedule": "0 */2 * * *"
         },
         {
             "path": "/api/cronJobs/updateDb/updateClassicUs",
-            "schedule": "*/30 * * * *"
+            "schedule": "0 */2 * * *"
         },
         {
             "path": "/api/cronJobs/updateDb/updateClassicEu",
-            "schedule": "*/30 * * * *"
+            "schedule": "0 */2 * * *"
         },
         {
             "path": "/api/cronJobs/getExtraData/getExtraDataUs3v3",
-            "schedule": "0 * * * *"
+            "schedule": "0 */4 * * *"
         },
         {
             "path": "/api/cronJobs/getExtraData/getExtraDataUs2v2",
-            "schedule": "0 * * * *"
+            "schedule": "0 */4 * * *"
         },
         {
             "path": "/api/cronJobs/getExtraData/getExtraDataUsRbg",
-            "schedule": "0 * * * *"
+            "schedule": "0 */4 * * *"
         },
         {
             "path": "/api/cronJobs/getExtraData/getExtraDataEu3v3",
-            "schedule": "0 * * * *"
+            "schedule": "0 */4 * * *"
         },
         {
             "path": "/api/cronJobs/getExtraData/getExtraDataEu2v2",
-            "schedule": "0 * * * *"
+            "schedule": "0 */4 * * *"
         },
         {
             "path": "/api/cronJobs/getExtraData/getExtraDataEuRbg",
-            "schedule": "0 * * * *"
+            "schedule": "0 */4 * * *"
         },             
         {
             "path": "/api/cronJobs/getExtraData/getExtraDataClassicUs3v3",
-            "schedule": "0 * * * *"
+            "schedule": "0 */4 * * *"
         },
         {
             "path": "/api/cronJobs/getExtraData/getExtraDataClassicUs2v2",
-            "schedule": "0 * * * *"
+            "schedule": "0 */4 * * *"
         },
         {
             "path": "/api/cronJobs/getExtraData/getExtraDataClassicUsRbg",
-            "schedule": "0 * * * *"
+            "schedule": "0 */4 * * *"
         },
         {
             "path": "/api/cronJobs/getExtraData/getExtraDataClassicEu3v3",
-            "schedule": "0 * * * *"
+            "schedule": "0 */4 * * *"
         },
         {
             "path": "/api/cronJobs/getExtraData/getExtraDataClassicEu2v2",
-            "schedule": "0 * * * *"
+            "schedule": "0 */4 * * *"
         },
         {
             "path": "/api/cronJobs/getExtraData/getExtraDataClassicEuRbg",
-            "schedule": "0 * * * *"
+            "schedule": "0 */4 * * *"
         },
         {
             "path": "/api/cronJobs/getPossibleRealms",
-            "schedule": "0 */4 * * *"
+            "schedule": "0 */12 * * *"
         },
         {
             "path": "/api/cronJobs/updateRatingCutoffs",

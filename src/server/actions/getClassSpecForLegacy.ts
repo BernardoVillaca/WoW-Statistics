@@ -29,8 +29,6 @@ interface LeaderboardEntry {
     character_spec: string;
 }
 
-
-
 export const getClassSpecForLegacy = async (region: keyof RegionMapping, bracket: keyof BracketMapping, season: number) => {
     const versionMapping = versionRegionBracketMapping.retail;
     if (!versionMapping) {
@@ -53,7 +51,7 @@ export const getClassSpecForLegacy = async (region: keyof RegionMapping, bracket
     .from(retailLegacyLeaderboard)
     .where(and(
         eq(retailLegacyLeaderboard.character_spec, ''),
-        eq(retailLegacyLeaderboard.pvp_season_index, season),
+        // eq(retailLegacyLeaderboard.pvp_season_index, season),
     
     ))
     .orderBy(desc(retailLegacyLeaderboard.rating));
