@@ -5,19 +5,31 @@ type HistoryEntry = {
     played?: number;
 };
 
-export const calculateDifference = (history: HistoryEntry[], cell: string, text: string) => {
+type CharacterData = {
+    id: string;
+    name: string;
+    character_class: string;
+    character_spec: string;
+    rank: number;
+    history: HistoryEntry[];
+    updated_at: string; 
+    [key: string]: string | number | HistoryEntry[] | undefined;
+}
+
+export const calculateDifference = (history: HistoryEntry[], characterData: CharacterData, cell: string, text: string) => {
     if (!['rating', 'rank', 'played'].includes(cell)) return 0;
 
     if (history && history.length > 0) {
         const lastHistoryEntry = history[history.length - 1];
         if (!lastHistoryEntry) return 0; // Additional check to handle undefined
 
-        const lastUpdate = new Date(lastHistoryEntry.updated_at);
+        const lastUpdate = new Date(characterData.updated_at);
         const currentDate = new Date();
         const diffTime = currentDate.getTime() - lastUpdate.getTime();
         const diffHours = diffTime / (1000 * 60 * 60);
+        console.log('diffHours', diffHours);
 
-        if (diffHours <= 48) {
+        if (diffHours <= 24) {
             let previousValue = lastHistoryEntry[cell as keyof HistoryEntry];
             if (typeof previousValue === 'string') {
                 previousValue = parseInt(previousValue, 10);

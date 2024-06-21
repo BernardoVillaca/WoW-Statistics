@@ -11,6 +11,7 @@ type CharacterData = {
   character_spec: string;
   rank: number;
   history: HistoryEntry[];
+  updated_at: string;
   [key: string]: string | number | HistoryEntry[] | undefined;
 };
 
@@ -89,7 +90,7 @@ const LeaderboardRow: React.FC<LeaderboardRowProps> = ({
   };
 
   const renderRankIcon = () => {
-    if (isRankHighlighted()) {
+    if (isRankHighlighted() && path !== '/legacy') {
       return (
         <div className='absolute left-3 top-3'>
           <Image src={Rank1} alt={characterData.name} height={15} className=' overflow-hidden' />
@@ -99,9 +100,9 @@ const LeaderboardRow: React.FC<LeaderboardRowProps> = ({
     return null;
   };
 
- if(legacy) {
-  searchTabs = searchTabs.filter((tab) => tab.name !== 'updated_at');
- }
+  if (legacy) {
+    searchTabs = searchTabs.filter((tab) => tab.name !== 'updated_at');
+  }
 
 
   return (
@@ -122,8 +123,7 @@ const LeaderboardRow: React.FC<LeaderboardRowProps> = ({
             cell={cell.name}
             characterClass={characterData.character_class}
             characterSpec={characterData.character_spec}
-            history={characterData.history}
-          />
+            history={characterData.history} legacy={false}          />
         );
       })}
     </div>

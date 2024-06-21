@@ -169,17 +169,7 @@ const RealmSearch: React.FC = () => {
 
     return (
         <div className='relative flex text-black items-center justify-center w-1/5 rounded-lg border-[1px] border-gray-700'>
-            {realm !== '' && (
-                <button
-                    className='absolute left-[150px] text-red-500'
-                    onClick={() => {
-                        setRealm('');
-                        setTextInput('');
-                    }}
-                >
-                    <FiMinusCircle />
-                </button>
-            )}
+
             <input
                 ref={inputRef}
                 placeholder='Search Realm'
@@ -189,12 +179,27 @@ const RealmSearch: React.FC = () => {
                 onKeyDown={handleKeyDown}
                 className="w-32 h-8 px-2 text-center text-black bg-gray-300 border-none focus:outline-none"
             />
-            <button
-                className='bg-gray-400 w-8 h-8 items-center justify-center flex'
-                onClick={toggleDropdown}
-            >
-                <FiChevronDown className={`${isOpen ? 'rotate-180' : ''}`} />
-            </button>
+            {realm !== '' ? (
+                <button
+                    className='bg-gray-400 w-8 h-8 items-center justify-center flex text-red-500'
+                    onClick={() => {
+                        setRealm('');
+                        setTextInput(''); 
+                        updateURL('realm', '', true);  
+                       
+                    }}
+                >
+                    <FiMinusCircle />
+                </button>
+
+            ) : (
+                <button
+                    className='bg-gray-400 w-8 h-8 items-center justify-center flex'
+                    onClick={toggleDropdown}
+                >
+                    <FiChevronDown className={`${isOpen ? 'rotate-180' : ''}`} />
+                </button>
+            )}            
             {isOpen && (
                 <div
                     className='absolute top-12 w-40 max-h-24 bg-gray-600 border-[1px] border-gray-700 overflow-auto snap-mandatory snap-y'

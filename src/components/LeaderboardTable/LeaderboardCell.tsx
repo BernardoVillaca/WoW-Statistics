@@ -51,10 +51,11 @@ type LeaderboardCellProps = {
   rowIndex: number;
   path: string | null;
   characterData: CharacterData
+  legacy: boolean;
 
 };
 
-const LeaderboardCell = ({ str, height, index, cell, characterClass, characterSpec, history, rowIndex, path, characterData }: LeaderboardCellProps) => {
+const LeaderboardCell = ({ str, height, index, cell, characterClass, characterSpec, history, rowIndex, path, characterData, legacy }: LeaderboardCellProps) => {
   const { currentPage, classSearch } = useSearch();  // Added resultsPerPage to calculate the correct rank
   const resultsPerPage = 50;  // Added resultsPerPage to calculate the correct rank
   const specClass = `${characterSpec} ${characterClass}`;
@@ -80,7 +81,7 @@ const LeaderboardCell = ({ str, height, index, cell, characterClass, characterSp
     const diffMinutes = Math.ceil(diffTime / (1000 * 60));
     let timeString = '';
     let className = '';
-  
+
     if (diffMinutes < 60) {
       timeString = `${diffMinutes} min`;
       className = 'text-green-500';
@@ -105,15 +106,15 @@ const LeaderboardCell = ({ str, height, index, cell, characterClass, characterSp
       timeString = `${diffDays} day${diffDays > 1 ? 's' : ''}`;
       className = 'text-red-500';
     }
-  
+
     return { timeString, className };
   };
-  
-  const difference = calculateDifference(history, cell, str);
+
+  const difference = calculateDifference(history, characterData, cell, str);
   const showDifference = difference !== 0;
-  
+
   const overallRank = (currentPage - 1) * resultsPerPage + rowIndex + 1;
-     
+
   const { timeString, className } = getTimeSinceLastPlayed(str);
 
 
@@ -147,7 +148,7 @@ const LeaderboardCell = ({ str, height, index, cell, characterClass, characterSp
         <span className={` ${Number(str) >= 70 ? 'text-green-300' : Number(str) >= 55 ? 'text-yellow-300' : 'text-red-300'} `}>
           {str}%
         </span>
-      ) : cell === 'rank' && path === '/solo-shuffle' ?(
+      ) : cell === 'rank' && path === '/solo-shuffle' ? (
         <div className='flex'>
           <span>{overallRank}</span>
           {showDifference && (

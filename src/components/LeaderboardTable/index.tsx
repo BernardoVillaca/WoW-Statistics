@@ -19,6 +19,7 @@ type CharacterData = {
   character_class: string;
   character_spec: string;
   rank: number;
+  updated_at: string;
   history: HistoryEntry[];
 };
 
