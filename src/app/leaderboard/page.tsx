@@ -7,7 +7,6 @@ import LeaderBoardTable from "~/components/LeaderboardTable";
 import VersionSearch from "~/components/SearchTab/VersionSearch";
 import { searchTabs } from '~/utils/helper/searchTabsMap';
 
-
 const resultsPerPage = 50
 const rowHeight = 40
 

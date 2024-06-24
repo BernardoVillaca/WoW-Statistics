@@ -10,7 +10,6 @@ import type {
 import { versionRegionBracketMapping } from '~/utils/helper/versionRegionBracketMapping';
 import { scrapPlayerArmory } from './scrapPlayerArmory';
 import {    retailLegacyLeaderboard} from '~/server/db/schema';
-import { spec } from 'node:test/reporters';
 
 interface CharacterData {
     active_spec?: {

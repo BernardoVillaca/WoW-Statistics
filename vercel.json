@@ -73,8 +73,8 @@
             "schedule": "0 */12 * * *"
         },
         {
-            "path": "/api/cronJobs/updateRatingCutoffs",
-            "schedule": "0 */4 * * *"
+            "path": "/api/cronJobs/updateStatistics",
+            "schedule": "0 */6 * * *"
         }
     ]
 }

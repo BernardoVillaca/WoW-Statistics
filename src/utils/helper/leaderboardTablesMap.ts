@@ -18,19 +18,19 @@ export type ILeaderboardTablesMap = Record<string, ILeaderboardTable>;
 
 export const leaderboardTablesMap: ILeaderboardTablesMap = {
     retailUs3v3: { version: 'retail', column: 'retail_us_3v3', table: us3v3Leaderboard },
-    retailUs2v2: { version: 'retail', column: 'retail_us_2v2', table: us2v2Leaderboard },
-    retailUsRBG: { version: 'retail', column: 'retail_us_rbg', table: usRBGLeaderboard },
+    // retailUs2v2: { version: 'retail', column: 'retail_us_2v2', table: us2v2Leaderboard },
+    // retailUsRBG: { version: 'retail', column: 'retail_us_rbg', table: usRBGLeaderboard },
 
-    retailEu3v3: { version: 'retail', column: 'retail_eu_3v3', table: eu3v3Leaderboard },
-    retailEu2v2: { version: 'retail', column: 'retail_eu_2v2', table: eu2v2Leaderboard },
-    retailEuRBG: { version: 'retail', column: 'retail_eu_rbg', table: euRBGLeaderboard },
+    // retailEu3v3: { version: 'retail', column: 'retail_eu_3v3', table: eu3v3Leaderboard },
+    // retailEu2v2: { version: 'retail', column: 'retail_eu_2v2', table: eu2v2Leaderboard },
+    // retailEuRBG: { version: 'retail', column: 'retail_eu_rbg', table: euRBGLeaderboard },
 
-    classicUs3v3: { version: 'classic', column: 'classic_us_3v3', table: classicUs3v3Leaderboard },
-    classicUs2v2: { version: 'classic', column: 'classic_us_2v2', table: classicUs2v2Leaderboard },
-    classicUsRBG: { version: 'classic', column: 'classic_us_rbg', table: classicUsRBGLeaderboard },
+    // classicUs3v3: { version: 'classic', column: 'classic_us_3v3', table: classicUs3v3Leaderboard },
+    // classicUs2v2: { version: 'classic', column: 'classic_us_2v2', table: classicUs2v2Leaderboard },
+    // classicUsRBG: { version: 'classic', column: 'classic_us_rbg', table: classicUsRBGLeaderboard },
 
-    classicEu3v3: { version: 'classic', column: 'classic_eu_3v3', table: classicEu3v3Leaderboard },
-    classicEu2v2: { version: 'classic', column: 'classic_eu_2v2', table: classicEu2v2Leaderboard },
-    classicEuRBG: { version: 'classic', column: 'classic_eu_rbg', table: classicEuRBGLeaderboard }
+    // classicEu3v3: { version: 'classic', column: 'classic_eu_3v3', table: classicEu3v3Leaderboard },
+    // classicEu2v2: { version: 'classic', column: 'classic_eu_2v2', table: classicEu2v2Leaderboard },
+    // classicEuRBG: { version: 'classic', column: 'classic_eu_rbg', table: classicEuRBGLeaderboard }
 }
 

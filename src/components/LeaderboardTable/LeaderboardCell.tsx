@@ -37,6 +37,7 @@ type CharacterData = {
   character_spec: string;
   rank: number;
   history: HistoryEntry[];
+  updated_at: string; 
   [key: string]: string | number | HistoryEntry[] | undefined;
 };
 

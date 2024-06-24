@@ -3,6 +3,7 @@
 import axios from 'axios'
 
 import React, { useEffect, useState } from 'react'
+import ActivityChart from '~/components/ActivityChart'
 import BarChart from '~/components/BarChart'
 import { SearchProvider } from '~/components/Context/SearchContext'
 import BracketSearch from '~/components/SearchTab/OtherSearch/BracketSearch'
@@ -135,9 +136,9 @@ const Home = () => {
       { label: '2600+', key: 'countAbove2600', total: countAbove2600 },
       { label: '2800+', key: 'countAbove2800', total: countAbove2800 },
     ];
-  
+
     const filteredCounts = ratingLevels.filter(count => count.total > 5 && count.total !== totalCount);
-  
+
     const uniqueCounts = filteredCounts.reduce((acc, current) => {
       const existing = acc.find(item => item.total === current.total);
       if (existing) {
@@ -151,10 +152,10 @@ const Home = () => {
       }
       return acc;
     }, [] as { label: string, key: string, total: number }[]);
-  
+
     return uniqueCounts;
   };
-  
+
 
 
   const onClickHandler = (rating: string) => {
@@ -223,16 +224,12 @@ const Home = () => {
         </div>
       </div>
       <div className='flex gap-2'>
-        <BarChart highestValue={highestClass} sortedArray={sortedClassCount} specificCount={allClassesCount} classChart={true} title='Classes' loading={loading} />
-        <div className='flex flex-col w-1/2 h-full pt-2 '>
-          <div className='flex flex-col h-10 w-full items-center place-content-center bg-gray-800 rounded-xl'>
-            <span>Activity</span>
-          </div>
-        </div>
-      </div>
-      <div className='flex gap-2'>
         <BarChart highestValue={highestDps} sortedArray={sortedDpsCount} specificCount={dpsSpecsCount} classChart={false} title='Dps Specs' loading={loading} />
         <BarChart highestValue={highestHealer} sortedArray={sortedHealerCount} specificCount={healerSpecsCount} classChart={false} title='Healer Specs' loading={loading} />
+      </div>
+      <div className='flex gap-2'>
+        <BarChart highestValue={highestClass} sortedArray={sortedClassCount} specificCount={allClassesCount} classChart={true} title='Classes' loading={loading} />
+        <ActivityChart />
       </div>
     </main >
   )

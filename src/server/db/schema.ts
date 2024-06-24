@@ -47,6 +47,34 @@ export const wowStatistics = createTable(
   }
 );
 
+
+
+export const activityStatistics = createTable(
+  "activity_statistics",
+  {
+    id: serial("id").primaryKey(),
+    classic_us_rbg: jsonb("classic_us_rbg").default(sql`'[]'::jsonb`),
+    classic_us_2v2: jsonb("classic_us_2v2").default(sql`'[]'::jsonb`),
+    classic_us_3v3: jsonb("classic_us_3v3").default(sql`'[]'::jsonb`),
+
+    classic_eu_rbg: jsonb("classic_eu_rbg").default(sql`'[]'::jsonb`),
+    classic_eu_2v2: jsonb("classic_eu_2v2").default(sql`'[]'::jsonb`),
+    classic_eu_3v3: jsonb("classic_eu_3v3").default(sql`'[]'::jsonb`),
+
+    retail_us_rbg: jsonb("retail_us_rbg").default(sql`'[]'::jsonb`),
+    retail_us_2v2: jsonb("retail_us_2v2").default(sql`'[]'::jsonb`),
+    retail_us_3v3: jsonb("retail_us_3v3").default(sql`'[]'::jsonb`),
+
+    retail_eu_rbg: jsonb("retail_eu_rbg").default(sql`'[]'::jsonb`),
+    retail_eu_2v2: jsonb("retail_eu_2v2").default(sql`'[]'::jsonb`),
+    retail_eu_3v3: jsonb("retail_eu_3v3").default(sql`'[]'::jsonb`),
+
+    created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
+  }
+);
+
+
+
 export const us3v3Leaderboard = createTable(
   "us_3v3_leaderboard",
   {

@@ -1,12 +1,12 @@
 'use client'
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { updateURL } from '~/utils/helper/updateURL';
 import { useSearch } from '~/components/Context/SearchContext';
 
 const BracketSearch = ({partofLeadeboard} : {partofLeadeboard: boolean}) => {
     const { setCurrentPage } = useSearch();
-    const [bracket, setBracket] = React.useState('');
+    const [bracket, setBracket] = useState('');
     // const router = useRouter();
 
     const handleClick = (newBracket: string) => {

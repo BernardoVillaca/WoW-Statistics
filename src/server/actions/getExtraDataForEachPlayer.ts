@@ -114,7 +114,7 @@ const updateCharacterData = async (
         if (characterData) {
             await db.update(table)
                 .set({
-                    character_spec: specName,
+                    character_spec: specName,  
                     character_class: characterData.character_class.name,
                 })
                 .where(eq(table.character_id, characterId));
