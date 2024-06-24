@@ -12,7 +12,7 @@ import VersionSearch from '~/components/SearchTab/VersionSearch'
 import type { IClassStatisticsMap, ISpecStatistics } from '~/utils/helper/classStatisticsMap'
 import useURLChange from '~/utils/hooks/useURLChange'
 
-interface wowStatistics {
+interface ClassSpecData {
   id: number,
   classic_eu_rbg: IClassStatisticsMap,
   classic_eu_2v2: IClassStatisticsMap,
@@ -47,7 +47,7 @@ const localDataMap: LocalDataMapType = {
 const healerSpecsArray = ['Restoration Druid', 'Holy Paladin', 'Discipline Priest', 'Restoration Shaman', 'Mistweaver Monk', 'Preservation Evoker', 'Holy Priest']
 
 const Home = () => {
-  const [data, setData] = useState<wowStatistics | null>(null)
+  const [classSpecData, setClassSpecData] = useState<ClassSpecData | null>(null)
   const [title, setTitle] = useState<string | null>(null)
   const [ratingFilter, setRatingFilter] = useState<string | null>(null)
   const [uniqueRatings, setUniqueRatings] = useState<{ label: string, key: string, total: number }[] | null>(null)
@@ -168,19 +168,19 @@ const Home = () => {
   useEffect(() => {
     setLoading(true)
     const fetchData = async () => {
-      const response = await axios.get('/api/getWowStatistics')
-      setData(response.data as wowStatistics)
+      const response = await axios.get<{ classSpecData: ClassSpecData }>('/api/getWowStatistics')
+      setClassSpecData(response.data.classSpecData)
       setLoading(false)
     }
     void fetchData()
   }, [])
 
   useEffect(() => {
-    if (data === null) return;
+    if (classSpecData === null) return;
     const { version, region, bracket } = getQueryParams();
-    const dataKey = localDataMap[version][region][bracket] as keyof wowStatistics;
+    const dataKey = localDataMap[version][region][bracket] as keyof ClassSpecData;
 
-    const newData = data?.[dataKey];
+    const newData = classSpecData?.[dataKey];
 
     if (newData && typeof newData === 'object') {
       setTitle(`${version.toUpperCase()} ${region.toUpperCase()} ${bracket.toUpperCase()}`);
@@ -190,7 +190,7 @@ const Home = () => {
     }
 
     setRatingFilter(null);
-  }, [queryParams, data]);
+  }, [queryParams, classSpecData]);
 
   useEffect(() => {
     setUniqueRatings(generateUniqueRatings());

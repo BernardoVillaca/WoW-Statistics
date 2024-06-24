@@ -5,17 +5,7 @@ import { ActivityMap } from '~/utils/helper/activityMap'
 const ActivityChart = () => {
   const [activityData, setActivityData] = useState<ActivityMap>()
 
-
-
-  useEffect(() => {
-    const getActivityData = async () => {
-      const response = await axios.get('/api/getActivity')
-      setActivityData(response.data.activityData)
-    }
-    void getActivityData()
-  }, [])
-
-
+ 
 
   
 

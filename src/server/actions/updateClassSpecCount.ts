@@ -1,12 +1,26 @@
 import { db } from '~/server/db';
-import { desc, eq } from "drizzle-orm";
+import { desc } from "drizzle-orm";
 import { leaderboardTablesMap } from "~/utils/helper/leaderboardTablesMap";
 import type { IClassStatisticsMap } from "~/utils/helper/classStatisticsMap";
-import { wowStatistics } from '../db/schema';
+import { classSpecStatistics } from '../db/schema';
 
-export const getLeaderboardsStatistics = async () => {
+type OverallClassSpecStatisticsData = {
+    created_at: Date;
+    [key: string]: IClassStatisticsMap | Date;
+};
+
+
+
+
+
+export const updateClassSpecCount = async () => {
+    const overallClassSpecStatisticsData: OverallClassSpecStatisticsData = {
+        created_at: new Date()
+
+      
+    };
+
     for (const [key, { version, column, table }] of Object.entries(leaderboardTablesMap)) {
-
         // Create a new map for the current loop iteration
         const currentClassStatisticsMap: IClassStatisticsMap = {};
 
@@ -18,7 +32,7 @@ export const getLeaderboardsStatistics = async () => {
             }
             const className = row.character_class;
             const specName = row.character_spec;
-            
+
             // If the class doesn't exist in the current map, create it
             if (!currentClassStatisticsMap[className]) {
                 currentClassStatisticsMap[className] = {};
@@ -86,22 +100,16 @@ export const getLeaderboardsStatistics = async () => {
             }
         }
 
-        try {
-            const response = await db.select().from(wowStatistics).where(eq(wowStatistics.id, 1));
+        // Add the currentClassStatisticsMap to the allClassStatistics object
+        overallClassSpecStatisticsData[column] = currentClassStatisticsMap;
+    }
 
-            // If no data is found, insert the new cutoffs
-            if (response.length === 0) {
-                await db.insert(wowStatistics).values({
-                    id: 1,
-                    [column]: currentClassStatisticsMap
-                });
-                console.log(`Ratings cutoff inserted successfully in the ${column} column!`);
-            } else {
-                await db.update(wowStatistics).set({ [column]: currentClassStatisticsMap }).where(eq(wowStatistics.id, 1));
-                console.log(`Ratings cutoff updated successfully in the ${column} column!`);
-            }
-        } catch (error) {
-            console.error(`Error updating the ${column} column:`, error);
-        }
+    // Insert all data at once
+    try {
+        await db.insert(classSpecStatistics).values(overallClassSpecStatisticsData);
+        
+        console.log('Successfully updated class spec statistics');
+    } catch (error) {
+        console.error('Error updating class spec statistics:', error);
     }
 };

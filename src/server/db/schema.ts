@@ -13,22 +13,22 @@ import {
 export const createTable = pgTableCreator((name) => `wowstats_${name}`);
 
 export const RatingsCutoff = createTable(
-  "ratings_cuttoff",
+  "ratings_cuttoffs",
   {
-    id: integer("id").primaryKey(),
+    id: serial("id").primaryKey(),
     us_cutoffs: jsonb("us_cutoffs"),
     eu_cutoffs: jsonb("eu_cutoffs"),
     classic_us_cutoffs: jsonb("classic_us_cutoffs"),
     classic_eu_cutoffs: jsonb("classic_eu_cutoffs"),
-    updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
-    history: jsonb("history").default(sql`'[]'::jsonb`)
+    created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`)
   }
 );
 
-export const wowStatistics = createTable(
-  "wow_statistics",
+export const classSpecStatistics = createTable(
+  "class_spec_statistics",
   {
-    id: integer("id").primaryKey(),
+    id: serial("id").primaryKey(),
+    
     classic_us_rbg: jsonb("classic_us_rbg").default(sql`'[]'::jsonb`),
     classic_us_2v2: jsonb("classic_us_2v2").default(sql`'[]'::jsonb`),
     classic_us_3v3: jsonb("classic_us_3v3").default(sql`'[]'::jsonb`),
@@ -44,6 +44,8 @@ export const wowStatistics = createTable(
     retail_eu_rbg: jsonb("retail_eu_rbg").default(sql`'[]'::jsonb`),
     retail_eu_2v2: jsonb("retail_eu_2v2").default(sql`'[]'::jsonb`),
     retail_eu_3v3: jsonb("retail_eu_3v3").default(sql`'[]'::jsonb`),
+
+    created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`)
   }
 );
 
@@ -141,18 +143,18 @@ export const retailLegacyLeaderboard = createTable(
       leaderboard.bracket,
       leaderboard.pvp_season_index,
       leaderboard.region),
-      retailLegacyCharacterNameIndex: index("retail_legacy_character_name_idx").on(leaderboard.character_name),
-      retailLegacyCharacterIdIndex: index("retail_legacy_character_id_idx").on(leaderboard.character_id),
-      retailLegacyCharacterClassIndex: index("retail_legacy_character_class_idx").on(leaderboard.character_class),
-      retailLegacyCharacterSpecIndex: index("retail_legacy_character_spec_idx").on(leaderboard.character_spec),
-      retailLegacyFactionNameIndex: index("retail_legacy_faction_name_idx").on(leaderboard.faction_name),
-      retailLegacyRankIndex: index("retail_legacy_rank_idx").on(leaderboard.rank),
-      retailLegacyRatingIndex: index("retail_legacy_rating_idx").on(leaderboard.rating),
-      retailLegacyPlayedIndex: index("retail_legacy_played_idx").on(leaderboard.played),
-      retailLegacyWinRatioIndex: index("retail_legacy_win_ratio_idx").on(leaderboard.win_ratio),
-      retailLegacyBracketIndex: index("retail_legacy_bracket_idx").on(leaderboard.bracket),
-      retailLegacyPvpSeasonIndexIndex: index("retail_legacy_pvp_season_index_idx").on(leaderboard.pvp_season_index),
-      retailLegacyRegionIndex: index("retail_legacy_region_idx").on(leaderboard.region),
+    retailLegacyCharacterNameIndex: index("retail_legacy_character_name_idx").on(leaderboard.character_name),
+    retailLegacyCharacterIdIndex: index("retail_legacy_character_id_idx").on(leaderboard.character_id),
+    retailLegacyCharacterClassIndex: index("retail_legacy_character_class_idx").on(leaderboard.character_class),
+    retailLegacyCharacterSpecIndex: index("retail_legacy_character_spec_idx").on(leaderboard.character_spec),
+    retailLegacyFactionNameIndex: index("retail_legacy_faction_name_idx").on(leaderboard.faction_name),
+    retailLegacyRankIndex: index("retail_legacy_rank_idx").on(leaderboard.rank),
+    retailLegacyRatingIndex: index("retail_legacy_rating_idx").on(leaderboard.rating),
+    retailLegacyPlayedIndex: index("retail_legacy_played_idx").on(leaderboard.played),
+    retailLegacyWinRatioIndex: index("retail_legacy_win_ratio_idx").on(leaderboard.win_ratio),
+    retailLegacyBracketIndex: index("retail_legacy_bracket_idx").on(leaderboard.bracket),
+    retailLegacyPvpSeasonIndexIndex: index("retail_legacy_pvp_season_index_idx").on(leaderboard.pvp_season_index),
+    retailLegacyRegionIndex: index("retail_legacy_region_idx").on(leaderboard.region),
   })
 );
 

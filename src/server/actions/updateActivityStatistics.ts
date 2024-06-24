@@ -20,7 +20,7 @@ type IHistory = {
 }
 
 
-export const getActivityStatistics = async () => {
+export const updateActivityStatistics = async () => {
     const now = new Date();
     const oneDay = 24 * 60 * 60 * 1000;
 
