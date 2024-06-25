@@ -13,7 +13,7 @@ export const db = drizzle(sql, { schema });
 
  if(firstRun) {
 
-   await updateActivityStatistics();
+  //  await updateActivityStatistics();
  
 
     firstRun = false;

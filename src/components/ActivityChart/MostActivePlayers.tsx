@@ -9,8 +9,8 @@ const MostActivePlayers = ({ name, player, mostActivePlayersColumns }: { name: s
   const characterSpecClass = `${player.character_spec} ${player.character_class}` as keyof typeof specIconsMap;
 
   return (
-    <div key={name} className='flex py-2 gap-2 border-b-[1px] border-opacity-20 border-gray-300 items-center'>
-      <span className={`${mostActivePlayersColumns[0]?.width}`} style={{ color: classColors[characterClass] }}>{player.character_name}-{player.realm_slug}</span>
+    <div key={name} className='flex py-2 gap-2 border-b-[1px] border-opacity-20 border-gray-300'>
+      <span className={` text=center ${mostActivePlayersColumns[0]?.width}`} style={{ color: classColors[characterClass] }}>{player.character_name}-{player.realm_slug}</span>
       <div className={`${mostActivePlayersColumns[1]?.width} flex justify-center`}>
         <Image
           width={20}
