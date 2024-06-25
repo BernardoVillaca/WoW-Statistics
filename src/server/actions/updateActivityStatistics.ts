@@ -2,12 +2,12 @@ import { db } from '~/server/db';
 import { desc } from "drizzle-orm";
 import { leaderboardTablesMap } from "~/utils/helper/leaderboardTablesMap";
 import { activityStatistics } from '../db/schema';
-import type { ActivityData, PlayerActivity, SpecActivity } from '~/utils/helper/activityMap';
+import type { ActivityStatistics, PlayerActivity, SpecActivity } from '~/utils/helper/activityMap';
 
 
 type OverallActivityStatisticsData = {
     created_at: Date;
-    [key: string]: ActivityData | Date;
+    [key: string]: ActivityStatistics | Date;
 };
 
 type IHistory = {

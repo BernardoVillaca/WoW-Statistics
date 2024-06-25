@@ -4,8 +4,6 @@ import horde from '../../assets/Factions/horde.png';
 import alliance from '../../assets/Factions/alliance.png'
 import { calculateDifference } from '~/utils/helper/calculateDifference';
 import { useSearch } from '../Context/SearchContext';
-import { last } from 'node_modules/cheerio/lib/esm/api/traversing';
-
 
 const classColors = {
   'Death Knight': "#C41E3A",

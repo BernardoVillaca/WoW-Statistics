@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import React from 'react';
 import { FiLoader } from 'react-icons/fi';
-import classIconsMap from '~/utils/helper/classIconsMap';
+import {classIconsMap} from '~/utils/helper/classIconsMap';
 import specIconsMap from '~/utils/helper/specIconsMap';
 const minWidth = 15;
 

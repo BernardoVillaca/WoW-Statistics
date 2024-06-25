@@ -9,9 +9,9 @@ export interface ISpecStatistics {
     countAbove1600: number;
 }
 
-export type IClassStatisticsMap = Record<string, Record<string, ISpecStatistics>>;
+export type ClassStatisticsMap = Record<string, Record<string, ISpecStatistics>>;
 
-export const classStatisticsMap: IClassStatisticsMap = {
+export const classStatisticsMap: ClassStatisticsMap = {
     'Warrior': {
         'Allspecs': { totalCount: 0, countAbove2800: 0, countAbove2600: 0, countAbove2400: 0, countAbove2200: 0, countAbove2000: 0, countAbove1800: 0, countAbove1600: 0 },
         'Arms': { totalCount: 0, countAbove2800: 0, countAbove2600: 0, countAbove2400: 0, countAbove2200: 0, countAbove2000: 0, countAbove1800: 0, countAbove1600: 0 },

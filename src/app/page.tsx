@@ -9,24 +9,44 @@ import { SearchProvider } from '~/components/Context/SearchContext'
 import BracketSearch from '~/components/SearchTab/OtherSearch/BracketSearch'
 import RegionSearch from '~/components/SearchTab/OtherSearch/RegionSearch'
 import VersionSearch from '~/components/SearchTab/VersionSearch'
-import type { IClassStatisticsMap, ISpecStatistics } from '~/utils/helper/classStatisticsMap'
+import { ActivityMap, ActivityStatistics } from '~/utils/helper/activityMap'
+import type { ClassStatisticsMap, ISpecStatistics } from '~/utils/helper/classStatisticsMap'
 import useURLChange from '~/utils/hooks/useURLChange'
 
 interface ClassSpecData {
   id: number,
-  classic_eu_rbg: IClassStatisticsMap,
-  classic_eu_2v2: IClassStatisticsMap,
-  classic_eu_3v3: IClassStatisticsMap,
-  classic_us_rbg: IClassStatisticsMap,
-  classic_us_2v2: IClassStatisticsMap,
-  classic_us_3v3: IClassStatisticsMap,
-  retail_eu_rbg: IClassStatisticsMap,
-  retail_eu_2v2: IClassStatisticsMap,
-  retail_eu_3v3: IClassStatisticsMap,
-  retail_us_rbg: IClassStatisticsMap,
-  retail_us_2v2: IClassStatisticsMap,
-  retail_us_3v3: IClassStatisticsMap,
+  classic_eu_rbg: ClassStatisticsMap,
+  classic_eu_2v2: ClassStatisticsMap,
+  classic_eu_3v3: ClassStatisticsMap,
+  classic_us_rbg: ClassStatisticsMap,
+  classic_us_2v2: ClassStatisticsMap,
+  classic_us_3v3: ClassStatisticsMap,
+  retail_eu_rbg: ClassStatisticsMap,
+  retail_eu_2v2: ClassStatisticsMap,
+  retail_eu_3v3: ClassStatisticsMap,
+  retail_us_rbg: ClassStatisticsMap,
+  retail_us_2v2: ClassStatisticsMap,
+  retail_us_3v3: ClassStatisticsMap,
 }
+
+interface ActivityData {
+  id: number;
+  classic_eu_rbg: ActivityMap,
+  classic_eu_2v2: ActivityMap,
+  classic_eu_3v3: ActivityMap,
+  classic_us_rbg: ActivityMap,
+  classic_us_2v2: ActivityMap,
+  classic_us_3v3: ActivityMap,
+  retail_eu_rbg: ActivityMap,
+  retail_eu_2v2: ActivityMap,
+  retail_eu_3v3: ActivityMap,
+  retail_us_rbg: ActivityMap,
+  retail_us_2v2: ActivityMap,
+  retail_us_3v3: ActivityMap,
+
+}
+
+
 type RegionType = 'us' | 'eu';
 type BracketType = '3v3' | '2v2' | 'rbg';
 type VersionType = 'retail' | 'classic';
@@ -48,10 +68,14 @@ const healerSpecsArray = ['Restoration Druid', 'Holy Paladin', 'Discipline Pries
 
 const Home = () => {
   const [classSpecData, setClassSpecData] = useState<ClassSpecData | null>(null)
+  const [localClassSpecData, setLocalClassSpecData] = useState<ClassStatisticsMap | null>(null)
+  
+  const [activityData, setActivityData] = useState<ActivityData | null>(null)
+  const [localActivityData, setLocalActivityData] = useState<ActivityStatistics | null>(null)
+  
   const [title, setTitle] = useState<string | null>(null)
   const [ratingFilter, setRatingFilter] = useState<string | null>(null)
   const [uniqueRatings, setUniqueRatings] = useState<{ label: string, key: string, total: number }[] | null>(null)
-  const [localData, setLocalData] = useState<IClassStatisticsMap | null>(null)
   const [loading, setLoading] = useState<boolean>(true)
   const queryParams = useURLChange()
 
@@ -86,16 +110,16 @@ const Home = () => {
     return item[key];
   };
 
-  if (localData) {
-    for (const className in localData) {
-      const classData = localData?.[className]?.AllSpecs
+  if (localClassSpecData) {
+    for (const className in localClassSpecData) {
+      const classData = localClassSpecData?.[className]?.AllSpecs
       if (!classData) continue
       const classCount = getFilteredCount(classData, ratingFilter);
 
       allClassesCount += Number(classCount);
       classCountMap.set(className, Number(classCount));
 
-      for (const specName in localData[className]) {
+      for (const specName in localClassSpecData[className]) {
         if (specName === 'AllSpecs') {
           totalCount += Number(classData?.totalCount);
           countAbove1600 += Number(classData?.countAbove1600);
@@ -108,7 +132,7 @@ const Home = () => {
           continue;
         }
 
-        const specData = localData?.[className]?.[specName]
+        const specData = localClassSpecData?.[className]?.[specName]
         if (!specData) continue
         const specCount = getFilteredCount(specData, ratingFilter);
 
@@ -176,25 +200,50 @@ const Home = () => {
   }, [])
 
   useEffect(() => {
+    setLoading(true)
+    const fetchData = async () => {
+      const response = await axios.get('/api/getWowStatistics')
+      setClassSpecData(response.data.classSpecData)
+      setActivityData(response.data.activityData)
+      console.log(response.data.activityData)
+      setLoading(false)
+    }
+    void fetchData()
+  }, [])
+
+  useEffect(() => {
     if (classSpecData === null) return;
     const { version, region, bracket } = getQueryParams();
-    const dataKey = localDataMap[version][region][bracket] as keyof ClassSpecData;
-
-    const newData = classSpecData?.[dataKey];
-
-    if (newData && typeof newData === 'object') {
+  
+    const classSpecdataKey = localDataMap[version][region][bracket] as keyof ClassSpecData;
+    const activityDataKey = localDataMap[version][region][bracket] as keyof ActivityData;
+  
+    const newActivityData = activityData?.[activityDataKey] as ActivityStatistics | undefined;
+    const newClassSpecData = classSpecData?.[classSpecdataKey];
+  
+    if (newClassSpecData && typeof newClassSpecData === 'object') {
       setTitle(`${version.toUpperCase()} ${region.toUpperCase()} ${bracket.toUpperCase()}`);
-      setLocalData(newData);
+      setLocalClassSpecData(newClassSpecData);
     } else {
-      setLocalData(null);
+      setLocalClassSpecData(null);
     }
-
+  
+    if (newActivityData) {
+      setLocalActivityData(newActivityData);
+    } else {
+      setLocalActivityData(null);
+    }
+  
     setRatingFilter(null);
-  }, [queryParams, classSpecData]);
+  }, [queryParams, classSpecData, activityData]);
+  
+  useEffect(() => {
+    setUniqueRatings(generateUniqueRatings());
+  }, [localClassSpecData]);
 
   useEffect(() => {
     setUniqueRatings(generateUniqueRatings());
-  }, [localData]);
+  }, [localClassSpecData]);
 
 
   const highestClass = sortedClassCount?.[0]?.[1] ?? 0
@@ -229,7 +278,7 @@ const Home = () => {
       </div>
       <div className='flex gap-2'>
         <BarChart highestValue={highestClass} sortedArray={sortedClassCount} specificCount={allClassesCount} classChart={true} title='Classes' loading={loading} />
-        <ActivityChart />
+        {localActivityData &&<ActivityChart localActivityData={localActivityData}/>}
       </div>
     </main >
   )

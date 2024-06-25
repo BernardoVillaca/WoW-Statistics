@@ -1,4 +1,4 @@
-export type ActivityData = {
+export interface ActivityStatistics  {
     total24h: number;
     total48h: number;
     total72h: number;
@@ -26,7 +26,7 @@ export type ActivityData = {
     mostActiveSpecs24h2400plus: Record<string, SpecActivity>;
     mostActiveSpecs48h2400plus: Record<string, SpecActivity>;
     mostActiveSpecs72h2400plus: Record<string, SpecActivity>;
-};
+}
 
 export type PlayerActivity = {
     played: number;
@@ -46,9 +46,9 @@ export type SpecActivity = {
     character_class: string;
 };
 
-export type ActivityMap = Record<string, ActivityData>;
+export type ActivityMap = Record<string, ActivityStatistics>;
 
-const createActivityData = (): ActivityData => ({
+const createActivityData = (): ActivityStatistics => ({
     total24h: 0,
     total48h: 0,
     total72h: 0,

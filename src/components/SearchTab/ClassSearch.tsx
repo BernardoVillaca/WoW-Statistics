@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import specIconsMap from '~/utils/helper/specIconsMap';
-import classIconsMap from '~/utils/helper/classIconsMap';
+import {classIconsMap }from '~/utils/helper/classIconsMap';
 import { useSearch } from '../Context/SearchContext';
 import { updateURL } from '~/utils/helper/updateURL';
 import useURLChange from '~/utils/hooks/useURLChange';

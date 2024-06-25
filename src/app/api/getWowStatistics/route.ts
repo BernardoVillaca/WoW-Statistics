@@ -13,11 +13,11 @@ export async function GET(req: NextRequest) {
         const classSpecData = response[0]
         
         const secondResponse = await db.select().from(activityStatistics).orderBy(desc(activityStatistics.id)).limit(1);
-        const activivtyData = secondResponse[0]
+        const activityData = secondResponse[0]
         
        
         
-        return NextResponse.json({classSpecData, activivtyData});
+        return NextResponse.json({classSpecData, activityData});
     } catch (error) {
         console.error('Error fetching realms:', error);
         return NextResponse.json({ error: 'Failed to fetch realms' }, { status: 500 });
