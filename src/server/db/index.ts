@@ -12,9 +12,9 @@ export const db = drizzle(sql, { schema });
  let firstRun = true;
 
  if(firstRun) {
-  //  await updateRatingsCutoffs();
-  //  await updateActivityStatistics();
-  //  await updateClassSpecCount();
+
+   await updateActivityStatistics();
+ 
 
     firstRun = false;
  }

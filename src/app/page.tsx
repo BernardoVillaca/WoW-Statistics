@@ -268,12 +268,12 @@ const Home = () => {
         </div>
       </div>
       <div className='flex gap-2'>
-        {localActivityData && <ActivityChart localActivityData={localActivityData} />}
-      </div>
-      <div className='flex gap-2'>
         <BarChart highestValue={highestClass} sortedArray={sortedClassCount} specificCount={allClassesCount} classChart={true} title='Classes' loading={loading} />
         <BarChart highestValue={highestDps} sortedArray={sortedDpsCount} specificCount={dpsSpecsCount} classChart={false} title='Dps Specs' loading={loading} />
         <BarChart highestValue={highestHealer} sortedArray={sortedHealerCount} specificCount={healerSpecsCount} classChart={false} title='Healer Specs' loading={loading} />
+      </div>
+      <div className='flex gap-2'>
+        {localActivityData && <ActivityChart localActivityData={localActivityData} />}
       </div>
     </main >
   )

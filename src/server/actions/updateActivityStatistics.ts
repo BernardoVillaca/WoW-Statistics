@@ -19,7 +19,6 @@ type IHistory = {
     updated_at: Date;
 }
 
-
 export const updateActivityStatistics = async () => {
     const now = new Date();
     const oneDay = 24 * 60 * 60 * 1000;
@@ -35,14 +34,6 @@ export const updateActivityStatistics = async () => {
         let total48h = 0;
         let total72h = 0;
 
-        let total24h2200plus = 0;
-        let total48h2200plus = 0;
-        let total72h2200plus = 0;
-
-        let total24h2400plus = 0;
-        let total48h2400plus = 0;
-        let total72h2400plus = 0;
-
         const playerActivity24h = new Map<string, PlayerActivity>();
         const playerActivity48h = new Map<string, PlayerActivity>();
         const playerActivity72h = new Map<string, PlayerActivity>();
@@ -50,16 +41,6 @@ export const updateActivityStatistics = async () => {
         const specActivity24h = new Map<string, SpecActivity>();
         const specActivity48h = new Map<string, SpecActivity>();
         const specActivity72h = new Map<string, SpecActivity>();
-
-        const specActivity24h2200plus = new Map<string, SpecActivity>();
-        const specActivity48h2200plus = new Map<string, SpecActivity>();
-        const specActivity72h2200plus = new Map<string, SpecActivity>();
-
-        const specActivity24h2400plus = new Map<string, SpecActivity>();
-        const specActivity48h2400plus = new Map<string, SpecActivity>();
-        const specActivity72h2400plus = new Map<string, SpecActivity>();
-
-
 
         const tableData = await db.select().from(table).orderBy(desc(table.rating))
 
@@ -118,32 +99,7 @@ export const updateActivityStatistics = async () => {
                         realm_slug: row.realm_slug
                     });
                 }
-                if (row.rating >= 2200) {
-                    total24h2200plus += 1;
-                    const currentSpecActivity2200 = specActivity24h2200plus.get(specKey);
-                    if (currentSpecActivity2200) {
-                        currentSpecActivity2200.played += 1;
-                    } else {
-                        specActivity24h2200plus.set(specKey, {
-                            played: 1,
-                            character_spec: row.character_spec,
-                            character_class: row.character_class
-                        });
-                    }
-                }
-                if (row.rating >= 2400) {
-                    total24h2400plus += 1;
-                    const currentSpecActivity2400 = specActivity24h2400plus.get(specKey);
-                    if (currentSpecActivity2400) {
-                        currentSpecActivity2400.played += 1;
-                    } else {
-                        specActivity24h2400plus.set(specKey, {
-                            played: 1,
-                            character_spec: row.character_spec,
-                            character_class: row.character_class
-                        });
-                    }
-                }
+            
             }
 
             // 48 hours count
@@ -175,31 +131,7 @@ export const updateActivityStatistics = async () => {
                         realm_slug: row.realm_slug
                     });
                 };
-
-                if (row.rating >= 2200) {
-                    total48h2200plus += 1;
-                    if (specActivity48h2200plus.has(specKey48h)) {
-                        specActivity48h2200plus.get(specKey48h)!.played += 1;
-                    } else {
-                        specActivity48h2200plus.set(specKey48h, {
-                            played: 1,
-                            character_spec: row.character_spec,
-                            character_class: row.character_class
-                        });
-                    };
-                };
-                if (row.rating >= 2400) {
-                    total48h2400plus += 1;
-                    if (specActivity48h2400plus.has(specKey48h)) {
-                        specActivity48h2400plus.get(specKey48h)!.played += 1;
-                    } else {
-                        specActivity48h2400plus.set(specKey48h, {
-                            played: 1,
-                            character_spec: row.character_spec,
-                            character_class: row.character_class
-                        });
-                    };
-                };
+                
             };
 
             // 72 hours count
@@ -231,30 +163,7 @@ export const updateActivityStatistics = async () => {
                         realm_slug: row.realm_slug
                     });
                 };
-                if (row.rating >= 2200) {
-                    total72h2200plus += 1;
-                    if (specActivity72h2200plus.has(specKey72h)) {
-                        specActivity72h2200plus.get(specKey72h)!.played += 1;
-                    } else {
-                        specActivity72h2200plus.set(specKey72h, {
-                            played: 1,
-                            character_spec: row.character_spec,
-                            character_class: row.character_class
-                        });
-                    };
-                };
-                if (row.rating >= 2400) {
-                    total72h2400plus += 1;
-                    if (specActivity72h2400plus.has(specKey72h)) {
-                        specActivity72h2400plus.get(specKey72h)!.played += 1;
-                    } else {
-                        specActivity72h2400plus.set(specKey72h, {
-                            played: 1,
-                            character_spec: row.character_spec,
-                            character_class: row.character_class
-                        });
-                    };
-                };
+               
             };
 
             const getTop5 = <T extends { rank?: number; played: number }>(activity: Map<string, T>): Record<string, T> => {
@@ -281,24 +190,14 @@ export const updateActivityStatistics = async () => {
                 total24h,
                 total48h,
                 total72h,
-                total24h2200plus,
-                total48h2200plus,
-                total72h2200plus,
-                total24h2400plus,
-                total48h2400plus,
-                total72h2400plus,
+                
                 mostActivePlayers24h: getTop5(playerActivity24h),
                 mostActivePlayers48h: getTop5(playerActivity48h),
                 mostActivePlayers72h: getTop5(playerActivity72h),
                 mostActiveSpecs24h: getTop5(specActivity24h),
                 mostActiveSpecs48h: getTop5(specActivity48h),
                 mostActiveSpecs72h: getTop5(specActivity72h),
-                mostActiveSpecs24h2200plus: getTop5(specActivity24h2200plus),
-                mostActiveSpecs48h2200plus: getTop5(specActivity48h2200plus),
-                mostActiveSpecs72h2200plus: getTop5(specActivity72h2200plus),
-                mostActiveSpecs24h2400plus: getTop5(specActivity24h2400plus),
-                mostActiveSpecs48h2400plus: getTop5(specActivity48h2400plus),
-                mostActiveSpecs72h2400plus: getTop5(specActivity72h2400plus),
+                
             };
         }
     };
