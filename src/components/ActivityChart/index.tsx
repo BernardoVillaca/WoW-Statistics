@@ -73,7 +73,7 @@ const ActivityChart = ({ localActivityData }: { localActivityData: ActivityStati
           </div>
         </div>
       </div>
-      <div className='flex flex-col  text-gray-300 gap-2 '>
+      <div className='flex flex-col  text-gray-300 gap-2'>
         <div className='flex w-full gap-4'>
           <div className='flex flex-col w-1/2 bg-gray-800 rounded-xl px-2'>
             <h3 className='font-bold text-center'>Most Active Players</h3>

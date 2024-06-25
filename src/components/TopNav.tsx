@@ -16,6 +16,9 @@ const TopNav = () => {
       <Link href="/legacy">
         <div className="text-white cursor-pointer">Legacy</div>
       </Link>
+      <Link href="/cutoffs">
+        <div className="text-white cursor-pointer">Cutoffs</div>
+      </Link>
       <Link href="/about">
         <div className="text-white cursor-pointer">About</div>
       </Link>

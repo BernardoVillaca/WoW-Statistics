@@ -4,23 +4,8 @@ import horde from '../../assets/Factions/horde.png';
 import alliance from '../../assets/Factions/alliance.png'
 import { calculateDifference } from '~/utils/helper/calculateDifference';
 import { useSearch } from '../Context/SearchContext';
+import { classColors } from '~/utils/helper/classIconsMap';
 
-const classColors = {
-  'Death Knight': "#C41E3A",
-  'Demon Hunter': "#A330C9",
-  'Druid': "#FF7C0A",
-  'Hunter': "#AAD372",
-  'Mage': "#3FC7EB",
-  'Monk': "#00FF98",
-  'Paladin': "#F48CBA",
-  'Priest': "#FFFFFF",
-  'Rogue': "#FFF468",
-  'Shaman': "#0070DD",
-  'Warlock': "#8788EE",
-  'Warrior': "#C69B6D",
-  'Evoker': "#33937F",
-  '': 'gray',
-};
 
 type HistoryEntry = {
   cell: string;

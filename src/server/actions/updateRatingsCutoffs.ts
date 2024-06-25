@@ -4,7 +4,6 @@ import { getAuthToken } from '~/server/actions/getAuthToken';
 import { and, eq, gte } from 'drizzle-orm/expressions';
 import { RatingsCutoff, eu3v3Leaderboard, euRBGLeaderboard, euShuffleLeaderboard, us3v3Leaderboard, usRBGLeaderboard, usShuffleLeaderboard } from '../db/schema';
 import { specIdMap } from '~/utils/helper/specIdMap';
-import { sql } from 'drizzle-orm';
 
 interface RegionParams {
     url: string;
@@ -15,22 +14,6 @@ interface RegionParams {
         namespace: string;
         locale: string;
     };
-}
-
-interface HistoryEntry {
-    us_changes: string[];
-    eu_changes: string[];
-    us_cutoffs: Cutoffs | undefined;
-    eu_cutoffs: Cutoffs | undefined;
-    updated_at: Date;
-}
-
-interface RatingsCutoffType {
-    id: number;
-    history: HistoryEntry[];
-    updated_at: Date;
-    us_cutoffs: Cutoffs;
-    eu_cutoffs: Cutoffs;
 }
 
 const regionParams: Record<string, RegionParams> = {
