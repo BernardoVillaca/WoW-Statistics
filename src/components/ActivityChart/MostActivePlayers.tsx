@@ -10,7 +10,7 @@ const MostActivePlayers = ({ name, player, mostActivePlayersColumns }: { name: s
 
   return (
     <div key={name} className='flex py-2 gap-2 border-b-[1px] border-opacity-20 border-gray-300'>
-      <span className={` text=center ${mostActivePlayersColumns[0]?.width}`} style={{ color: classColors[characterClass] }}>{player.character_name}-{player.realm_slug}</span>
+      <span className={` text-center ${mostActivePlayersColumns[0]?.width}`} style={{ color: classColors[characterClass] }}>{player.character_name}-{player.realm_slug}</span>
       <div className={`${mostActivePlayersColumns[1]?.width} flex justify-center`}>
         <Image
           width={20}
