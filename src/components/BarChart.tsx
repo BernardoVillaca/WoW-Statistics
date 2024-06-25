@@ -27,7 +27,7 @@ const BarChart: React.FC<BarChartProps> = ({ highestValue, sortedArray, specific
             ) : (
                 <div className='flex flex-col gap-1'>
                     {highestValue && sortedArray
-                        ?.slice(0, 10)
+                        ?.slice(0, 7)
                         .filter(([_, count]) => (count / specificCount) * 100 >= 2)
                         .map(([className, count]) => {
                             const width = Math.max((count / highestValue) * 100, minWidth);

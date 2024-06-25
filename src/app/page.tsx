@@ -9,7 +9,7 @@ import { SearchProvider } from '~/components/Context/SearchContext'
 import BracketSearch from '~/components/SearchTab/OtherSearch/BracketSearch'
 import RegionSearch from '~/components/SearchTab/OtherSearch/RegionSearch'
 import VersionSearch from '~/components/SearchTab/VersionSearch'
-import { ActivityMap, ActivityStatistics } from '~/utils/helper/activityMap'
+import type { ActivityMap, ActivityStatistics } from '~/utils/helper/activityMap'
 import type { ClassStatisticsMap, ISpecStatistics } from '~/utils/helper/classStatisticsMap'
 import useURLChange from '~/utils/hooks/useURLChange'
 
@@ -69,10 +69,10 @@ const healerSpecsArray = ['Restoration Druid', 'Holy Paladin', 'Discipline Pries
 const Home = () => {
   const [classSpecData, setClassSpecData] = useState<ClassSpecData | null>(null)
   const [localClassSpecData, setLocalClassSpecData] = useState<ClassStatisticsMap | null>(null)
-  
+
   const [activityData, setActivityData] = useState<ActivityData | null>(null)
   const [localActivityData, setLocalActivityData] = useState<ActivityStatistics | null>(null)
-  
+
   const [title, setTitle] = useState<string | null>(null)
   const [ratingFilter, setRatingFilter] = useState<string | null>(null)
   const [uniqueRatings, setUniqueRatings] = useState<{ label: string, key: string, total: number }[] | null>(null)
@@ -202,10 +202,9 @@ const Home = () => {
   useEffect(() => {
     setLoading(true)
     const fetchData = async () => {
-      const response = await axios.get('/api/getWowStatistics')
+      const response = await axios.get<{ classSpecData: ClassSpecData, activityData: ActivityData }>('/api/getWowStatistics')
       setClassSpecData(response.data.classSpecData)
       setActivityData(response.data.activityData)
-      console.log(response.data.activityData)
       setLoading(false)
     }
     void fetchData()
@@ -214,37 +213,33 @@ const Home = () => {
   useEffect(() => {
     if (classSpecData === null) return;
     const { version, region, bracket } = getQueryParams();
-  
+
     const classSpecdataKey = localDataMap[version][region][bracket] as keyof ClassSpecData;
     const activityDataKey = localDataMap[version][region][bracket] as keyof ActivityData;
-  
+
     const newActivityData = activityData?.[activityDataKey] as ActivityStatistics | undefined;
     const newClassSpecData = classSpecData?.[classSpecdataKey];
-  
+
     if (newClassSpecData && typeof newClassSpecData === 'object') {
       setTitle(`${version.toUpperCase()} ${region.toUpperCase()} ${bracket.toUpperCase()}`);
       setLocalClassSpecData(newClassSpecData);
     } else {
       setLocalClassSpecData(null);
     }
-  
+
     if (newActivityData) {
       setLocalActivityData(newActivityData);
     } else {
       setLocalActivityData(null);
     }
-  
+
     setRatingFilter(null);
   }, [queryParams, classSpecData, activityData]);
-  
-  useEffect(() => {
-    setUniqueRatings(generateUniqueRatings());
-  }, [localClassSpecData]);
+
 
   useEffect(() => {
     setUniqueRatings(generateUniqueRatings());
   }, [localClassSpecData]);
-
 
   const highestClass = sortedClassCount?.[0]?.[1] ?? 0
   const highestHealer = sortedHealerCount?.[0]?.[1] ?? 0
@@ -273,12 +268,12 @@ const Home = () => {
         </div>
       </div>
       <div className='flex gap-2'>
-        <BarChart highestValue={highestDps} sortedArray={sortedDpsCount} specificCount={dpsSpecsCount} classChart={false} title='Dps Specs' loading={loading} />
-        <BarChart highestValue={highestHealer} sortedArray={sortedHealerCount} specificCount={healerSpecsCount} classChart={false} title='Healer Specs' loading={loading} />
+        {localActivityData && <ActivityChart localActivityData={localActivityData} />}
       </div>
       <div className='flex gap-2'>
         <BarChart highestValue={highestClass} sortedArray={sortedClassCount} specificCount={allClassesCount} classChart={true} title='Classes' loading={loading} />
-        {localActivityData &&<ActivityChart localActivityData={localActivityData}/>}
+        <BarChart highestValue={highestDps} sortedArray={sortedDpsCount} specificCount={dpsSpecsCount} classChart={false} title='Dps Specs' loading={loading} />
+        <BarChart highestValue={highestHealer} sortedArray={sortedHealerCount} specificCount={healerSpecsCount} classChart={false} title='Healer Specs' loading={loading} />
       </div>
     </main >
   )

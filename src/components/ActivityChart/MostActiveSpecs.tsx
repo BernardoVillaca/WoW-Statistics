@@ -1,7 +1,14 @@
 import React from 'react';
 import { classColors } from '~/utils/helper/classIconsMap';
 
-const MostActiveSpecs = ({ name, spec, total, mostActiveSpecsColumns }: { name: string, spec: any, total: number, mostActiveSpecsColumns: { label: string, width: string }[] }) => {
+type SpecProp = {
+  character_class: string;
+  character_spec: string;
+  played: number;
+};
+
+
+const MostActiveSpecs = ({ name, spec, total, mostActiveSpecsColumns }: { name: string, spec: SpecProp, total: number, mostActiveSpecsColumns: { label: string, width: string }[] }) => {
   const calculateSpecPercentage = (specPlayed: number, total: number) => {
     if (total === 0) return 0;
     return ((specPlayed / total) * 100).toFixed(2);

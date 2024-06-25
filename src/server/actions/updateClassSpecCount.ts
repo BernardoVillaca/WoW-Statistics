@@ -1,12 +1,12 @@
 import { db } from '~/server/db';
 import { desc } from "drizzle-orm";
 import { leaderboardTablesMap } from "~/utils/helper/leaderboardTablesMap";
-import type { IClassStatisticsMap } from "~/utils/helper/classStatisticsMap";
+import type { ClassStatisticsMap } from "~/utils/helper/classStatisticsMap";
 import { classSpecStatistics } from '../db/schema';
 
 type OverallClassSpecStatisticsData = {
     created_at: Date;
-    [key: string]: IClassStatisticsMap | Date;
+    [key: string]: ClassStatisticsMap | Date;
 };
 
 
@@ -22,7 +22,7 @@ export const updateClassSpecCount = async () => {
 
     for (const [key, { version, column, table }] of Object.entries(leaderboardTablesMap)) {
         // Create a new map for the current loop iteration
-        const currentClassStatisticsMap: IClassStatisticsMap = {};
+        const currentClassStatisticsMap: ClassStatisticsMap = {};
 
         const tableData = await db.select().from(table).orderBy(desc(table.rating));
 
