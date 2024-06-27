@@ -10,7 +10,7 @@ const truncateName = (name: string, maxLength: number) => {
 };
 
 const MostActivePlayers = ({ name, player, mostActivePlayersColumns }: { name: string, player: PlayerActivity, mostActivePlayersColumns: { label: string, width: string }[] }) => {
-  const characterClass = player.character_class as keyof typeof classColors;
+  const characterClass = player.character_class;
   const characterSpecClass = `${player.character_spec} ${player.character_class}` as keyof typeof specIconsMap;
   const truncatedName = truncateName(`${player.character_name}-${player.realm_slug}`, 23);
 

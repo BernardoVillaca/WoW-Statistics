@@ -46,7 +46,7 @@ const LeaderboardCell = ({ str, height, index, cell, characterClass, characterSp
   const specIcon = specIconsMap[specClass as keyof typeof specIconsMap];
   const factionIcon = str === 'HORDE' ? horde : str === 'ALLIANCE' ? alliance : null;
 
-  const classColor = classColors[characterClass as keyof typeof classColors];
+  const classColor = classColors[characterClass];
 
   const formatRealmName = (formattedText: string) => {
     if (formattedText.length > 13) {
