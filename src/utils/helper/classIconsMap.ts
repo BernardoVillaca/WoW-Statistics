@@ -13,7 +13,7 @@ import warrior from '../../assets/Classes/Warrior/warrior_class.jpg';
 import evoker from '../../assets/Classes/Evoker/evoker_class.jpg';
 import questionMark from '../../assets/Other/questionMark.jpg';
 
-export const classColors: { [key: string]: string } = {
+export const classColors: Record<string, string> = {
   'Death Knight': '#C41E3A',
   'Blood Death Knight': '#C41E3A',
   'Frost Death Knight': '#C41E3A',
