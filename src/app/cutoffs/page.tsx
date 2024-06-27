@@ -7,6 +7,7 @@ import { FiBarChart2 } from 'react-icons/fi';
 import { classColors } from '~/utils/helper/classIconsMap';
 import usImage from '~/assets/Regions/us.png';
 import euImage from '~/assets/Regions/eu.png';
+import { set } from 'zod';
 type Cutoffs = Record<string, { rating: number; count: number }>;
 
 type AllCutoffs = {
@@ -14,7 +15,7 @@ type AllCutoffs = {
   eu_cutoffs: Cutoffs;
 }
 
-function formatKey(key: string): string {
+const formatKey = (key: string): string => {
   return key
     .replace('_cutoff', '')
     .split('_')
@@ -22,7 +23,7 @@ function formatKey(key: string): string {
     .join(' ');
 }
 
-function sortCutoffs(cutoffs: Cutoffs): [string, { rating: number; count: number }][] {
+const sortCutoffs = (cutoffs: Cutoffs): [string, { rating: number; count: number }][] => {
   const specialOrder = ['arena_3v3_cutoff', 'rbg_alliance_cutoff', 'rbg_horde_cutoff'];
   const specialCutoffs = specialOrder
     .map(key => [key, cutoffs[key]])
@@ -35,9 +36,37 @@ function sortCutoffs(cutoffs: Cutoffs): [string, { rating: number; count: number
   return [...specialCutoffs, ...remainingCutoffs];
 }
 
-function RatingCutoffs() {
+const RatingCutoffs = () => {
   const [uscutoffs, setUsCutoffs] = useState<Cutoffs | null>(null)
   const [eucutoffs, setEuCutoffs] = useState<Cutoffs | null>(null)
+  const [isOpen, setIsOpen] = useState(false)
+  const [selectedKey, setSelectedKey] = useState<string | null>(null)
+  const [historyData, setHistoryData] = useState<Record<string, number> | null>(null)
+  const [loading, setLoading] = useState(false)
+
+
+  const onClickHandler = async (key: string) => {
+    document.body.style.overflow = 'hidden';
+    setIsOpen(!isOpen);
+    setLoading(true);
+    if (!historyData) {
+      const response = await axios.get<{ history: Record<string, number> }>(`/api/getRatingCutoffs?history=true`)
+      setHistoryData(response.data.history)
+      console.log(response);
+    }
+    setLoading(false);
+
+    setSelectedKey(key);
+
+  }
+
+  const onClose = () => {
+    setIsOpen(false)
+    document.body.style.overflow = '';
+
+
+
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,7 +78,26 @@ function RatingCutoffs() {
   }, [])
 
   return (
-    <div className='flex flex-col w-full min-h-screen bg-gradient-to-b from-[#000080] to-black text-white gap-4 py-2'>
+    <div className='flex flex-col w-full min-h-screen bg-gradient-to-b from-[#000080] to-black text-white gap-4 py-2 relative'>
+      {isOpen && selectedKey &&
+        <div
+          className='absolute flex flex-col w-full h-full bg-black/40 items-center'
+          onClick={() => onClose()}
+        >
+          <div
+            className='flex h-[400px] w-[800px] bg-gray-800 items-start place-content-end px-4 mt-72'
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className='text-2xl text-black select-none'
+              onClick={() => onClose()}
+            >
+              X
+            </button>
+
+          </div>
+        </div>
+      }
       <div className='flex px-24 gap-24'>
         <div className='flex flex-col w-1/2 place-content-center items-center bg-gray-800 px-2 rounded-xl'>
           <div className='p-4'>
@@ -62,18 +110,19 @@ function RatingCutoffs() {
             />
           </div>
           {uscutoffs && sortCutoffs(uscutoffs).map(([key, value]) => (
-            <div className='flex justify-between w-full border-y-[1px] border-gray-300 border-opacity-20'>
-              <span
-                className='w-1/2'
-                key={key}
-                style={{ color: classColors[formatKey(key)] }}>{formatKey(key)}</span>
+            <button
+              key={key}
+              className='flex justify-between w-full border-y-[1px] border-gray-300 border-opacity-20 hover:bg-gray-700'
+              onClick={() => onClickHandler(key)}
+            >
+              <span className='w-1/2' key={key} style={{ color: classColors[formatKey(key)] }}>{formatKey(key)}</span>
               <span >{value.rating}</span>
               <FiBarChart2 />
-            </div>
+            </button>
           ))}
         </div>
         <div className='flex flex-col w-1/2 place-content-center items-center bg-gray-800 px-2 rounded-xl'>
-        <div className='p-4'>
+          <div className='p-4'>
             <Image
               className=''
               src={euImage}
@@ -83,14 +132,14 @@ function RatingCutoffs() {
             />
           </div>
           {eucutoffs && sortCutoffs(eucutoffs).map(([key, value]) => (
-            <div className='flex justify-between w-full border-y-[1px] border-gray-300 border-opacity-20'>
+            <button key={key} className='flex justify-between w-full border-y-[1px] border-gray-300 border-opacity-20 hover:bg-gray-700'>
               <span
                 className='w-1/2'
                 key={key}
                 style={{ color: classColors[formatKey(key)] }}>{formatKey(key)}</span>
               <span className=''>{value.rating}</span>
               <FiBarChart2 />
-            </div>
+            </button>
           ))}
         </div>
       </div>

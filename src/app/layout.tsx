@@ -21,9 +21,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className=''>
+      <body >
         <TopNav />
-        <div className="flex">
+        <div className="flex ">
           {/* left */}
           <div className="flex flex-col w-1/6 bg-gradient-to-b from-[#000080] to-black "> </div>
           {/* middle */}
