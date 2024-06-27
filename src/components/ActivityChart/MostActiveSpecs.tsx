@@ -14,7 +14,7 @@ const MostActiveSpecs = ({ name, spec, total, mostActiveSpecsColumns }: { name: 
     return ((specPlayed / total) * 100).toFixed(2);
   };
 
-  const specClass = spec.character_class as keyof typeof classColors;
+  const specClass = spec.character_class;
   const percentage = calculateSpecPercentage(spec.played, total);
 
   return (
