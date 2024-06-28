@@ -70,7 +70,7 @@
         },
         {
             "path": "/api/cronJobs/updateStatistics",
-            "schedule": "0 */24 * * *"
+            "schedule": "0 */12 * * *"
         }
     ]
 }
