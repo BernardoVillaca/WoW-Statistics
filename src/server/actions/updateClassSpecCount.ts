@@ -10,9 +10,6 @@ type OverallClassSpecStatisticsData = {
 };
 
 
-
-
-
 export const updateClassSpecCount = async () => {
     const overallClassSpecStatisticsData: OverallClassSpecStatisticsData = {
         created_at: new Date()
@@ -20,7 +17,7 @@ export const updateClassSpecCount = async () => {
       
     };
 
-    for (const [key, { version, column, table }] of Object.entries(leaderboardTablesMap)) {
+    for (const [key, { column, table }] of Object.entries(leaderboardTablesMap)) {
         // Create a new map for the current loop iteration
         const currentClassStatisticsMap: ClassStatisticsMap = {};
 
@@ -32,38 +29,7 @@ export const updateClassSpecCount = async () => {
             }
             const className = row.character_class;
             const specName = row.character_spec;
-
-            // If the class doesn't exist in the current map, create it
-            if (!currentClassStatisticsMap[className]) {
-                currentClassStatisticsMap[className] = {};
-            }
-            // If the spec doesn't exist in the current map, create it
-            if (!currentClassStatisticsMap[className]![specName]) {
-                currentClassStatisticsMap[className]![specName] = {
-                    totalCount: 0,
-                    countAbove2800: 0,
-                    countAbove2600: 0,
-                    countAbove2400: 0,
-                    countAbove2200: 0,
-                    countAbove2000: 0,
-                    countAbove1600: 0,
-                    countAbove1800: 0
-                };
-            }
-            // If the Allspecs doesn't exist in the current map, create it
-            if (!currentClassStatisticsMap[className]!.AllSpecs) {
-                currentClassStatisticsMap[className]!.AllSpecs = {
-                    totalCount: 0,
-                    countAbove2800: 0,
-                    countAbove2600: 0,
-                    countAbove2400: 0,
-                    countAbove2200: 0,
-                    countAbove2000: 0,
-                    countAbove1600: 0,
-                    countAbove1800: 0
-                };
-            }
-
+            
             // Update the total count
             currentClassStatisticsMap[className]![specName]!.totalCount += 1;
             currentClassStatisticsMap[className]!.AllSpecs!.totalCount += 1;
