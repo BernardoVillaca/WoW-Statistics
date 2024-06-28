@@ -4,6 +4,7 @@ import * as schema from './schema'
 import { updateRatingsCutoffs } from '../actions/updateRatingsCutoffs';
 import { updateActivityStatistics } from '../actions/updateActivityStatistics';
 import { updateClassSpecCount } from '../actions/updateClassSpecCount';
+import { updateShuffle } from '../actions/updateShuffle';
 
 
 
@@ -13,7 +14,7 @@ export const db = drizzle(sql, { schema });
 
  if(firstRun) {
 
-  //  await updateActivityStatistics();
+  // await updateShuffle('us', 'first');
  
 
     firstRun = false;

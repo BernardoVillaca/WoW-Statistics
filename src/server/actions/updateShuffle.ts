@@ -98,7 +98,7 @@ const capitalizeAndFormatString = (str: string | undefined): string => {
         .join(' ');
 };
 
-export const updateShuffle = async (region: 'eu' | 'us'): Promise<void> => {
+export const updateShuffle = async (region: 'eu' | 'us' , half: string): Promise<void> => {
     const isEU = region === 'eu';
     const table = isEU ? euShuffleLeaderboard : usShuffleLeaderboard;
     const regionParams = isEU ? {
@@ -108,12 +108,15 @@ export const updateShuffle = async (region: 'eu' | 'us'): Promise<void> => {
         namespace: 'dynamic-us',
         locale: 'en_US'
     };
+    
+    const middleIndex = Math.ceil(classesSpecs.length / 2);
+    const selectedSpecs = half === 'first' ? classesSpecs.slice(0, middleIndex) : classesSpecs.slice(middleIndex);
 
     try {
         const authToken = await getAuthToken(false);
         const requests: Promise<void>[] = [];
 
-        for (const { class: characterClass, specs } of classesSpecs) {
+        for (const { class: characterClass, specs } of selectedSpecs) {
             for (const spec of specs) {
                 const apiEndpoint = `https://${region}.api.blizzard.com/data/wow/pvp-season/37/pvp-leaderboard/shuffle-${characterClass}-${spec}`;
                 console.log(`Fetching shuffle leaderboard data for ${region} ${characterClass} ${spec}...`)
@@ -172,7 +175,7 @@ export const updateShuffle = async (region: 'eu' | 'us'): Promise<void> => {
         if (axios.isAxiosError(error) && error.response?.status === 401) {
             console.log('Token expired, refreshing token and retrying the request...');
             await getAuthToken(true);
-            return updateShuffle(region);
+            return updateShuffle(region, half);
         }
 
     }

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { updateShuffle } from '~/server/actions/updateShuffle';
+import { getExtraDataForEachPlayer } from '~/server/actions/getExtraDataForEachPlayer';
+
 export const maxDuration = 300;
 export const dynamic = 'force-dynamic';
 
@@ -12,13 +13,16 @@ export async function GET(req: NextRequest) {
         });
     }
 
-    try { 
+    try {
+        console.log('Getting extra data for classic 2v2.');
 
-        console.log('Running update eu shuffle');
-        await updateShuffle('eu')
+        await getExtraDataForEachPlayer('classic', 'eu', '2v2');
+        await getExtraDataForEachPlayer('classic', 'us', '2v2');
         
-        console.log('Finished updating eu shuffle');
-        return NextResponse.json({ message: 'Finished updating eu shuffle' });
+      
+
+        console.log('Finished getting extra data for classic 2v2.');
+        return NextResponse.json({ message: 'Scheduled tasks completed.' });
     } catch (error) {
         console.error('Error running scheduled tasks:', error);
         return NextResponse.json({ error: 'Error running scheduled tasks.' }, { status: 500 });

@@ -14,11 +14,12 @@ export async function GET(req: NextRequest) {
     }
 
     try {
-        console.log('Getting extra data for us classic 2v2.');
-         
-        await getExtraDataForEachPlayer('classic', 'us', '2v2');
-             
-        console.log('Fishing getting extra data for us classic 2v2.');
+        console.log('Getting extra data for classic rbg.');
+
+        await getExtraDataForEachPlayer('classic', 'eu', 'rbg');
+        await getExtraDataForEachPlayer('classic', 'us', 'rbg');
+        
+        console.log('Finished getting extra data for classic rbg.');
         return NextResponse.json({ message: 'Scheduled tasks completed.' });
     } catch (error) {
         console.error('Error running scheduled tasks:', error);
