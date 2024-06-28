@@ -20,6 +20,7 @@
     "@vercel/postgres": "^0.8.0",
     "axios": "^1.7.2",
     "chart.js": "^4.4.3",
+    "chartjs-adapter-date-fns": "^3.0.0",
     "cheerio": "1.0.0-rc.12",
     "drizzle-orm": "^0.30.10",
     "next": "^14.2.3",
