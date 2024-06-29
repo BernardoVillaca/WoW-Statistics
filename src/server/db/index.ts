@@ -5,9 +5,9 @@ import { updateLeaderboard } from '../actions/updateLeaderboard';
 
 export const db = drizzle(sql, { schema });
 
-let first = true;
+// let first = true;
 
-if(first) {
-    await updateLeaderboard('retail','us', '3v3');
-    first = false;
-}
+// if(first) {
+//     await updateLeaderboard('retail','us', '3v3');
+//     first = false;
+// }
