@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { db } from '~/server/db';
 import { getAuthToken } from '~/server/actions/getAuthToken';
-import { eq } from 'drizzle-orm/expressions';
+import { and, eq } from 'drizzle-orm/expressions';
 import type {
     BracketMapping,
     RegionMapping,
@@ -167,13 +167,30 @@ const handleDataInsert = async (formattedData: LeaderboardEntry, table: Leaderbo
         const existingRecord = await db
             .select()
             .from(table)
-            .where(eq((table as typeof eu3v3Leaderboard).character_id, formattedData.character_id))
-            .limit(1);
+            .where(and(
+                eq(table.character_name, formattedData.character_name),
+                eq(table.realm_slug, formattedData.realm_slug),
+            ));
         if (existingRecord.length === 0) {
             await db.insert(table).values(formattedData);
             return;
         }
 
+        if (existingRecord.length > 1) {
+            console.log('Multiple entries found for', formattedData.character_name, formattedData.realm_slug);
+            // Delete duplicates
+            await db
+                .delete(table)             
+                .where(and(
+                    eq(table.character_name, formattedData.character_name),
+                    eq(table.realm_slug, formattedData.realm_slug),
+                ));
+            
+            // Reinsert the formattedData as a fresh entry
+            await db.insert(table).values(formattedData);
+            return;
+        }
+        
         const existingEntry = existingRecord[0] as LeaderboardEntry;
         if (!existingEntry) {
             return;
@@ -214,7 +231,10 @@ const handleDataInsert = async (formattedData: LeaderboardEntry, table: Leaderbo
 
     }
     try {
-        await db.update(table).set(updateData).where(eq((table as typeof eu3v3Leaderboard).character_id, formattedData.character_id));
+        await db.update(table).set(updateData).where(and(
+            eq(table.character_name, formattedData.character_name),
+            eq(table.realm_slug, formattedData.realm_slug),
+        ));
     } catch (error) {
         console.log('Error updating leaderboard data:', (error as Error).message);
     }

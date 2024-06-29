@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { db } from '~/server/db';
 import { getAuthToken } from '~/server/actions/getAuthToken';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import type {
     LeaderboardParams,
     BracketMapping,
@@ -117,7 +117,11 @@ const updateCharacterData = async (
                     character_spec: specName,  
                     character_class: characterData.character_class.name,
                 })
-                .where(eq(table.character_id, characterId));
+                .where(and(
+                    eq(table.character_name, characterName),
+                    eq(table.realm_slug, realmSlug)
+                
+                ));
         } else if (version === 'retail') {
             const playerArmoryData = await scrapPlayerArmory(characterName, realmSlug, armoryEndpoint);
             if (playerArmoryData) {
@@ -127,7 +131,11 @@ const updateCharacterData = async (
                         character_spec: characterSpec,
                         character_class: characterClass,
                     })
-                    .where(eq(table.character_id, characterId));
+                    .where(and(
+                        eq(table.character_name, characterName),
+                        eq(table.realm_slug, realmSlug)
+                    
+                    ));
                 return;
             }
             console.log(`Deleting ${characterName} on realm: ${realmSlug}`);
