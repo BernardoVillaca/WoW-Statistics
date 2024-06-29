@@ -26,6 +26,7 @@ import retribution_paladin from '../../assets/Classes/Paladin/retribution_paladi
 import discipline_priest from '../../assets/Classes/Priest/discipline_priest_spec.jpg';
 import holy_priest from '../../assets/Classes/Priest/holy_priest_spec.jpg';
 import shadow_priest from '../../assets/Classes/Priest/shadow_priest_spec.jpg';
+import combat_rogue from '../../assets/Classes/Rogue/combat_rogue_spec.jpg';
 import assassination_rogue from '../../assets/Classes/Rogue/assassination_rogue_spec.jpg';
 import outlaw_rogue from '../../assets/Classes/Rogue/outlaw_rogue_spec.jpg';
 import subtlety_rogue from '../../assets/Classes/Rogue/subtlety_rogue_spec.jpg';
@@ -69,6 +70,7 @@ const specIconsMap = {
     'Discipline Priest': discipline_priest,
     'Holy Priest': holy_priest,
     'Shadow Priest': shadow_priest,
+    'Combat Rogue': combat_rogue,
     'Assassination Rogue': assassination_rogue,
     'Outlaw Rogue': outlaw_rogue,
     'Subtlety Rogue': subtlety_rogue,

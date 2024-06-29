@@ -33,6 +33,7 @@ export const classStatisticsMap: ClassStatisticsMap = {
     'Rogue': {
         'Allspecs': { totalCount: 0, countAbove2800: 0, countAbove2600: 0, countAbove2400: 0, countAbove2200: 0, countAbove2000: 0, countAbove1800: 0, countAbove1600: 0 },
         'Assassination': { totalCount: 0, countAbove2800: 0, countAbove2600: 0, countAbove2400: 0, countAbove2200: 0, countAbove2000: 0, countAbove1800: 0, countAbove1600: 0 },
+        'Combat': { totalCount: 0, countAbove2800: 0, countAbove2600: 0, countAbove2400: 0, countAbove2200: 0, countAbove2000: 0, countAbove1800: 0, countAbove1600: 0 }, 
         'Outlaw': { totalCount: 0, countAbove2800: 0, countAbove2600: 0, countAbove2400: 0, countAbove2200: 0, countAbove2000: 0, countAbove1800: 0, countAbove1600: 0 },
         'Subtlety': { totalCount: 0, countAbove2800: 0, countAbove2600: 0, countAbove2400: 0, countAbove2200: 0, countAbove2000: 0, countAbove1800: 0, countAbove1600: 0 }
     },
