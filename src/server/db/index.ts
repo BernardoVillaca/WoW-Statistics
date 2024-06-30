@@ -6,9 +6,9 @@ import { updateShuffle } from '../actions/updateShuffle';
 
 export const db = drizzle(sql, { schema });
 
-let first = true;
+// let first = true;
 
-if(first) {
-   await updateShuffle('us', 2);
-    first = false;
-}
+// if(first) {
+//    await updateShuffle('us', 2);
+//     first = false;
+// }
