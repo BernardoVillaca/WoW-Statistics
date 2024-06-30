@@ -9,6 +9,6 @@ export const db = drizzle(sql, { schema });
 // let first = true;
 
 // if(first) {
-//    await updateShuffle('us', 2);
+//    await updateLeaderboard('retail', 'us', '3v3');
 //     first = false;
 // }

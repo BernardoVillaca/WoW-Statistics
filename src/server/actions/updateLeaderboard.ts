@@ -226,8 +226,7 @@ const handleDataInsert = async (formattedData: LeaderboardEntry, table: Leaderbo
             }
 
         }
-    } catch (error) {
-        console.log('Error fetching existing data', (error as Error).message);
+   
 
     }
     try {
