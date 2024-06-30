@@ -5,19 +5,35 @@
             "schedule": "0 */2 * * *"
         },
         {
-            "path": "/api/cronJobs/updateDb/updateUsShuffleFirstHalf",
+            "path": "/api/cronJobs/updateDb/updateUsShuffle1",
             "schedule": "3 */2 * * *"
         },
         {
-            "path": "/api/cronJobs/updateDb/updateUsShuffleSecondHalf",
+            "path": "/api/cronJobs/updateDb/updateUsShuffle2",
             "schedule": "6 */2 * * *"
         },
         {
-            "path": "/api/cronJobs/updateDb/updateEuShuffleFirstHalf",
+            "path": "/api/cronJobs/updateDb/updateUsShuffle3",
+            "schedule": "3 */2 * * *"
+        },
+        {
+            "path": "/api/cronJobs/updateDb/updateUsShuffle4",
+            "schedule": "6 */2 * * *"
+        },
+        {
+            "path": "/api/cronJobs/updateDb/updateEuShuffle1",
             "schedule": "9 */2 * * *"
         },
         {
-            "path": "/api/cronJobs/updateDb/updateEuShuffleSecondHalf",
+            "path": "/api/cronJobs/updateDb/updateEuShuffle2",
+            "schedule": "12 */2 * * *"
+        },
+        {
+            "path": "/api/cronJobs/updateDb/updateEuShuffle3",
+            "schedule": "9 */2 * * *"
+        },
+        {
+            "path": "/api/cronJobs/updateDb/updateEuShuffle4",
             "schedule": "12 */2 * * *"
         },
         {

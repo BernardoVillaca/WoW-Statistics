@@ -14,11 +14,11 @@ export async function GET(req: NextRequest) {
 
     try { 
 
-        console.log('Running update us shuffle first half');
-        await updateShuffle('us', 'first')
+        console.log('Running update us shuffle forth quarter');
+        await updateShuffle('us', 4)
         
         console.log('Finished updating us shuffle');
-        return NextResponse.json({ message: 'Finished updating us shuffle first half' });
+        return NextResponse.json({ message: 'Finished updating us shuffle forth quarter' });
     } catch (error) {
         console.error('Error running scheduled tasks:', error);
         return NextResponse.json({ error: 'Error running scheduled tasks.' }, { status: 500 });

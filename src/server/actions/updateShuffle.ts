@@ -98,7 +98,7 @@ const capitalizeAndFormatString = (str: string | undefined): string => {
         .join(' ');
 };
 
-export const updateShuffle = async (region: 'eu' | 'us' , half: string): Promise<void> => {
+export const updateShuffle = async (region: 'eu' | 'us' , part: number): Promise<void> => {
     const isEU = region === 'eu';
     const table = isEU ? euShuffleLeaderboard : usShuffleLeaderboard;
     const regionParams = isEU ? {
@@ -109,9 +109,7 @@ export const updateShuffle = async (region: 'eu' | 'us' , half: string): Promise
         locale: 'en_US'
     };
     
-    const middleIndex = Math.ceil(classesSpecs.length / 2);
-    const selectedSpecs = half === 'first' ? classesSpecs.slice(0, middleIndex) : classesSpecs.slice(middleIndex);
-
+    const selectedSpecs = classesSpecs.slice((part - 1) * 4, part * 4);
     try {
         const authToken = await getAuthToken(false);
         const requests: Promise<void>[] = [];
@@ -175,7 +173,7 @@ export const updateShuffle = async (region: 'eu' | 'us' , half: string): Promise
         if (axios.isAxiosError(error) && error.response?.status === 401) {
             console.log('Token expired, refreshing token and retrying the request...');
             await getAuthToken(true);
-            return updateShuffle(region, half);
+            return updateShuffle(region, part);
         }
 
     }
