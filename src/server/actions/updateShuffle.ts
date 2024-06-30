@@ -109,7 +109,7 @@ export const updateShuffle = async (region: 'eu' | 'us' , part: number): Promise
         locale: 'en_US'
     };
     
-    const selectedSpecs = classesSpecs.slice((part - 1) * 4, part * 4);
+    const selectedSpecs = classesSpecs.slice((part - 1) * 3, part * 3);
     try {
         const authToken = await getAuthToken(false);
         const requests: Promise<void>[] = [];
