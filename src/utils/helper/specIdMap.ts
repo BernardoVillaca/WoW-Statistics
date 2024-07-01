@@ -54,7 +54,7 @@ export const specIdMap: Record<number, SpecInfo> = {
     72: { name: 'fury_warrior_cutoff', class: 'Warrior', spec: 'Fury' },
     73: { name: 'protection_warrior_cutoff', class: 'Warrior', spec: 'Protection' },
   
-    1467: { name: 'preservation_evoker_cutoff', class: 'Evoker', spec: 'Preservation' },
+    1467: { name: 'devastation_evoker_cutoff', class: 'Evoker', spec: 'Devastation' },
+    1468: { name: 'preservation_evoker_cutoff', class: 'Evoker', spec: 'Preservation' },
     1473: { name: 'augmentation_evoker_cutoff', class: 'Evoker', spec: 'Augmentation' },
-    1477: { name: 'devastation_evoker_cutoff', class: 'Evoker', spec: 'Devastation' },
   };

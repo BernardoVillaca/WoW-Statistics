@@ -54,7 +54,7 @@ const ActivityChart = ({ localActivityData }: { localActivityData: ActivityStati
     <div className='flex flex-col w-full h-full pt-2 gap-4'>
       <div className='flex h-10 w-full items-center place-content-center bg-gray-800 rounded-xl px-2'>
         <div className='flex w-1/3'>
-          <span>Total Active Players: {total}</span>
+          <span>Total Active Characters: {total}</span>
         </div>
         <div className='flex w-1/3 items-center place-content-center'>
           <span>Activity</span>
