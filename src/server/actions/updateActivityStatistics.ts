@@ -28,6 +28,7 @@ export const updateActivityStatistics = async () => {
         created_at: now,
     };
 
+    console.log('Updating activity statistics');
     for (const [key, { column, table }] of Object.entries(leaderboardTablesMap)) {
         // Initialize counts for active players
         let total24h = 0;

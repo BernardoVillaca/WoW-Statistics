@@ -16,7 +16,7 @@ export const updateClassSpecCount = async () => {
 
       
     };
-
+    console.log('Updating class spec statistics')
     for (const [key, { column, table }] of Object.entries(leaderboardTablesMap)) {
         // Create a new map for the current loop iteration
         const currentClassStatisticsMap: ClassStatisticsMap = {};
@@ -27,8 +27,40 @@ export const updateClassSpecCount = async () => {
             if (!row.character_class || !row.character_spec || !row.rating) {
                 continue;
             }
+
+
+            
             const className = row.character_class;
             const specName = row.character_spec;
+
+             // Initialize the class and spec objects if they don't exist
+             if (!currentClassStatisticsMap[className]) {
+                currentClassStatisticsMap[className] = {
+                    AllSpecs: {
+                        totalCount: 0,
+                        countAbove2800: 0,
+                        countAbove2600: 0,
+                        countAbove2400: 0,
+                        countAbove2200: 0,
+                        countAbove2000: 0,
+                        countAbove1800: 0,
+                        countAbove1600: 0
+                    }
+                };
+            }
+
+            if (!currentClassStatisticsMap![className]![specName]) {
+                currentClassStatisticsMap![className]![specName] = {
+                    totalCount: 0,
+                    countAbove2800: 0,
+                    countAbove2600: 0,
+                    countAbove2400: 0,
+                    countAbove2200: 0,
+                    countAbove2000: 0,
+                    countAbove1800: 0,
+                    countAbove1600: 0
+                };
+            }
             
             // Update the total count
             currentClassStatisticsMap[className]![specName]!.totalCount += 1;
