@@ -77,6 +77,7 @@ export const classColors: Record<string, string> = {
   'Evoker': '#33937F',
   'Augmentation Evoker': '#33937F',
   'Preservation Evoker': '#33937F',
+  'Devastation Evoker': '#33937F ',
 
   'Arena 3v3': '#CD7F32',
   'Rbg Alliance': '#0057B7',

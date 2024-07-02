@@ -112,13 +112,12 @@ const RatingCutoffs = () => {
     };
   };
 
-
-
   const onClickHandler = async (key: string, region: string) => {
     setSelectedKey(key);
     setIsOpen(true);
     setLoading(true);
     setSelectedRegion(region);
+    setChartData(null);
 
     if (historyData.length === 0) {
       const response = await axios.get<{ history: HistoryEntry[] }>(`/api/getRatingCutoffs?history=true`);
@@ -127,13 +126,21 @@ const RatingCutoffs = () => {
 
   };
 
+  const oncloseHandler = () => {
+    setIsOpen(false);
+    setSelectedKey(null);
+    setSelectedRegion(null);
+
+  }
+
   useEffect(() => {
     if (selectedKey && historyData.length > 0) {
-      const data = getChartData(selectedKey, selectedRegion);  // Assuming 'us' as the region for example
+      const data = getChartData(selectedKey, selectedRegion);
+      console.log(data);
       setChartData(data);
       setLoading(false);
     }
-  }, [selectedKey, historyData]);
+  }, [selectedKey, historyData, selectedRegion]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -171,7 +178,7 @@ const RatingCutoffs = () => {
       {isOpen && selectedKey && (
         <div
           className='fixed flex top-0 right-0 flex-col w-full h-full bg-black/40 items-center place-content-center'
-          onClick={() => setIsOpen(false)}
+          onClick={() => oncloseHandler()}
         >
           <div
             className='flex flex-col  bg-gray-800 p-2 rounded-xl '
@@ -189,7 +196,7 @@ const RatingCutoffs = () => {
                   </div>
                   <button
                     className='text-2xl text-gray-300 select-none'
-                    onClick={() => setIsOpen(false)}
+                    onClick={() => oncloseHandler()}
                   >
                     <FiX />
                   </button>

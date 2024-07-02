@@ -13,5 +13,6 @@ export const db = drizzle(sql, { schema });
 
 // if(first) {
 //     await updateClassSpecCount();
+//     await updateActivityStatistics();
 //     first = false;
 // }
