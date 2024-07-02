@@ -13,11 +13,9 @@ type OverallClassSpecStatisticsData = {
 export const updateClassSpecCount = async () => {
     const overallClassSpecStatisticsData: OverallClassSpecStatisticsData = {
         created_at: new Date()
-
-      
     };
     console.log('Updating class spec statistics')
-    for (const [key, { column, table }] of Object.entries(leaderboardTablesMap)) {
+    for (const { column, table } of Object.values(leaderboardTablesMap)) {
         // Create a new map for the current loop iteration
         const currentClassStatisticsMap: ClassStatisticsMap = {};
 
@@ -28,13 +26,11 @@ export const updateClassSpecCount = async () => {
                 continue;
             }
 
-
-            
             const className = row.character_class;
             const specName = row.character_spec;
 
-             // Initialize the class and spec objects if they don't exist
-             if (!currentClassStatisticsMap[className]) {
+            // Initialize the class and spec objects if they don't exist
+            if (!currentClassStatisticsMap[className]) {
                 currentClassStatisticsMap[className] = {
                     AllSpecs: {
                         totalCount: 0,
@@ -49,7 +45,9 @@ export const updateClassSpecCount = async () => {
                 };
             }
 
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
             if (!currentClassStatisticsMap![className]![specName]) {
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
                 currentClassStatisticsMap![className]![specName] = {
                     totalCount: 0,
                     countAbove2800: 0,
@@ -61,39 +59,55 @@ export const updateClassSpecCount = async () => {
                     countAbove1600: 0
                 };
             }
-            
+
             // Update the total count
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
             currentClassStatisticsMap[className]![specName]!.totalCount += 1;
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
             currentClassStatisticsMap[className]!.AllSpecs!.totalCount += 1;
 
             // Update the counts based on rating thresholds
             const rating = row.rating;
             if (rating >= 2800) {
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
                 currentClassStatisticsMap[className]![specName]!.countAbove2800 += 1;
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
                 currentClassStatisticsMap[className]!.AllSpecs!.countAbove2800 += 1;
             }
             if (rating >= 2600) {
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
                 currentClassStatisticsMap[className]![specName]!.countAbove2600 += 1;
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
                 currentClassStatisticsMap[className]!.AllSpecs!.countAbove2600 += 1;
             }
             if (rating >= 2400) {
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
                 currentClassStatisticsMap[className]![specName]!.countAbove2400 += 1;
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
                 currentClassStatisticsMap[className]!.AllSpecs!.countAbove2400 += 1;
             }
             if (rating >= 2200) {
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
                 currentClassStatisticsMap[className]![specName]!.countAbove2200 += 1;
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
                 currentClassStatisticsMap[className]!.AllSpecs!.countAbove2200 += 1;
             }
             if (rating >= 2000) {
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
                 currentClassStatisticsMap[className]![specName]!.countAbove2000 += 1;
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
                 currentClassStatisticsMap[className]!.AllSpecs!.countAbove2000 += 1;
             }
             if (rating >= 1800) {
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
                 currentClassStatisticsMap[className]![specName]!.countAbove1800 += 1;
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
                 currentClassStatisticsMap[className]!.AllSpecs!.countAbove1800 += 1;
             }
             if (rating >= 1600) {
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
                 currentClassStatisticsMap[className]![specName]!.countAbove1600 += 1;
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
                 currentClassStatisticsMap[className]!.AllSpecs!.countAbove1600 += 1;
             }
         }
@@ -105,7 +119,7 @@ export const updateClassSpecCount = async () => {
     // Insert all data at once
     try {
         await db.insert(classSpecStatistics).values(overallClassSpecStatisticsData);
-        
+
         console.log('Successfully updated class spec statistics');
     } catch (error) {
         console.error('Error updating class spec statistics:', error);
