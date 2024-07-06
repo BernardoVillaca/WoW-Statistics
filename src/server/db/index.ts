@@ -6,12 +6,14 @@ import { updateShuffle } from '../actions/updateShuffle';
 import { updateClassSpecCount } from '../actions/updateClassSpecCount';
 import { updateRatingsCutoffs } from '../actions/updateRatingsCutoffs';
 import { updateActivityStatistics } from '../actions/updateActivityStatistics';
+import { deleteActivePlayers } from '../actions/deleteActivePlayers';
+
 
 export const db = drizzle(sql, { schema });
 
-// let first = true;
+let first = true;
 
-// if (first) {
-//     await updateLeaderboard('classic', 'eu', '3v3'); 
-//     first = false;
-// }
+if (first) {
+    await deleteActivePlayers();
+    first = false;
+}

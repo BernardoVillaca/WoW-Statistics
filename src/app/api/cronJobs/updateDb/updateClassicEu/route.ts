@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { deleteActivePlayers } from '~/server/actions/deleteActivePlayers';
 import { updateLeaderboard } from '~/server/actions/updateLeaderboard';
 export const maxDuration = 300;
 export const dynamic = 'force-dynamic';
@@ -18,6 +19,8 @@ export async function GET(req: NextRequest) {
         await updateLeaderboard('classic', 'eu', '3v3');
         await updateLeaderboard('classic', 'eu', '2v2');
         await updateLeaderboard('classic', 'eu', 'rbg');
+        // Deleting here since its the last update db cron job
+        await deleteActivePlayers();
         
         console.log('Finished updating classic eu tables tasks');
         return NextResponse.json({ message: 'Finished updating classic eu tables tasks' });
