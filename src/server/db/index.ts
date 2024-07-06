@@ -11,9 +11,9 @@ import { deleteActivePlayers } from '../actions/deleteActivePlayers';
 
 export const db = drizzle(sql, { schema });
 
-let first = true;
+// let first = true;
 
-if (first) {
-    await deleteActivePlayers();
-    first = false;
-}
+// if (first) {
+//     await deleteActivePlayers();
+//     first = false;
+// }
