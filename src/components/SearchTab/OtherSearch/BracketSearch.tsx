@@ -28,7 +28,7 @@ const BracketSearch = ({partofLeadeboard} : {partofLeadeboard: boolean}) => {
     }, [bracket]);
 
     return (
-        <div className={`flex text-black items-center justify-center ${partofLeadeboard ? 'w-1/5 border-[1px]' : ''}  rounded-lg gap-8  border-gray-700`}>
+        <div className={`flex text-black items-center justify-center ${partofLeadeboard ? 'w-1/5 border-[1px]' : 'w-[400px]'}  rounded-lg gap-8  border-gray-700`}>
             <button
                 className={`flex text-gray-300 border-[1px] ${bracket === '3v3' ? 'border-blue-500' : 'border-gray-300'}  rounded-full w-12 h-12 items-center justify-center`}
                 onClick={() => handleClick('3v3')}

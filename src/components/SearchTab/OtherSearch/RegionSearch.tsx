@@ -29,7 +29,7 @@ const RegionSearch = ({partofLeadeboard} : {partofLeadeboard: boolean}) => {
     }, [region]);
 
     return (
-        <div className={`flex text-black items-center justify-center ${partofLeadeboard ? 'w-1/5 border-[1px]' : ''} rounded-lg gap-8  border-gray-700`}>
+        <div className={`flex text-black items-center justify-center ${partofLeadeboard ? 'w-1/5 border-[1px]' : 'w-[400px]'} rounded-lg gap-8  border-gray-700`}>
             <div
                 className={`cursor-pointer rounded-full w-12 h-12 items-center justify-center ${region === 'us' ? 'border-2 border-blue-500' : ''}`}
                 onClick={() => handleClick('us')}

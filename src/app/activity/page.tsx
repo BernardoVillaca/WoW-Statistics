@@ -98,7 +98,9 @@ const Activity = () => {
       setChartData(chartData);
       setLoading(false);
     }
-  }, [queryParams]);
+  }, [queryParams, data]);
+  
+  const params = getQueryParams();
 
   return (
     <main className="flex flex-col min-h-screen bg-gradient-to-b from-[#000080] to-black text-white relative gap-4 py-2">
@@ -107,9 +109,12 @@ const Activity = () => {
         <VersionSearch />
         <BracketSearch partofLeadeboard={false} />
       </div>
-      <div className='flex w-full h-[600px] bg-gray-800 rounded-xl justify-between items-center place-content-center'>
+      <div className='flex items-center place-content-center'>
+        {params.version} {params.region} {params.bracket }
+      </div>
+      <div className='flex w-full bg-gray-800 rounded-xl justify-between items-center place-content-center'>
         {loading ? (
-          <div className='flex items-center place-content-center w-full'>
+          <div className='flex items-center place-content-center w-full h-[640px]'>
             <FiLoader className="animate-spin text-gray-300" size={50} />
           </div>
         ) : (

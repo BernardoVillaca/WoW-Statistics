@@ -8,13 +8,14 @@ import type {
     VersionMapping
 } from '~/utils/helper/versionRegionBracketMapping';
 import { versionRegionBracketMapping } from '~/utils/helper/versionRegionBracketMapping';
-import type {
-    eu3v3Leaderboard, eu2v2Leaderboard, euRBGLeaderboard,
-    us3v3Leaderboard, us2v2Leaderboard, usRBGLeaderboard,
-    classicUs3v3Leaderboard, classicUs2v2Leaderboard, classicUsRBGLeaderboard,
-    classicEu2v2Leaderboard, classicEu3v3Leaderboard, classicEuRBGLeaderboard,
-    usShuffleLeaderboard,
-    euShuffleLeaderboard
+import {
+    type eu3v3Leaderboard, type eu2v2Leaderboard, type euRBGLeaderboard,
+    type us3v3Leaderboard, type us2v2Leaderboard, type usRBGLeaderboard,
+    type classicUs3v3Leaderboard, type classicUs2v2Leaderboard, type classicUsRBGLeaderboard,
+    type classicEu2v2Leaderboard, type classicEu3v3Leaderboard, type classicEuRBGLeaderboard,
+    type usShuffleLeaderboard,
+    type euShuffleLeaderboard,
+    currentActivePlayers
 } from '~/server/db/schema';
 
 interface HistoryEntry {
@@ -132,7 +133,7 @@ export const updateLeaderboard = async (version: keyof VersionMapping, region: k
 
             for (const data of formattedData) {
                 if (table !== null) {
-                    requests.push(handleDataInsert(data, table));
+                    requests.push(handleDataInsert(data, table, region, version, bracket));
                 }
 
                 if (requests.length >= 100) {
@@ -159,7 +160,7 @@ export const updateLeaderboard = async (version: keyof VersionMapping, region: k
     }
 };
 
-const handleDataInsert = async (formattedData: LeaderboardEntry, table: LeaderboardTable): Promise<void> => {
+const handleDataInsert = async (formattedData: LeaderboardEntry, table: LeaderboardTable, region: string, version: string, bracket: string): Promise<void> => {
 
     let updateData: LeaderboardEntry = { ...formattedData };
 
@@ -180,22 +181,19 @@ const handleDataInsert = async (formattedData: LeaderboardEntry, table: Leaderbo
             console.log('Multiple entries found for', formattedData.character_name, formattedData.realm_slug);
             // Delete duplicates
             await db
-                .delete(table)             
+                .delete(table)
                 .where(and(
                     eq(table.character_name, formattedData.character_name),
                     eq(table.realm_slug, formattedData.realm_slug),
                 ));
-            
+
             // Reinsert the formattedData as a fresh entry
             await db.insert(table).values(formattedData);
             return;
         }
-        
-        const existingEntry = existingRecord[0] as LeaderboardEntry;
-        if (!existingEntry) {
-            return;
-        }
 
+        const existingEntry = existingRecord[0] as LeaderboardEntry;
+      
         // Preserve existing data in some fields and changed updated_at if played is different
         updateData = {
             ...formattedData,
@@ -208,6 +206,7 @@ const handleDataInsert = async (formattedData: LeaderboardEntry, table: Leaderbo
 
         // If the played value is different, update the history and updated_at
         if (existingEntry.played !== formattedData.played) {
+            console.log('Updating history for', formattedData.character_name, formattedData.realm_slug, '...'   )
             const historyEntry: HistoryEntry = {
                 played: existingEntry.played,
                 won: existingEntry.won,
@@ -230,13 +229,17 @@ const handleDataInsert = async (formattedData: LeaderboardEntry, table: Leaderbo
         console.log('Error fetching existing data', (error as Error).message);
 
     }
+
     try {
         await db.update(table).set(updateData).where(and(
             eq(table.character_name, formattedData.character_name),
             eq(table.realm_slug, formattedData.realm_slug),
         ));
+
+
     } catch (error) {
         console.log('Error updating leaderboard data:', (error as Error).message);
     }
+    
 };
 
