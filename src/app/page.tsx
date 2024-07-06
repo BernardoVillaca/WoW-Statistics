@@ -248,7 +248,7 @@ const Home = () => {
   return (
 
     <main className="flex flex-col min-h-screen bg-gradient-to-b from-[#000080] to-black text-white relative gap-4 py-2">
-      <div className=' h-20 bg-gray-800 flex flex-coljustify-between px-20 '>
+      <div className=' h-20 bg-gray-800 flex flex-coljustify-between px-20 rounded-xl'>
         <RegionSearch partofLeadeboard={false} />
         <VersionSearch />
         <BracketSearch partofLeadeboard={false} />

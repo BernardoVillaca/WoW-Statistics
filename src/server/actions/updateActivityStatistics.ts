@@ -100,7 +100,7 @@ export const updateActivityStatistics = async () => {
                         realm_slug: row.realm_slug
                     });
                 }
-            
+
             }
 
             // 48 hours count
@@ -132,7 +132,7 @@ export const updateActivityStatistics = async () => {
                         realm_slug: row.realm_slug
                     });
                 };
-                
+
             };
 
             // 72 hours count
@@ -164,7 +164,7 @@ export const updateActivityStatistics = async () => {
                         realm_slug: row.realm_slug
                     });
                 };
-               
+
             };
 
             const getTop5 = <T extends { rank?: number; played: number }>(activity: Map<string, T>): Record<string, T> => {
@@ -175,30 +175,30 @@ export const updateActivityStatistics = async () => {
                         .sort((a, b) => b[1].played - a[1].played)
                         .slice(0, 5)
                 );
-            
+
                 // Convert the Map back to an object
                 const result: Record<string, T> = {};
                 top5.forEach((value, key) => {
                     result[key] = value;
                 });
-            
+
                 return result;
             };
-            
 
             // Add the activity statistics for this column to the overall object
             overallActivityStatisticsData[column] = {
                 total24h,
                 total48h,
                 total72h,
-                
+
                 mostActivePlayers24h: getTop5(playerActivity24h),
                 mostActivePlayers48h: getTop5(playerActivity48h),
                 mostActivePlayers72h: getTop5(playerActivity72h),
+                
                 mostActiveSpecs24h: getTop5(specActivity24h),
                 mostActiveSpecs48h: getTop5(specActivity48h),
                 mostActiveSpecs72h: getTop5(specActivity72h),
-                
+
             };
         }
     };

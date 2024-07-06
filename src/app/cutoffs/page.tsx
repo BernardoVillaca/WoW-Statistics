@@ -130,7 +130,6 @@ const RatingCutoffs = () => {
     setIsOpen(false);
     setSelectedKey(null);
     setSelectedRegion(null);
-
   }
 
   useEffect(() => {

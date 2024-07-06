@@ -64,9 +64,10 @@ const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, results
   const [data, setData] = useState<CharacterData[]>([]);
   const [loading, setLoading] = useState(false);
   const [paramsToUse, setParamsToUse] = useState({} as QueryParams);
-  const queryParams = useURLChange();
   const [path, setPath] = useState<string | null>(null);
-
+  
+  const queryParams = useURLChange();
+  
   useEffect(() => {
     if (typeof window !== 'undefined') {
       setPath(window.location.pathname);
