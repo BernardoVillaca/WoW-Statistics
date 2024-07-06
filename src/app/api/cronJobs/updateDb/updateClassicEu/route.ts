@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { deleteActivePlayers } from '~/server/actions/deleteActivePlayers';
+
 import { updateLeaderboard } from '~/server/actions/updateLeaderboard';
 export const maxDuration = 300;
 export const dynamic = 'force-dynamic';
