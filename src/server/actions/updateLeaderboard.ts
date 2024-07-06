@@ -17,6 +17,7 @@ import {
     type euShuffleLeaderboard,
     currentActivePlayers
 } from '~/server/db/schema';
+import { sql } from 'drizzle-orm';
 
 interface HistoryEntry {
     played: number;
@@ -206,7 +207,29 @@ const handleDataInsert = async (formattedData: LeaderboardEntry, table: Leaderbo
 
         // If the played value is different, update the history and updated_at
         if (existingEntry.played !== formattedData.played) {
-            console.log('Updating history for', formattedData.character_name, formattedData.realm_slug, '...'   )
+            // Insert active player data
+            try {
+                const activePlayerData = {
+                    ...updateData,
+                    region: region,
+                    version: version,
+                    bracket: bracket
+                };
+                console.log('Inserting active player data:', activePlayerData);
+                await db.insert(currentActivePlayers).values(activePlayerData);
+            
+                // Calculate the cutoff time for 2 hours ago
+                const twoHoursAgo = new Date(Date.now() - 2 * 60 * 60 * 1000);
+            
+                // Delete records older than 2 hours
+                await db.delete(currentActivePlayers).where(
+                    sql`${currentActivePlayers.created_at} < ${twoHoursAgo.toISOString()}`
+                );            
+                console.log('Deleted records older than 2 hours');
+            } catch (error) {
+                console.log('Error inserting active player data:', (error as Error).message);
+            }
+
             const historyEntry: HistoryEntry = {
                 played: existingEntry.played,
                 won: existingEntry.won,
