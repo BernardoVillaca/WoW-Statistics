@@ -217,15 +217,7 @@ const handleDataInsert = async (formattedData: LeaderboardEntry, table: Leaderbo
                 };
                 console.log('Inserting active player data:', activePlayerData);
                 await db.insert(currentActivePlayers).values(activePlayerData);
-            
-                // Calculate the cutoff time for 2 hours ago
-                const twoHoursAgo = new Date(Date.now() - 2 * 60 * 60 * 1000);
-            
-                // Delete records older than 2 hours
-                await db.delete(currentActivePlayers).where(
-                    sql`${currentActivePlayers.created_at} < ${twoHoursAgo.toISOString()}`
-                );            
-                console.log('Deleted records older than 2 hours');
+                            
             } catch (error) {
                 console.log('Error inserting active player data:', (error as Error).message);
             }

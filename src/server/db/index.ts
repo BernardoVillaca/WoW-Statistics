@@ -12,6 +12,6 @@ export const db = drizzle(sql, { schema });
 // let first = true;
 
 // if (first) {
-//     await updateLeaderboard('retail', 'us', '3v3'); 
+//     await updateLeaderboard('classic', 'eu', '3v3'); 
 //     first = false;
 // }

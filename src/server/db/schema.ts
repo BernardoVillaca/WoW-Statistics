@@ -702,8 +702,10 @@ export const currentActivePlayers = createTable(
     tier_id: integer("tier_id"),
     tier_href: varchar("tier_href", { length: 512 }),
     created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
-    updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),    
+    updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),  
+    history: jsonb("history").default(sql`'[]'::jsonb`)  
   },
+
   (leaderboard) => ({
     currentActivePlayersCharacterNameIndex: index("current_active_players_character_name_idx").on(leaderboard.character_name),
     currentActivePlayersCharacterIdIndex: index("current_active_players_character_id_idx").on(leaderboard.character_id),
