@@ -34,6 +34,10 @@ ChartJS.register(
   TimeScale
 );
 
+type ApiResponse = {
+  activityHistory: HistoryEntry[];
+};
+
 type HistoryEntry = {
   created_at: string;
   [key: string]: { total24h: number } | string;
@@ -65,10 +69,10 @@ const Activity = () => {
 
   useEffect(() => {
     const getData = async () => {
-      const response = await axios.get('/api/getWowStatistics?history=true');
+      const response = await axios.get<ApiResponse>('/api/getWowStatistics?history=true');
       setData(response.data.activityHistory);
     };
-    getData();
+    void getData();
   }, []);
 
   useEffect(() => {
@@ -77,11 +81,14 @@ const Activity = () => {
       const labels = data.map(entry => new Date(entry.created_at));
 
       const values = data.map(entry => {
-        const key = `${params.version}_${params.region}_${params.bracket}`;
-        const value = (entry as any)[key];
-        return typeof value === 'object' && 'total24h' in value ? value.total24h : 0;
+        const key = `${params.version}_${params.region}_${params.bracket}` as keyof HistoryEntry;
+        const value = entry[key];
+        if (typeof value === 'object' && 'total24h' in value) {
+          return (value as { total24h: number }).total24h;
+        }
+        return 0;
       });
-      const randomColor= getRandomColor();
+      const randomColor = getRandomColor();
       const chartData = {
         labels,
         datasets: [
@@ -99,7 +106,7 @@ const Activity = () => {
       setLoading(false);
     }
   }, [queryParams, data]);
-  
+
   const params = getQueryParams();
 
   return (
@@ -110,7 +117,7 @@ const Activity = () => {
         <BracketSearch partofLeadeboard={false} />
       </div>
       <div className='flex items-center place-content-center'>
-        {params.version} {params.region} {params.bracket }
+        {params.version} {params.region} {params.bracket}
       </div>
       <div className='flex w-full bg-gray-800 rounded-xl justify-between items-center place-content-center'>
         {loading ? (
