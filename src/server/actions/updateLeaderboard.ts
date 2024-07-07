@@ -18,6 +18,7 @@ import {
     currentActivePlayers
 } from '~/server/db/schema';
 import { sql } from 'drizzle-orm';
+import { deleteActivePlayers } from './deleteActivePlayers';
 
 interface HistoryEntry {
     played: number;
@@ -159,6 +160,14 @@ export const updateLeaderboard = async (version: keyof VersionMapping, region: k
             return updateLeaderboard(version, region, bracket);
         }
     }
+
+
+    try {
+        await deleteActivePlayers();
+    } catch (error) {
+        console.error('Error deleting old records:', (error as Error).message);
+        
+    }
 };
 
 const handleDataInsert = async (formattedData: LeaderboardEntry, table: LeaderboardTable, region: string, version: string, bracket: string): Promise<void> => {
@@ -194,7 +203,7 @@ const handleDataInsert = async (formattedData: LeaderboardEntry, table: Leaderbo
         }
 
         const existingEntry = existingRecord[0] as LeaderboardEntry;
-      
+
         // Preserve existing data in some fields and changed updated_at if played is different
         updateData = {
             ...formattedData,
@@ -217,10 +226,13 @@ const handleDataInsert = async (formattedData: LeaderboardEntry, table: Leaderbo
                 };
                 console.log('Inserting active player data:', activePlayerData);
                 await db.insert(currentActivePlayers).values(activePlayerData);
-                            
+
             } catch (error) {
                 console.log('Error inserting active player data:', (error as Error).message);
             }
+            const currentTime = new Date();
+            const diffTime = currentTime.getTime() - existingEntry.updated_at.getTime();
+            const diffHours = diffTime / (1000 * 60 * 60);
 
             const historyEntry: HistoryEntry = {
                 played: existingEntry.played,
@@ -234,7 +246,7 @@ const handleDataInsert = async (formattedData: LeaderboardEntry, table: Leaderbo
             let newHistory: HistoryEntry[] = existingEntry.history ?? [];
             newHistory.push(historyEntry);
 
-            // Limit history to 40 entries
+            // Limit history to 40 entries4
             if (newHistory.length > 40) {
                 newHistory = newHistory.slice(newHistory.length - 20);
             }
@@ -255,6 +267,6 @@ const handleDataInsert = async (formattedData: LeaderboardEntry, table: Leaderbo
     } catch (error) {
         console.log('Error updating leaderboard data:', (error as Error).message);
     }
-    
+
 };
 

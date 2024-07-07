@@ -6,7 +6,7 @@ export const deleteActivePlayers = async () => {
     try {
         const twoHoursAgo = new Date(Date.now() - 2 * 60 * 60 * 1000);
         await db.delete(currentActivePlayers).where(sql`${currentActivePlayers.updated_at} < ${twoHoursAgo}`);
-        console.log('Old recordes deleted')
+        console.log('Old records deleted')
     } catch (error) {
         console.error('Error fetching old records:', error);
     }
