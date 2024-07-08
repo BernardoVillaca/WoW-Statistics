@@ -160,13 +160,10 @@ export const updateLeaderboard = async (version: keyof VersionMapping, region: k
             return updateLeaderboard(version, region, bracket);
         }
     }
-
-
     try {
         await deleteActivePlayers();
     } catch (error) {
-        console.error('Error deleting old records:', (error as Error).message);
-        
+        console.error('Error deleting old records:', (error as Error).message);        
     }
 };
 

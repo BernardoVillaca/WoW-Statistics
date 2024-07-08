@@ -5,41 +5,10 @@ import alliance from '../../assets/Factions/alliance.png'
 import { calculateDifference } from '~/utils/helper/calculateDifference';
 import { useSearch } from '../Context/SearchContext';
 import { classColors } from '~/utils/helper/classIconsMap';
+import { LeaderboardCellProps } from './types';
 
 
-type HistoryEntry = {
-  cell: string;
-  value: string | number;
-  updated_at: string;
-};
-
-type CharacterData = {
-  id: string;
-  name: string;
-  character_class: string;
-  character_spec: string;
-  rank: number;
-  history: HistoryEntry[];
-  updated_at: string; 
-  [key: string]: string | number | HistoryEntry[] | undefined;
-};
-
-type LeaderboardCellProps = {
-  str: string;
-  height: number;
-  index: number;
-  cell: string;
-  characterClass: string;
-  characterSpec: string;
-  history: HistoryEntry[];
-  rowIndex: number;
-  path: string | null;
-  characterData: CharacterData
-  legacy: boolean;
-
-};
-
-const LeaderboardCell = ({ str, height, index, cell, characterClass, characterSpec, history, rowIndex, path, characterData, legacy }: LeaderboardCellProps) => {
+const LeaderboardCell = ({ str, height, index, cell, characterClass, characterSpec, history, rowIndex, path, characterData}: LeaderboardCellProps) => {
   const { currentPage, classSearch } = useSearch();  // Added resultsPerPage to calculate the correct rank
   const resultsPerPage = 50;  // Added resultsPerPage to calculate the correct rank
   const specClass = `${characterSpec} ${characterClass}`;

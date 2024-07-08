@@ -1,20 +1,5 @@
-type HistoryEntry = {
-    updated_at: string;
-    rating?: number;
-    rank?: number;
-    played?: number;
-};
+import { CharacterData, HistoryEntry } from "~/components/LeaderboardTable/types";
 
-type CharacterData = {
-    id: string;
-    name: string;
-    character_class: string;
-    character_spec: string;
-    rank: number;
-    history: HistoryEntry[];
-    updated_at: string; 
-    [key: string]: string | number | HistoryEntry[] | undefined;
-}
 
 export const calculateDifference = (history: HistoryEntry[], characterData: CharacterData, cell: string, text: string) => {
     if (!['rating', 'rank', 'played'].includes(cell)) return 0;

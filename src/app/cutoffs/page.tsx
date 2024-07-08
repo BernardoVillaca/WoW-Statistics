@@ -153,7 +153,6 @@ const RatingCutoffs = () => {
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-
         setIsOpen(false);
         setSelectedKey(null);
         setSelectedRegion(null);

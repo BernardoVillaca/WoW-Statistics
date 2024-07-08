@@ -6,57 +6,10 @@ import LeaderboardRow from './LeaderboardRow';
 import axios from 'axios';
 import { useSearch } from '../Context/SearchContext';
 import useURLChange from '~/utils/hooks/useURLChange';
-import { Cutoffs } from '~/utils/helper/ratingCutoffsInterface';
 import RatingsCutoffTab from '../RatingsCutoffTab';
-
-type SearchTab = {
-  name: string;
-};
-
-type CharacterData = {
-  id: string;
-  name: string;
-  character_class: string;
-  character_spec: string;
-  rank: number;
-  updated_at: string;
-  history: HistoryEntry[];
-};
-
-type HistoryEntry = {
-  cell: string;
-  value: string | number;
-  updated_at: string;
-};
-
-type LeaderBoardTableProps = {
-  searchTabs: SearchTab[];
-  resultsPerPage: number;
-  rowHeight: number;
-  legacy: boolean;
-};
-
-type RatingCutoffs = {
-  id: number;
-  eu_cutoffs: Cutoffs;
-  us_cutoffs: Cutoffs
-  classic_us_cutoffs: Cutoffs;
-  classic_eu_cutoffs: Cutoffs;
-
-};
+import { CharacterData, LeaderBoardTableProps, QueryParams, RatingCutoffs } from './types';
 
 
-type QueryParams = {
-  version: string;
-  region: string;
-  bracket: string;
-  page: string | number;
-  search: string | undefined;
-  faction: string | undefined;
-  realm: string | undefined;
-  minRating: number;
-  maxRating: number;
-}
 
 const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, resultsPerPage, rowHeight, legacy }) => {
   const { setResultsCount, setRatingCutoffs, setClassSearch, ratingCutoffs } = useSearch();
@@ -65,9 +18,9 @@ const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, results
   const [loading, setLoading] = useState(false);
   const [paramsToUse, setParamsToUse] = useState({} as QueryParams);
   const [path, setPath] = useState<string | null>(null);
-  
+
   const queryParams = useURLChange();
-  
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       setPath(window.location.pathname);
@@ -161,19 +114,17 @@ const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, results
       ) : (
         <div>
           {data.map((characterData, index) => (
-            true ? (
-              <LeaderboardRow
-                legacy={legacy}
-                ratingCutoffs={ratingCutoffs}
-                queryParams={paramsToUse}
-                path={path}
-                rowIndex={index}
-                key={`${characterData.id}-${index}`}
-                characterData={characterData}
-                searchTabs={searchTabs}
-                rowHeight={rowHeight}
-              />
-            ) : null
+            <LeaderboardRow
+              legacy={legacy}
+              ratingCutoffs={ratingCutoffs}
+              queryParams={paramsToUse}
+              path={path}
+              rowIndex={index}
+              key={`${characterData.character_id}-${index}`}
+              characterData={characterData}
+              searchTabs={searchTabs}
+              rowHeight={rowHeight}
+            />
           ))}
         </div>
       )}

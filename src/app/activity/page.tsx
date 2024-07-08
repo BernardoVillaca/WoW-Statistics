@@ -16,12 +16,16 @@ import {
   ChartData,
 } from 'chart.js';
 import 'chartjs-adapter-date-fns';
-import { SearchProvider } from '~/components/Context/SearchContext';
+import { SearchProvider, useSearch } from '~/components/Context/SearchContext';
 import RegionSearch from '~/components/SearchTab/OtherSearch/RegionSearch';
 import VersionSearch from '~/components/SearchTab/VersionSearch';
 import BracketSearch from '~/components/SearchTab/OtherSearch/BracketSearch';
 import useURLChange from '~/utils/hooks/useURLChange';
 import { FiLoader } from 'react-icons/fi';
+import { searchTabs } from '~/utils/helper/searchTabsMap';
+import LeaderboardRow from '~/components/LeaderboardTable/LeaderboardRow';
+import ScrollTab from '~/components/ScrollTab';
+import { CharacterData } from '~/components/LeaderboardTable/types';
 
 ChartJS.register(
   CategoryScale,
@@ -34,11 +38,16 @@ ChartJS.register(
   TimeScale
 );
 
-type ApiResponse = {
-  activityHistory: HistoryEntry[];
+type WowStatisticsResponse = {
+  activityHistory: ActivityEntry[];
 };
 
-type HistoryEntry = {
+type ActivePlayersResponse = {
+  activePlayers: CharacterData[];
+  total: number;
+};
+
+type ActivityEntry = {
   created_at: string;
   [key: string]: { total24h: number } | string;
 };
@@ -53,9 +62,15 @@ const getRandomColor = () => {
 };
 
 const Activity = () => {
-  const [data, setData] = useState<HistoryEntry[]>([]);
+  const { setResultsCount } = useSearch();
+  const [data, setData] = useState<ActivityEntry[]>([]);
   const [chartData, setChartData] = useState<ChartData<'line'> | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [activePlayers, setActivePlayers] = useState<CharacterData[]>([]);
+
+  const [graphLoading, setGraphLoading] = useState(true);
+  const [activePlayersLoading, setActivePlayersLoading] = useState(true);
+
+
   const queryParams = useURLChange();
 
   const getQueryParams = () => {
@@ -63,17 +78,34 @@ const Activity = () => {
     return {
       version: params.get('version') ?? 'retail',
       region: params.get('region') ?? 'us',
-      bracket: params.get('bracket') ?? '3v3'
+      bracket: params.get('bracket') ?? '3v3',
+      page: params.get('page') ?? 1
     };
   };
 
   useEffect(() => {
     const getData = async () => {
-      const response = await axios.get<ApiResponse>('/api/getWowStatistics?history=true');
+      const response = await axios.get<WowStatisticsResponse>('/api/getWowStatistics?history=true');
       setData(response.data.activityHistory);
     };
     void getData();
   }, []);
+
+  useEffect(() => {
+    const getActivePlayers = async () => {
+      setActivePlayersLoading(true);
+      const params = getQueryParams();
+      const response = await axios.get<ActivePlayersResponse>('/api/get20ActivePlayersResults', {
+        params,
+      });
+      setActivePlayers(response.data.activePlayers);
+      setResultsCount(response.data.total)
+      setActivePlayersLoading(false);
+
+    }
+    void getActivePlayers();
+
+  }, [queryParams]);
 
   useEffect(() => {
     if (data.length > 0) {
@@ -81,7 +113,7 @@ const Activity = () => {
       const labels = data.map(entry => new Date(entry.created_at));
 
       const values = data.map(entry => {
-        const key = `${params.version}_${params.region}_${params.bracket}` as keyof HistoryEntry;
+        const key = `${params.version}_${params.region}_${params.bracket}` as keyof ActivityEntry;
         const value = entry[key];
         if (typeof value === 'object' && 'total24h' in value) {
           return (value as { total24h: number }).total24h;
@@ -103,7 +135,7 @@ const Activity = () => {
       };
 
       setChartData(chartData);
-      setLoading(false);
+      setGraphLoading(false);
     }
   }, [queryParams, data]);
 
@@ -120,7 +152,7 @@ const Activity = () => {
         {params.version} {params.region} {params.bracket}
       </div>
       <div className='flex w-full bg-gray-800 rounded-xl justify-between items-center place-content-center'>
-        {loading ? (
+        {graphLoading ? (
           <div className='flex items-center place-content-center w-full h-[640px]'>
             <FiLoader className="animate-spin text-gray-300" size={50} />
           </div>
@@ -147,6 +179,33 @@ const Activity = () => {
           )
         )}
       </div>
+      <ScrollTab resultsPerPage={10} />
+      <div className='flex w-full flex-col h-[400px] bg-gray-800 rounded-xl'>
+        {activePlayersLoading ? (
+          <div className='flex items-center place-content-center w-full h-[400px]'>
+            <FiLoader className="animate-spin text-gray-300" size={50} />
+          </div>
+        ) : (
+          <>
+            {activePlayers.length > 0 ? (
+              activePlayers.map((player, index) => (
+                <LeaderboardRow
+                  rowIndex={index}
+                  key={`${player.id}-${index}`}
+                  characterData={player}
+                  searchTabs={searchTabs}
+                  rowHeight={40}
+                />
+              ))
+            ) : (
+              <div className='flex items-center place-content-center w-full h-[400px]'>
+                <p className='text-gray-300'>No one is playing. Dead game :(</p>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+
     </main>
   );
 };
