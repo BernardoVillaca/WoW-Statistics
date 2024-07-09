@@ -74,7 +74,7 @@
         },
         {
             "path": "/api/cronJobs/updateStatistics",
-            "schedule": "51 */12 * * *"
+            "schedule": "51 */3 * * *"
         }
     ]
 }
