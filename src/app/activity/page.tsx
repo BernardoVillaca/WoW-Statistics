@@ -43,7 +43,7 @@ type WowStatisticsResponse = {
 };
 
 type ActivePlayersResponse = {
-  activePlayers: CharacterData[];
+  results: CharacterData[];
   total: number;
 };
 
@@ -63,6 +63,7 @@ const getRandomColor = () => {
 
 const Activity = () => {
   const { setResultsCount } = useSearch();
+  const [path, setPath] = useState<string>('');
   const [data, setData] = useState<ActivityEntry[]>([]);
   const [chartData, setChartData] = useState<ChartData<'line'> | null>(null);
   const [activePlayers, setActivePlayers] = useState<CharacterData[]>([]);
@@ -70,12 +71,13 @@ const Activity = () => {
   const [graphLoading, setGraphLoading] = useState(true);
   const [activePlayersLoading, setActivePlayersLoading] = useState(true);
 
-
   const queryParams = useURLChange();
 
   const getQueryParams = () => {
     const params = new URLSearchParams(queryParams ?? '');
     return {
+      resultsPerPage: 10,
+      path: path,
       version: params.get('version') ?? 'retail',
       region: params.get('region') ?? 'us',
       bracket: params.get('bracket') ?? '3v3',
@@ -95,10 +97,11 @@ const Activity = () => {
     const getActivePlayers = async () => {
       setActivePlayersLoading(true);
       const params = getQueryParams();
-      const response = await axios.get<ActivePlayersResponse>('/api/get20ActivePlayersResults', {
+      const response = await axios.get<ActivePlayersResponse>('/api/get50Results', {
         params,
       });
-      setActivePlayers(response.data.activePlayers);
+      console.log(response)
+      setActivePlayers(response.data.results);
       setResultsCount(response.data.total)
       setActivePlayersLoading(false);
 
@@ -106,6 +109,13 @@ const Activity = () => {
     void getActivePlayers();
 
   }, [queryParams]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setPath(window.location.pathname);
+      
+    }
+  }, []);
 
   useEffect(() => {
     if (data.length > 0) {

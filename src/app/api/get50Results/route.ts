@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import { db } from '~/server/db';
 import type { VersionMapping, RegionMapping, BracketMapping } from '~/utils/helper/versionRegionBracketMapping';
 import { versionRegionBracketMapping } from '~/utils/helper/versionRegionBracketMapping';
-import { count, eq, and, gte, lte, or, desc } from 'drizzle-orm';
+import { count, eq, and, gte, lte, or, desc, sql } from 'drizzle-orm';
 import type { SQL } from 'drizzle-orm';
 import { retailLegacyLeaderboard } from '~/server/db/schema';
 
@@ -15,17 +15,16 @@ export async function GET(req: NextRequest) {
   const bracket = (searchParams.get('bracket') ?? '3v3') as keyof BracketMapping;
 
   // Other parameters
+  const resultsperPage = searchParams.has('resultsPerPage') ? Number(searchParams.get('resultsPerPage')) : 50;
+  const pvpSeasonIndex = searchParams.has('pvpSeasonIndex') ? Number(searchParams.get('pvpSeasonIndex')) : 36;
   const path = searchParams.get('path') ?? '';
-  const pvpSeasonIndex = searchParams.has('pvpSeasonIndex')
-    ? Number(searchParams.get('pvpSeasonIndex'))
-    : 36;
   const search = searchParams.get('search') ?? '';
   const faction = searchParams.get('faction') ?? '';
   const realm = searchParams.get('realm') ?? '';
   const minRating = parseInt(searchParams.get('minRating') ?? '0', 10);
   const maxRating = parseInt(searchParams.get('maxRating') ?? '4000', 10);
   const page = parseInt(searchParams.get('page') ?? '1', 10);
-  const limit = 50;
+  const limit = resultsperPage;
   const offset = (page - 1) * limit;
 
   try {
@@ -75,7 +74,13 @@ export async function GET(req: NextRequest) {
       if (pvpSeasonIndex) andConditions.push(eq(retailLegacyLeaderboard.pvp_season_index, pvpSeasonIndex));
       andConditions.push(eq(retailLegacyLeaderboard.bracket, bracket));
       andConditions.push(eq(retailLegacyLeaderboard.region, region));
+    }
 
+    if (path === '/activity' && 'updated_at' in queryTable) {
+      const twoHoursAgo = new Date(Date.now() - 2 * 60 * 60 * 1000); // 2 hours ago
+      const twoHoursAgoISOString = twoHoursAgo.toISOString();
+      andConditions.push(sql`${queryTable.updated_at} >= ${sql.raw(`'${twoHoursAgoISOString}'`)}`);
+      console.log('Filtering for activity, twoHoursAgo:', twoHoursAgoISOString);
     }
 
     if (faction) andConditions.push(eq(queryTable.faction_name, faction.toUpperCase()));

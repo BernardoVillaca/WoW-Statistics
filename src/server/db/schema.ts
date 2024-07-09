@@ -679,45 +679,6 @@ export const classicEuRBGLeaderboard = createTable(
   })
 );
 
-export const currentActivePlayers = createTable(
-  "current_active_players",
-  {
-    id: serial("id").primaryKey(),
-    character_name: varchar("character_name", { length: 256 }),
-    character_id: integer("character_id"),
-    character_class: varchar("character_class", { length: 256 }).default(''),
-    character_spec: varchar("character_spec", { length: 256 }).default(''),
-    version: varchar("version", { length: 256 }),
-    region: varchar("region", { length: 256 }),
-    bracket: varchar("bracket", { length: 256 }),
-    realm_id: integer("realm_id"),
-    realm_slug: varchar("realm_slug", { length: 256 }),
-    faction_name: varchar("faction_name", { length: 256 }),
-    rank: integer("rank"),
-    rating: integer("rating"),
-    played: integer("played"),
-    win_ratio: varchar("win_ratio", { length: 10 }),
-    won: integer("won"),
-    lost: integer("lost"),
-    tier_id: integer("tier_id"),
-    tier_href: varchar("tier_href", { length: 512 }),
-    created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
-    updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),  
-    history: jsonb("history").default(sql`'[]'::jsonb`)  
-  },
-
-  (leaderboard) => ({
-    currentActivePlayersCharacterNameIndex: index("current_active_players_character_name_idx").on(leaderboard.character_name),
-    currentActivePlayersCharacterIdIndex: index("current_active_players_character_id_idx").on(leaderboard.character_id),
-    currentActivePlayersCharacterClassIndex: index("current_active_players_character_class_idx").on(leaderboard.character_class),
-    currentActivePlayersCharacterSpecIndex: index("current_active_players_character_spec_idx").on(leaderboard.character_spec),
-    currentActivePlayersFactionNameIndex: index("current_active_players_faction_name_idx").on(leaderboard.faction_name),
-    currentActivePlayersRankIndex: index("current_active_players_rank_idx").on(leaderboard.rank),
-    currentActivePlayersRatingIndex: index("current_active_players_rating_idx").on(leaderboard.rating),
-    currentActivePlayersPlayedIndex: index("current_active_players_played_idx").on(leaderboard.played),
-    currentActivePlayersWinRatioIndex: index("current_active_players_win_ratio_idx").on(leaderboard.win_ratio)
-  })
-);
 
 
 

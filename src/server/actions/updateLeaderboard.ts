@@ -14,11 +14,10 @@ import {
     type classicUs3v3Leaderboard, type classicUs2v2Leaderboard, type classicUsRBGLeaderboard,
     type classicEu2v2Leaderboard, type classicEu3v3Leaderboard, type classicEuRBGLeaderboard,
     type usShuffleLeaderboard,
-    type euShuffleLeaderboard,
-    currentActivePlayers
+    type euShuffleLeaderboard,   
 } from '~/server/db/schema';
 import { sql } from 'drizzle-orm';
-import { deleteActivePlayers } from './deleteActivePlayers';
+
 
 interface HistoryEntry {
     played: number;
@@ -160,11 +159,7 @@ export const updateLeaderboard = async (version: keyof VersionMapping, region: k
             return updateLeaderboard(version, region, bracket);
         }
     }
-    try {
-        await deleteActivePlayers();
-    } catch (error) {
-        console.error('Error deleting old records:', (error as Error).message);        
-    }
+    
 };
 
 const handleDataInsert = async (formattedData: LeaderboardEntry, table: LeaderboardTable, region: string, version: string, bracket: string): Promise<void> => {
@@ -214,22 +209,7 @@ const handleDataInsert = async (formattedData: LeaderboardEntry, table: Leaderbo
         // If the played value is different, update the history and updated_at
         if (existingEntry.played !== formattedData.played) {
             // Insert active player data
-            try {
-                const activePlayerData = {
-                    ...updateData,
-                    region: region,
-                    version: version,
-                    bracket: bracket
-                };
-                console.log('Inserting active player data:', activePlayerData);
-                await db.insert(currentActivePlayers).values(activePlayerData);
-
-            } catch (error) {
-                console.log('Error inserting active player data:', (error as Error).message);
-            }
-            const currentTime = new Date();
-            const diffTime = currentTime.getTime() - existingEntry.updated_at.getTime();
-            const diffHours = diffTime / (1000 * 60 * 60);
+                 
 
             const historyEntry: HistoryEntry = {
                 played: existingEntry.played,
