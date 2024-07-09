@@ -77,10 +77,9 @@ export async function GET(req: NextRequest) {
     }
 
     if (path === '/activity' && 'updated_at' in queryTable) {
-      const twoHoursAgo = new Date(Date.now() - 2 * 60 * 60 * 1000); // 2 hours ago
+      const twoHoursAgo = new Date(Date.now() - 5 * 60 * 60 * 1000); // 5 hours ago
       const twoHoursAgoISOString = twoHoursAgo.toISOString();
       andConditions.push(sql`${queryTable.updated_at} >= ${sql.raw(`'${twoHoursAgoISOString}'`)}`);
-      console.log('Filtering for activity, twoHoursAgo:', twoHoursAgoISOString);
     }
 
     if (faction) andConditions.push(eq(queryTable.faction_name, faction.toUpperCase()));

@@ -93,27 +93,28 @@ const Activity = () => {
     void getData();
   }, []);
 
+  const getActivePlayers = async () => {
+    setActivePlayersLoading(true);
+    const params = getQueryParams();
+    const response = await axios.get<ActivePlayersResponse>('/api/get50Results', {
+      params,
+    });
+    setActivePlayers(response.data.results);
+    setResultsCount(response.data.total)
+    setActivePlayersLoading(false);
+
+  }
+
   useEffect(() => {
-    const getActivePlayers = async () => {
-      setActivePlayersLoading(true);
-      const params = getQueryParams();
-      const response = await axios.get<ActivePlayersResponse>('/api/get50Results', {
-        params,
-      });
-      console.log(response)
-      setActivePlayers(response.data.results);
-      setResultsCount(response.data.total)
-      setActivePlayersLoading(false);
-
+    if (queryParams !== null && path !== null) {
+      void getActivePlayers();
     }
-    void getActivePlayers();
+  }, [queryParams, path]);
 
-  }, [queryParams]);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       setPath(window.location.pathname);
-      
     }
   }, []);
 
