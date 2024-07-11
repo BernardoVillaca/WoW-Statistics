@@ -159,7 +159,7 @@ const Activity = () => {
         <VersionSearch />
         <BracketSearch partofLeadeboard={false} />
       </div>
-      <span className='text-center'>
+      <span className='text-center text-xl'>
         {versionText} {regionText} {bracketText} Active Characters Count
       </span>
       <div className='flex w-full items-center place-content-center'>

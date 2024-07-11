@@ -14,9 +14,8 @@ import {
     type classicUs3v3Leaderboard, type classicUs2v2Leaderboard, type classicUsRBGLeaderboard,
     type classicEu2v2Leaderboard, type classicEu3v3Leaderboard, type classicEuRBGLeaderboard,
     type usShuffleLeaderboard,
-    type euShuffleLeaderboard,   
+    type euShuffleLeaderboard,
 } from '~/server/db/schema';
-import { sql } from 'drizzle-orm';
 
 
 interface HistoryEntry {
@@ -159,7 +158,7 @@ export const updateLeaderboard = async (version: keyof VersionMapping, region: k
             return updateLeaderboard(version, region, bracket);
         }
     }
-    
+
 };
 
 const handleDataInsert = async (formattedData: LeaderboardEntry, table: LeaderboardTable, region: string, version: string, bracket: string): Promise<void> => {
@@ -208,8 +207,6 @@ const handleDataInsert = async (formattedData: LeaderboardEntry, table: Leaderbo
 
         // If the played value is different, update the history and updated_at
         if (existingEntry.played !== formattedData.played) {
-            // Insert active player data
-                 
 
             const historyEntry: HistoryEntry = {
                 played: existingEntry.played,

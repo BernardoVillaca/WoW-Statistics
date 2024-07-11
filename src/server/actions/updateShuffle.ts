@@ -98,6 +98,15 @@ const capitalizeAndFormatString = (str: string | undefined): string => {
         .join(' ');
 };
 
+const partitionClassesSpecs = (classesSpecs: { class: string; specs: string[] }[], part: number, totalParts: number) => {
+    const totalClasses = classesSpecs.length;
+    const partSize = Math.ceil(totalClasses / totalParts);
+    const startIndex = (part - 1) * partSize;
+    return classesSpecs.slice(startIndex, startIndex + partSize);
+};
+
+
+
 export const updateShuffle = async (region: 'eu' | 'us' , part: number): Promise<void> => {
     const isEU = region === 'eu';
     const table = isEU ? euShuffleLeaderboard : usShuffleLeaderboard;
@@ -109,7 +118,9 @@ export const updateShuffle = async (region: 'eu' | 'us' , part: number): Promise
         locale: 'en_US'
     };
     
-    const selectedSpecs = classesSpecs.slice((part - 1) * 3, part * 3);
+    const totalParts = 3;
+    const selectedSpecs = partitionClassesSpecs(classesSpecs, part, totalParts);
+
     try {
         const authToken = await getAuthToken(false);
         const requests: Promise<void>[] = [];
@@ -117,7 +128,7 @@ export const updateShuffle = async (region: 'eu' | 'us' , part: number): Promise
         for (const { class: characterClass, specs } of selectedSpecs) {
             for (const spec of specs) {
                 const apiEndpoint = `https://${region}.api.blizzard.com/data/wow/pvp-season/37/pvp-leaderboard/shuffle-${characterClass}-${spec}`;
-                console.log(`Fetching shuffle leaderboard data for ${region} ${characterClass} ${spec}...`)
+                console.log(`Fetching shuffle leaderboard data for ${region} ${characterClass} ${spec}...`);
                 const response = await axios.get<ApiResponse>(apiEndpoint, {
                     params: {
                         ...regionParams,

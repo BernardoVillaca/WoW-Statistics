@@ -18,7 +18,7 @@ const LeaderboardPage = () => {
         <VersionSearch />
         <SearchTab isShuffle={false} />
         <ScrollTab resultsPerPage={resultsPerPage} />
-        <div className="flex h-16 bg-black justify-between rounded-xl">
+        <div className="flex h-8 bg-gray-800 text-gray-300 justify-between ">
           {searchTabs.map((tab) => (
             <div key={tab.name} className={`flex items-center justify-center text-white text-center h-full w-full '} `}>{tab.label}</div>
           ))}
