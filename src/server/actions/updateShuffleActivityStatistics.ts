@@ -9,11 +9,9 @@ import { and, eq, sql } from "drizzle-orm"
 
 export const updateShuffleActivityStatistics = async () => {
     for (const character_class in classStatisticsMap) {
-        const classData = classStatisticsMap[character_class];
-        const allSpecsData = classData?.['Allspecs'];
         const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000); // 24 hours ago
         const twentyFourHoursAgoISOString = twentyFourHoursAgo.toISOString();
-        
+
         const response = await db
             .select()
             .from(usShuffleLeaderboard)
