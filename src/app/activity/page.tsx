@@ -26,6 +26,7 @@ import { searchTabs } from '~/utils/helper/searchTabsMap';
 import LeaderboardRow from '~/components/LeaderboardTable/LeaderboardRow';
 import ScrollTab from '~/components/ScrollTab';
 import { CharacterData } from '~/components/LeaderboardTable/types';
+import MostActivePlayers from '~/components/MostActivePlayers';
 
 ChartJS.register(
   CategoryScale,
@@ -84,8 +85,11 @@ const Activity = () => {
       page: params.get('page') ?? 1
     };
   };
+  const params = getQueryParams();
+  const { version, region, bracket } = params;
 
   useEffect(() => {
+    if (typeof window !== 'undefined') setPath(window.location.pathname);
     const getData = async () => {
       const response = await axios.get<WowStatisticsResponse>('/api/getWowStatistics?history=true');
       setData(response.data.activityHistory);
@@ -93,34 +97,23 @@ const Activity = () => {
     void getData();
   }, []);
 
-  const getActivePlayers = async () => {
-    setActivePlayersLoading(true);
-    const params = getQueryParams();
-    const response = await axios.get<ActivePlayersResponse>('/api/get50Results', {
-      params,
-    });
-    setActivePlayers(response.data.results);
-    setResultsCount(response.data.total)
-    setActivePlayersLoading(false);
-
-  }
-
   useEffect(() => {
     if (queryParams !== null && path !== null) {
+      const getActivePlayers = async () => {
+        setActivePlayersLoading(true);
+        const response = await axios.get<ActivePlayersResponse>('/api/get50Results', {
+          params,
+        });
+        setActivePlayers(response.data.results);
+        setResultsCount(response.data.total)
+        setActivePlayersLoading(false);
+      };
       void getActivePlayers();
     }
   }, [queryParams, path]);
 
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setPath(window.location.pathname);
-    }
-  }, []);
-
   useEffect(() => {
     if (data.length > 0) {
-      const params = getQueryParams();
       const labels = data.map(entry => new Date(entry.created_at));
 
       const values = data.map(entry => {
@@ -148,74 +141,93 @@ const Activity = () => {
       setChartData(chartData);
       setGraphLoading(false);
     }
-  }, [queryParams, data]);
+  }, [version, region, bracket, data]);
 
-  const params = getQueryParams();
+
+  const capitalizeFirstLetter = (string: string) => {
+    return string.replace(/\b\w/g, char => char.toUpperCase());
+  };
+
+  const versionText = capitalizeFirstLetter(params.version);
+  const regionText = capitalizeFirstLetter(params.region);
+  const bracketText = capitalizeFirstLetter(params.bracket);
 
   return (
-    <main className="flex flex-col min-h-screen bg-gradient-to-b from-[#000080] to-black text-white relative gap-4 py-2">
+    <main className="flex flex-col min-h-screen bg-gradient-to-b from-[#000080] to-black text-gray-300 relative gap-4 py-2">
       <div className='h-20 bg-gray-800 flex justify-between px-20 rounded-xl'>
         <RegionSearch partofLeadeboard={false} />
         <VersionSearch />
         <BracketSearch partofLeadeboard={false} />
       </div>
-      <div className='flex items-center place-content-center'>
-        {params.version} {params.region} {params.bracket}
-      </div>
-      <div className='flex w-full bg-gray-800 rounded-xl justify-between items-center place-content-center'>
-        {graphLoading ? (
-          <div className='flex items-center place-content-center w-full h-[640px]'>
-            <FiLoader className="animate-spin text-gray-300" size={50} />
-          </div>
-        ) : (
-          chartData && (
-            <Line data={chartData} options={{
-              scales: {
-                x: {
-                  type: 'time',
-                  time: {
-                    unit: 'day',
+      <span className='text-center'>
+        {versionText} {regionText} {bracketText} Active Characters Count
+      </span>
+      <div className='flex w-full items-center place-content-center'>
+        <div className='flex rounded-xl  h-[350px] w-[700px] bg-gray-800'>
+          {graphLoading ? (
+            <div className='flex items-center place-content-center w-full h-[340px]'>
+              <FiLoader className="animate-spin text-gray-300" size={50} />
+            </div>
+          ) : (
+            chartData && (
+              <Line data={chartData} options={{
+                scales: {
+                  x: {
+                    type: 'time',
+                    time: {
+                      unit: 'day',
+                    },
+                  },
+                  y: {
+                    beginAtZero: false,
                   },
                 },
-                y: {
-                  beginAtZero: false,
+                plugins: {
+                  legend: {
+                    display: false,
+                  },
                 },
-              },
-              plugins: {
-                legend: {
-                  display: false,
-                },
-              },
-            }} />
-          )
-        )}
+              }} />
+            )
+          )}
+        </div>
       </div>
-      <ScrollTab resultsPerPage={10} />
-      <div className='flex w-full flex-col h-[400px] bg-gray-800 rounded-xl'>
-        {activePlayersLoading ? (
-          <div className='flex items-center place-content-center w-full h-[400px]'>
-            <FiLoader className="animate-spin text-gray-300" size={50} />
-          </div>
-        ) : (
-          <>
-            {activePlayers.length > 0 ? (
-              activePlayers.map((player, index) => (
-                <LeaderboardRow
-                  rowIndex={index}
-                  key={`${player.id}-${index}`}
-                  characterData={player}
-                  searchTabs={searchTabs}
-                  rowHeight={40}
-                />
-              ))
-            ) : (
-              <div className='flex items-center place-content-center w-full h-[400px]'>
-                <p className='text-gray-300'>No one is playing. Dead game :(</p>
-              </div>
-            )}
-          </>
-        )}
+      <div className='flex flex-col gap-4 p-4 border-24 border-[1px] rounded border-opacity-60 border-gray-300 '>
+        <span className="text-center text-xl">Recent Activity</span>
+        <ScrollTab resultsPerPage={10} />
+        <div className="flex h-8 bg-gray-800 text-gray-300 justify-between ">
+          {searchTabs.map((tab) => (
+            <div key={tab.name} className={`flex items-center justify-center text-white text-center h-full w-full '} `}>{tab.label}</div>
+          ))}
+        </div>
+        <div className='flex w-full flex-col h-[400px] bg-gray-800 rounded-xl'>
+          {activePlayersLoading ? (
+            <div className='flex items-center place-content-center w-full h-[400px]'>
+              <FiLoader className="animate-spin text-gray-300" size={50} />
+            </div>
+          ) : (
+            <>
+              {activePlayers.length > 0 ? (
+                activePlayers
+                  .map((player, index) => (
+                    <LeaderboardRow
+                      rowIndex={index}
+                      key={`${player.id}-${index}`}
+                      characterData={player}
+                      searchTabs={searchTabs}
+                      rowHeight={40}
+                    />
+                  ))
+              ) : (
+                <div className='flex items-center place-content-center w-full h-[400px]'>
+                  <p className='text-gray-300'>No one is playing. Dead game :(</p>
+                </div>
+              )}
+            </>
+          )}
+        </div>
       </div>
+      <MostActivePlayers />
 
     </main>
   );

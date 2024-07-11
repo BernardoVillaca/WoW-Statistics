@@ -17,6 +17,8 @@ export async function GET(req: NextRequest) {
   // Other parameters
   const resultsperPage = searchParams.has('resultsPerPage') ? Number(searchParams.get('resultsPerPage')) : 50;
   const pvpSeasonIndex = searchParams.has('pvpSeasonIndex') ? Number(searchParams.get('pvpSeasonIndex')) : 36;
+ 
+  const orderBy=  searchParams.get('orderBy') ?? '';
   const path = searchParams.get('path') ?? '';
   const search = searchParams.get('search') ?? '';
   const faction = searchParams.get('faction') ?? '';
@@ -90,12 +92,17 @@ export async function GET(req: NextRequest) {
 
     if (maxRating) andConditions.push(lte(queryTable.rating, maxRating));
 
+    if (path !== '/legacy') andConditions.push(sql`${queryTable.character_spec} <> ''`);
+
     const combinedConditions = orConditions.length > 0
       ? and(...andConditions, or(...orConditions))
       : and(...andConditions);
 
+
+    const order = orderBy === 'played' ? desc(queryTable.played) : desc(queryTable.rating);
+
     const [results, totalResult] = await Promise.all([
-      db.select().from(queryTable).where(combinedConditions).limit(limit).offset(offset).orderBy(desc(queryTable.rating)),
+      db.select().from(queryTable).where(combinedConditions).limit(limit).offset(offset).orderBy(order),
       db.select({ count: count() }).from(queryTable).where(combinedConditions)
     ]);
 
