@@ -3,11 +3,24 @@
 import React, { useEffect, useState } from 'react';
 import { updateURL } from '~/utils/helper/updateURL';
 import { useSearch } from '~/components/Context/SearchContext';
+import useURLChange from '~/utils/hooks/useURLChange';
 
-const BracketSearch = ({partofLeadeboard} : {partofLeadeboard: boolean}) => {
+const BracketSearch = ({ partofLeadeboard }: { partofLeadeboard: boolean }) => {
     const { setCurrentPage } = useSearch();
     const [bracket, setBracket] = useState('');
-    // const router = useRouter();
+    const queryParams = useURLChange();
+  
+    const getQueryParams = () => {
+        const params = new URLSearchParams(queryParams ?? '');
+        return {
+            version: params.get('version') ?? 'retail',
+            region: params.get('region') ?? 'us',
+            bracket: params.get('bracket') ?? '3v3',
+        };
+    };
+
+    const params = getQueryParams();
+    const { version} = params;
 
     const handleClick = (newBracket: string) => {
         if (newBracket === bracket) return;
@@ -19,6 +32,11 @@ const BracketSearch = ({partofLeadeboard} : {partofLeadeboard: boolean}) => {
         const initialBracket = urlParams.get('bracket') ?? '3v3';
         setBracket(initialBracket);
     }, []);
+
+    useEffect(() => {
+          if (version === 'classic' && bracket === 'shuffle') setBracket('3v3');
+       
+    }, [version]);
 
     useEffect(() => {
         if (bracket) {
@@ -45,8 +63,18 @@ const BracketSearch = ({partofLeadeboard} : {partofLeadeboard: boolean}) => {
                 className={`flex text-gray-300 border-[1px] ${bracket === 'rbg' ? 'border-blue-500' : 'border-gray-300'}  rounded-full w-12 h-12 items-center justify-center`}
                 onClick={() => handleClick('rbg')}
             >
-                Rbg
+                RBG
             </button>
+            {!partofLeadeboard  && (
+                <button
+                    className={`flex text-gray-300 border-[1px] ${bracket === 'shuffle' ? 'border-blue-500' : 'border-gray-300'}  rounded-full w-12 h-12 items-center justify-center`}
+                    disabled={version === 'classic'}
+                    onClick={() => handleClick('shuffle')}
+                >
+                    SFL
+                </button>
+
+            )}
         </div>
     );
 };

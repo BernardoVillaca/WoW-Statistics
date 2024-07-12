@@ -48,19 +48,19 @@ interface ActivityData {
 
 
 type RegionType = 'us' | 'eu';
-type BracketType = '3v3' | '2v2' | 'rbg';
+type BracketType = '3v3' | '2v2' | 'rbg' | 'shuffle'
 type VersionType = 'retail' | 'classic';
 
-type LocalDataMapType = Record<VersionType, Record<RegionType, Record<BracketType, string>>>;
+type LocalDataMapType = Record<VersionType, Record<RegionType, Record<BracketType, string | null>>>;
 
 const localDataMap: LocalDataMapType = {
   retail: {
-    us: { '3v3': 'retail_us_3v3', '2v2': 'retail_us_2v2', 'rbg': 'retail_us_rbg' },
-    eu: { '3v3': 'retail_eu_3v3', '2v2': 'retail_eu_2v2', 'rbg': 'retail_eu_rbg' },
+    us: { '3v3': 'retail_us_3v3', '2v2': 'retail_us_2v2', 'rbg': 'retail_us_rbg', 'shuffle': 'retail_us_shuffle' },
+    eu: { '3v3': 'retail_eu_3v3', '2v2': 'retail_eu_2v2', 'rbg': 'retail_eu_rbg', 'shuffle': 'retail_eu_shuffle' },
   },
   classic: {
-    us: { '3v3': 'classic_us_3v3', '2v2': 'classic_us_2v2', 'rbg': 'classic_us_rbg' },
-    eu: { '3v3': 'classic_eu_3v3', '2v2': 'classic_eu_2v2', 'rbg': 'classic_eu_rbg' }
+    us: { '3v3': 'classic_us_3v3', '2v2': 'classic_us_2v2', 'rbg': 'classic_us_rbg', 'shuffle': null },
+    eu: { '3v3': 'classic_eu_3v3', '2v2': 'classic_eu_2v2', 'rbg': 'classic_eu_rbg', 'shuffle': null },
   }
 };
 

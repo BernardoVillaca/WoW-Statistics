@@ -51,12 +51,17 @@ export const activityMap: ActivityMap = {
     retail_us_3v3: createActivityData(),
     retail_us_2v2: createActivityData(),
     retail_us_rbg: createActivityData(),
+    retail_us_shuffle: createActivityData(),
+
     retail_eu_3v3: createActivityData(),
     retail_eu_2v2: createActivityData(),
     retail_eu_rbg: createActivityData(),
+    retail_eu_shuffle: createActivityData(),
+
     classic_us_3v3: createActivityData(),
     classic_us_2v2: createActivityData(),
     classic_us_rbg: createActivityData(),
+    
     classic_eu_3v3: createActivityData(),
     classic_eu_2v2: createActivityData(),
     classic_eu_rbg: createActivityData(),

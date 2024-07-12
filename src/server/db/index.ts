@@ -2,17 +2,18 @@ import { drizzle } from 'drizzle-orm/vercel-postgres';
 import { sql } from "@vercel/postgres";
 import * as schema from './schema'
 import { updateActivityStatistics } from '../actions/updateActivityStatistics';
-import { updateShuffleActivityStatistics } from '../actions/updateShuffleActivityStatistics';
 import { updateShuffle } from '../actions/updateShuffle';
+import { updateClassSpecCount } from '../actions/updateClassSpecCount';
 
 
 
 export const db = drizzle(sql, { schema });
 
-// let first = true;
+let first = true;
 
-// if(first) {
-//     await updateShuffle('us', 3);
-//     // await updateShuffleActivityStatistics();
-//     first = false;
-// }
+if(first) {
+
+    await updateActivityStatistics();
+    await updateClassSpecCount();
+    first = false;
+}

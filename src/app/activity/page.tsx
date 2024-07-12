@@ -99,6 +99,8 @@ const Activity = () => {
 
   useEffect(() => {
     if (queryParams !== null && path !== null) {
+
+      if (version === 'classic' && bracket === 'shuffle') return;
       const getActivePlayers = async () => {
         setActivePlayersLoading(true);
         const response = await axios.get<ActivePlayersResponse>('/api/get50Results', {

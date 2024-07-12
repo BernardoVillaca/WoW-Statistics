@@ -42,10 +42,12 @@ export const classSpecStatistics = createTable(
     retail_us_rbg: jsonb("retail_us_rbg").default(sql`'[]'::jsonb`),
     retail_us_2v2: jsonb("retail_us_2v2").default(sql`'[]'::jsonb`),
     retail_us_3v3: jsonb("retail_us_3v3").default(sql`'[]'::jsonb`),
+    retail_us_shuffle: jsonb("retail_us_shuffle").default(sql`'[]'::jsonb`),
 
     retail_eu_rbg: jsonb("retail_eu_rbg").default(sql`'[]'::jsonb`),
     retail_eu_2v2: jsonb("retail_eu_2v2").default(sql`'[]'::jsonb`),
     retail_eu_3v3: jsonb("retail_eu_3v3").default(sql`'[]'::jsonb`),
+    retail_eu_shuffle: jsonb("retail_eu_shuffle").default(sql`'[]'::jsonb`),
 
     created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`)
   }
@@ -68,10 +70,12 @@ export const activityStatistics = createTable(
     retail_us_rbg: jsonb("retail_us_rbg").default(sql`'[]'::jsonb`),
     retail_us_2v2: jsonb("retail_us_2v2").default(sql`'[]'::jsonb`),
     retail_us_3v3: jsonb("retail_us_3v3").default(sql`'[]'::jsonb`),
+    retail_us_shuffle: jsonb("retail_us_shuffle").default(sql`'[]'::jsonb`),
 
     retail_eu_rbg: jsonb("retail_eu_rbg").default(sql`'[]'::jsonb`),
     retail_eu_2v2: jsonb("retail_eu_2v2").default(sql`'[]'::jsonb`),
     retail_eu_3v3: jsonb("retail_eu_3v3").default(sql`'[]'::jsonb`),
+    retail_eu_shuffle: jsonb("retail_eu_shuffle").default(sql`'[]'::jsonb`),
 
     created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
   }
@@ -382,8 +386,7 @@ export const euRBGLeaderboard = createTable(
     lost: integer("lost"),
     tier_id: integer("tier_id"),
     tier_href: varchar("tier_href", { length: 512 }),
-    created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`)
-    ,
+    created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
     updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
     history: jsonb("history").default(sql`'[]'::jsonb`)
 
