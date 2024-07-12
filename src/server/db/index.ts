@@ -9,11 +9,11 @@ import { updateClassSpecCount } from '../actions/updateClassSpecCount';
 
 export const db = drizzle(sql, { schema });
 
-let first = true;
+// let first = true;
 
-if(first) {
+// if(first) {
 
-    await updateActivityStatistics();
-    await updateClassSpecCount();
-    first = false;
-}
+//     await updateActivityStatistics();
+//     await updateClassSpecCount();
+//     first = false;
+// }
