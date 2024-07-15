@@ -135,7 +135,7 @@ export const updateLeaderboard = async (version: keyof VersionMapping, region: k
             console.log(`Updating leaderboard data for ${version} ${region} ${bracket}...`);
 
             // Set all present records to false
-            await db.update(table).set({ present: false })
+            await db.update(table).set({ present: false }).where(eq(table.present, true));
 
             for (const data of formattedData) {
                 if (table !== null) {
