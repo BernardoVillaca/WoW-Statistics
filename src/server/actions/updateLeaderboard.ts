@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { db } from '~/server/db';
 import { getAuthToken } from '~/server/actions/getAuthToken';
-import { and, eq, gt, lt } from 'drizzle-orm/expressions';
+import { and, eq, lt } from 'drizzle-orm/expressions';
 import type {
     BracketMapping,
     RegionMapping,
@@ -25,7 +25,7 @@ interface HistoryEntry {
     rating: number;
     rank: number;
     updated_at: Date;
-    
+
 }
 
 interface LeaderboardEntry {
@@ -134,6 +134,9 @@ export const updateLeaderboard = async (version: keyof VersionMapping, region: k
 
             console.log(`Updating leaderboard data for ${version} ${region} ${bracket}...`);
 
+            // Set all present records to false
+            await db.update(table).set({ present: false })
+
             for (const data of formattedData) {
                 if (table !== null) {
                     requests.push(handleDataInsert(data, table, region, version, bracket));
@@ -149,15 +152,14 @@ export const updateLeaderboard = async (version: keyof VersionMapping, region: k
                 await Promise.all(requests);
             }
 
-            // Delete entries that are not present in the current leaderboard 
+            console.log(`Deleting entries that are not present in the current leaderboard for ${version} ${region} ${bracket}...`);
             await db.delete(table).where(and(
                 eq(table.present, false),
-                lt(table.rank, 5000) 
-            ));
-            await db.update(table).set({ present: false }).where(eq(table.present, true));
+                lt(table.rank, 5000)
+            ));            
 
             console.log(`Leaderboard data updated successfully for ${version} ${region} ${bracket}!`);
-        } 
+        }
 
     } catch (error: unknown) {
         console.log('Failed to fetch or insert leaderboard data:', (error as Error).message);
@@ -224,7 +226,7 @@ const handleDataInsert = async (formattedData: LeaderboardEntry, table: Leaderbo
                 lost: existingEntry.lost,
                 rating: existingEntry.rating,
                 rank: existingEntry.rank,
-                updated_at: existingEntry.updated_at,              
+                updated_at: existingEntry.updated_at,
             };
 
             let newHistory: HistoryEntry[] = existingEntry.history ?? [];
