@@ -145,7 +145,7 @@ export const us3v3Leaderboard = createTable(
     created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
     updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
     history: jsonb("history").default(sql`'[]'::jsonb`),
-    present: boolean("present").default(true)
+    present: boolean("present").default(false)
 
   },
   (leaderboard) => ({
@@ -183,10 +183,10 @@ export const us2v2Leaderboard = createTable(
     lost: integer("lost"),
     tier_id: integer("tier_id"),
     tier_href: varchar("tier_href", { length: 512 }),
-    created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`)
-    ,
+    created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
     updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
-    history: jsonb("history").default(sql`'[]'::jsonb`)
+    history: jsonb("history").default(sql`'[]'::jsonb`),
+    present: boolean("present").default(false)
 
   },
   (leaderboard) => ({
@@ -224,10 +224,10 @@ export const usRBGLeaderboard = createTable(
     lost: integer("lost"),
     tier_id: integer("tier_id"),
     tier_href: varchar("tier_href", { length: 512 }),
-    created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`)
-    ,
+    created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
     updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
-    history: jsonb("history").default(sql`'[]'::jsonb`)
+    history: jsonb("history").default(sql`'[]'::jsonb`),
+    present: boolean("present").default(false)
 
   },
   (leaderboard) => ({
@@ -266,7 +266,9 @@ export const usShuffleLeaderboard = createTable(
     tier_href: varchar("tier_href", { length: 512 }),
     created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
     updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
-    history: jsonb("history").default(sql`'[]'::jsonb`)
+    history: jsonb("history").default(sql`'[]'::jsonb`),
+    present: boolean("present").default(false)
+
   },
   (leaderboard) => ({
     usShufflePrimaryIndex: index("us_shuffle_primary_idx").on(
@@ -306,7 +308,9 @@ export const eu3v3Leaderboard = createTable(
     tier_href: varchar("tier_href", { length: 512 }),
     created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
     updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
-    history: jsonb("history").default(sql`'[]'::jsonb`)
+    history: jsonb("history").default(sql`'[]'::jsonb`),
+    present: boolean("present").default(false)
+
 
   },
   (leaderboard) => ({
@@ -344,10 +348,11 @@ export const eu2v2Leaderboard = createTable(
     lost: integer("lost"),
     tier_id: integer("tier_id"),
     tier_href: varchar("tier_href", { length: 512 }),
-    created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`)
-    ,
+    created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
     updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
-    history: jsonb("history").default(sql`'[]'::jsonb`)
+    history: jsonb("history").default(sql`'[]'::jsonb`),
+    present: boolean("present").default(false)
+
 
   },
   (leaderboard) => ({
@@ -387,7 +392,9 @@ export const euRBGLeaderboard = createTable(
     tier_href: varchar("tier_href", { length: 512 }),
     created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
     updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
-    history: jsonb("history").default(sql`'[]'::jsonb`)
+    history: jsonb("history").default(sql`'[]'::jsonb`),
+    present: boolean("present").default(false)
+
 
   },
   (leaderboard) => ({
@@ -426,7 +433,9 @@ export const euShuffleLeaderboard = createTable(
     tier_href: varchar("tier_href", { length: 512 }),
     created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
     updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
-    history: jsonb("history").default(sql`'[]'::jsonb`)
+    history: jsonb("history").default(sql`'[]'::jsonb`),
+    present: boolean("present").default(false)
+
   },
   (leaderboard) => ({
     euShufflePrimaryIndex: index("eu_shuffle_primary_idx").on(
@@ -466,7 +475,9 @@ export const classicUs3v3Leaderboard = createTable(
     tier_href: varchar("tier_href", { length: 512 }),
     created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
     updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
-    history: jsonb("history").default(sql`'[]'::jsonb`)
+    history: jsonb("history").default(sql`'[]'::jsonb`),
+    present: boolean("present").default(false)
+
   },
   (leaderboard) => ({
     classicUs3v3PrimaryIndex: index("classic_us_3v3_primary_idx").on(
@@ -505,7 +516,9 @@ export const classicUs2v2Leaderboard = createTable(
     tier_href: varchar("tier_href", { length: 512 }),
     created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
     updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
-    history: jsonb("history").default(sql`'[]'::jsonb`)
+    history: jsonb("history").default(sql`'[]'::jsonb`),
+    present: boolean("present").default(false)
+
   },
   (leaderboard) => ({
     classicUs2v2PrimaryIndex: index("classic_us_2v2_primary_idx").on(
@@ -544,7 +557,9 @@ export const classicUsRBGLeaderboard = createTable(
     tier_href: varchar("tier_href", { length: 512 }),
     created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
     updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
-    history: jsonb("history").default(sql`'[]'::jsonb`)
+    history: jsonb("history").default(sql`'[]'::jsonb`),
+    present: boolean("present").default(false)
+
   },
   (leaderboard) => ({
     classicUsRbgPrimaryIndex: index("classic_us_rbg_primary_idx").on(
@@ -584,7 +599,9 @@ export const classicEu3v3Leaderboard = createTable(
     tier_href: varchar("tier_href", { length: 512 }),
     created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
     updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
-    history: jsonb("history").default(sql`'[]'::jsonb`)
+    history: jsonb("history").default(sql`'[]'::jsonb`),
+    present: boolean("present").default(false)
+
   },
   (leaderboard) => ({
     classicEu3v3PrimaryIndex: index("classic_eu_3v3_primary_idx").on(
@@ -623,7 +640,9 @@ export const classicEu2v2Leaderboard = createTable(
     tier_href: varchar("tier_href", { length: 512 }),
     created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
     updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
-    history: jsonb("history").default(sql`'[]'::jsonb`)
+    history: jsonb("history").default(sql`'[]'::jsonb`),
+    present: boolean("present").default(false)
+
   },
   (leaderboard) => ({
     classicEu2v2PrimaryIndex: index("classic_eu_2v2_primary_idx").on(
@@ -662,7 +681,9 @@ export const classicEuRBGLeaderboard = createTable(
     tier_href: varchar("tier_href", { length: 512 }),
     created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
     updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
-    history: jsonb("history").default(sql`'[]'::jsonb`)
+    history: jsonb("history").default(sql`'[]'::jsonb`),
+    present: boolean("present").default(false)
+
   },
   (leaderboard) => ({
     classicEuRbgPrimaryIndex: index("classic_eu_rbg_primary_idx").on(
@@ -680,9 +701,6 @@ export const classicEuRBGLeaderboard = createTable(
     classicEuRBGWinRatioIndex: index("classic_eu_RBG_win_ratio_idx").on(leaderboard.win_ratio)
   })
 );
-
-
-
 
 
 export const authToken = createTable(
