@@ -6,10 +6,9 @@ import {
   timestamp,
   varchar,
   integer,
-  jsonb
+  jsonb,
+  boolean
 } from "drizzle-orm/pg-core";
-import { version } from "os";
-import RegionSearch from "~/components/SearchTab/OtherSearch/RegionSearch";
 
 
 export const createTable = pgTableCreator((name) => `wowstats_${name}`);
@@ -143,10 +142,10 @@ export const us3v3Leaderboard = createTable(
     lost: integer("lost"),
     tier_id: integer("tier_id"),
     tier_href: varchar("tier_href", { length: 512 }),
-    created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`)
-    ,
+    created_at: timestamp("created_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
     updated_at: timestamp("updated_at", { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
-    history: jsonb("history").default(sql`'[]'::jsonb`)
+    history: jsonb("history").default(sql`'[]'::jsonb`),
+    present: boolean("present").default(true)
 
   },
   (leaderboard) => ({

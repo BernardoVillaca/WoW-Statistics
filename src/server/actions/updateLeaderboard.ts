@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { db } from '~/server/db';
 import { getAuthToken } from '~/server/actions/getAuthToken';
-import { and, eq } from 'drizzle-orm/expressions';
+import { and, eq, gt, lt } from 'drizzle-orm/expressions';
 import type {
     BracketMapping,
     RegionMapping,
@@ -25,6 +25,7 @@ interface HistoryEntry {
     rating: number;
     rank: number;
     updated_at: Date;
+    
 }
 
 interface LeaderboardEntry {
@@ -46,6 +47,7 @@ interface LeaderboardEntry {
     updated_at: Date;
     win_ratio: string;
     history: HistoryEntry[];
+    present?: boolean; // Add the 'present' property as optional
 }
 
 interface ApiResponse {
@@ -126,7 +128,8 @@ export const updateLeaderboard = async (version: keyof VersionMapping, region: k
                 created_at: new Date(),
                 updated_at: new Date(),
                 history: [],
-                win_ratio: Math.round((item.season_match_statistics.won / item.season_match_statistics.played) * 100).toString() // Ensure win_ratio is a number
+                win_ratio: Math.round((item.season_match_statistics.won / item.season_match_statistics.played) * 100).toString(), // Ensure win_ratio is a number
+                present: true
             }));
 
             console.log(`Updating leaderboard data for ${version} ${region} ${bracket}...`);
@@ -146,10 +149,16 @@ export const updateLeaderboard = async (version: keyof VersionMapping, region: k
                 await Promise.all(requests);
             }
 
+            // Delete entries that are not present in the current leaderboard 
+            await db.delete(table).where(and(
+                eq(table.present, false),
+                lt(table.rank, 5000) 
+            ));
+            await db.update(table).set({ present: false }).where(eq(table.present, true));
+
             console.log(`Leaderboard data updated successfully for ${version} ${region} ${bracket}!`);
-        } else {
-            console.log('No entries found in the response');
-        }
+        } 
+
     } catch (error: unknown) {
         console.log('Failed to fetch or insert leaderboard data:', (error as Error).message);
         if (axios.isAxiosError(error) && error.response?.status === 401) {
@@ -202,7 +211,8 @@ const handleDataInsert = async (formattedData: LeaderboardEntry, table: Leaderbo
             character_spec: existingEntry.character_spec,
             created_at: existingEntry.created_at,
             updated_at: existingEntry.played === formattedData.played ? existingEntry.updated_at : new Date(),
-            history: existingEntry.history
+            history: existingEntry.history,
+            present: true
         };
 
         // If the played value is different, update the history and updated_at
@@ -214,7 +224,7 @@ const handleDataInsert = async (formattedData: LeaderboardEntry, table: Leaderbo
                 lost: existingEntry.lost,
                 rating: existingEntry.rating,
                 rank: existingEntry.rank,
-                updated_at: existingEntry.updated_at,
+                updated_at: existingEntry.updated_at,              
             };
 
             let newHistory: HistoryEntry[] = existingEntry.history ?? [];
