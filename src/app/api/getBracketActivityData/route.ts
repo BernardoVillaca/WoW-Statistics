@@ -8,7 +8,8 @@ export async function GET(req: NextRequest) {
 
   const version = (searchParams.get('version') ?? 'retail') as keyof VersionMapping;
   const region = (searchParams.get('region') ?? 'us') as keyof RegionMapping;
-  const bracket = (searchParams.get('bracket') ?? '3v3') as keyof BracketMapping;
+  const bracket = (searchParams.get('bracket')?.includes('shuffle') ? 'shuffle' : searchParams.get('bracket') ?? '3v3') as keyof BracketMapping;
+  const spec = searchParams.get('spec') ?? '';
   const name = searchParams.get('name') ?? '';
   const realm = searchParams.get('realm') ?? '';
 
@@ -34,7 +35,7 @@ export async function GET(req: NextRequest) {
       throw new Error("Both 'name' and 'realm' parameters are required.");
     }
 
-    const capitalizeFirstChar = (word:string) => {
+    const capitalizeFirstChar = (word: string) => {
       if (!word || typeof word !== 'string') {
         return '';
       }
@@ -46,12 +47,13 @@ export async function GET(req: NextRequest) {
       .where(
         and(
           eq(table.character_name, capitalizeFirstChar(name)),
-          eq(table.realm_slug, realm.toLowerCase())
+          eq(table.realm_slug, realm.toLowerCase()),
+          eq(table.character_spec, spec)
         )
       );
-      console.log(results)
+
     if (results.length === 0) {
-      return NextResponse.json({ message: 'Character not found' }, { status: 404 });
+      return NextResponse.json({ message: 'Character not found' });
     }
 
     return NextResponse.json(results[0]);

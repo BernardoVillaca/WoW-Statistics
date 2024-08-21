@@ -16,6 +16,7 @@ import {
     ChartData,
 } from 'chart.js';
 import 'chartjs-adapter-date-fns';
+import { FiLoader } from 'react-icons/fi';
 
 ChartJS.register(
     CategoryScale,
@@ -63,19 +64,21 @@ const ActitivityTab = ({ choosenBracket, params }: ActitivityTabProps) => {
                         bracket,
                     },
                 });
+               
+                if (response.data.message === 'Character not found') {                                      
+                    setChartData(null);
+                    setLoading(false);
+                    return
+                }
 
-                // Assuming response.data.history contains the history entries
-                const history = response.data.history || [];
-                console.log(response.data)
+                const history = response.data.history;
                 setHistoryData(history);
-                
+                setLoading(false);
+
             } catch (error) {
                 console.error('Error fetching bracket activity data:', error);
-            } finally {
-                setLoading(false);
             }
-        } else {
-            console.warn('Missing parameters, cannot fetch data');
+
         }
     };
 
@@ -83,7 +86,6 @@ const ActitivityTab = ({ choosenBracket, params }: ActitivityTabProps) => {
         if (historyData.length > 0) {
             const labels = historyData.map((entry) => new Date(entry.updated_at));
             const ratings = historyData.map((entry) => entry.rating);
-            console.log(ratings)
             const data = {
                 labels,
                 datasets: [
@@ -110,17 +112,17 @@ const ActitivityTab = ({ choosenBracket, params }: ActitivityTabProps) => {
     }, [choosenBracket, params]);
 
     return (
-        <div className='flex flex-col items-center justify-center h-full bg-gray-800 p-4'>
+        <div className='flex flex-col items-center place-content-center h-full bg-gray-800 p-4'>
             <span className='text-white text-lg mb-4'>
                 {`Activity - ${choosenBracket.includes('shuffle') ? 'Shuffle' : choosenBracket}`}
             </span>
             <div className='w-full h-full'>
                 {loading ? (
-                    <div className='flex items-center justify-center'>
-                        <p className='text-white'>Loading...</p>
+                    <div className="h-full flex flex-col place-content-center items-center bg-gray-800 bg-opacity-50">
+                        <FiLoader className="animate-spin text-white" size={50} />
                     </div>
                 ) : (
-                    chartData && (
+                    chartData ? (
                         <Line
                             data={chartData}
                             options={{
@@ -132,19 +134,29 @@ const ActitivityTab = ({ choosenBracket, params }: ActitivityTabProps) => {
                                         },
                                         title: {
                                             display: true,
-                                            text: 'Date',
+
                                         },
                                     },
                                     y: {
                                         beginAtZero: false,
                                         title: {
                                             display: true,
-                                            text: 'Rating',
+
                                         },
                                     },
+                                    
                                 },
+                                plugins: {
+                                    legend: {
+                                      display: false,
+                                    },
+                                  }
                             }}
                         />
+                    ) : (
+                        <div className='flex items-center justify-center h-full'>
+                            <p className='text-gray-300'>No data available :(</p>
+                        </div>
                     )
                 )}
             </div>

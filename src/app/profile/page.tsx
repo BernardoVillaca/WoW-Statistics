@@ -7,6 +7,7 @@ import Image from 'next/image';
 import axios from 'axios';
 import BracketTab from './Components/BracketTab';
 import ActitivityTab from './Components/ActivityTab';
+import AchievementsTab from './Components/AchievementsTab';
 
 
 type QueryParams = {
@@ -41,8 +42,6 @@ const ProfilePage = () => {
     const [params, setParams] = useState<QueryParams>({} as QueryParams);
     const [profileData, setProfileData] = useState<ProfileData | null>(null);
     const [choosenBracket, setChoosenBracket] = useState<string>('3v3');
-    const [bracketActivityData, setBracketActivityData] = useState(null);
-
     const queryParams = useURLChange();
 
 
@@ -84,15 +83,15 @@ const ProfilePage = () => {
                 {params.region === 'us' && <Image src={us} width={25} alt="us" />}
                 {params.region === 'eu' && <Image src={eu} width={25} alt="eu" />}
             </div>
-            <div className="flex gap-4">
+            <div className="flex gap-4 h-32">
                 {profileData && Object.entries(profileData).map(([bracket, data]) => (
                     <BracketTab key={bracket} params={params} bracket={bracket} data={data} setChoosenBracket={setChoosenBracket} choosenBracket={choosenBracket} />
                 ))}
             </div>
-            <div className='h-[650px] flex gap-2'>
+            <div className='h-[600px] flex gap-2'>
                 <div className='flex flex-col w-1/2 gap-2'>
                     <ActitivityTab choosenBracket={choosenBracket} params={params} />
-                    <div className='flex place-content-center h-1/2 bg-gray-800'>Achievements</div>
+                    <AchievementsTab />
                 </div>
                 <div className='flex place-content-center w-1/2 bg-gray-800'>Talent</div>
             </div>
