@@ -88,10 +88,10 @@ const ProfilePage = () => {
                     <BracketTab key={bracket} params={params} bracket={bracket} data={data} setChoosenBracket={setChoosenBracket} choosenBracket={choosenBracket} />
                 ))}
             </div>
-            <div className='h-[600px] flex gap-2'>
+            <div className='flex gap-2'>
                 <div className='flex flex-col w-1/2 gap-2'>
                     <ActitivityTab choosenBracket={choosenBracket} params={params} />
-                    <AchievementsTab />
+                    <AchievementsTab params={params} />
                 </div>
                 <div className='flex place-content-center w-1/2 bg-gray-800'>Talent</div>
             </div>

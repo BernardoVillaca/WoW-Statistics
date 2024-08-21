@@ -45,8 +45,6 @@ const BracketTab = ({ params, bracket, data, setChoosenBracket, choosenBracket }
     const specIcon = specIconsMap[specClassKey as keyof typeof specIconsMap];
 
 
-
-
     return (
         <button
             className={`flex flex-col  ${choosenBracket === bracket ? 'bg-gray-700' : 'bg-slate-800'} w-1/4 pt-2 px-2`}

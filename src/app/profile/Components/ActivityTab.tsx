@@ -112,7 +112,7 @@ const ActitivityTab = ({ choosenBracket, params }: ActitivityTabProps) => {
     }, [choosenBracket, params]);
 
     return (
-        <div className='flex flex-col items-center place-content-center h-full bg-gray-800 p-4'>
+        <div className='flex flex-col items-center place-content-center h-[350px] bg-gray-800 p-4'>
             <span className='text-white text-lg mb-4'>
                 {`Activity - ${choosenBracket.includes('shuffle') ? 'Shuffle' : choosenBracket}`}
             </span>
