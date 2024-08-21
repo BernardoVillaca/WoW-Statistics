@@ -21,7 +21,6 @@ import {
   ChartData,
 } from 'chart.js';
 import 'chartjs-adapter-date-fns';
-import { set } from 'zod';
 
 ChartJS.register(
   CategoryScale,

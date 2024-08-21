@@ -19,6 +19,7 @@ export type SearchTab = {
     character_name: string;
     character_class: string;
     character_spec: string;
+    realm_slug: string;
     rank: number;
     history: HistoryEntry[];
     updated_at: string; 
@@ -61,6 +62,8 @@ export type SearchTab = {
     legacy?: boolean; 
     queryParams?: {
       bracket: string;
+      region: string;
+      version: string;
     }; 
     ratingCutoffs?: RatingCutoffs | null; 
   };

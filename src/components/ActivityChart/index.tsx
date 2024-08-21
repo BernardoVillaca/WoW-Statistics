@@ -6,7 +6,7 @@ import MostActiveSpecs from './MostActiveSpecs';
 const ActivityChart = ({ localActivityData }: { localActivityData: ActivityStatistics }) => {
   const [timeFrame, setTimeFrame] = useState<'24h' | '48h' | '72h'>('24h');
   const timeFrames: Array<'24h' | '48h' | '72h'> = ['24h', '48h', '72h'];
-
+  
   const mostActivePlayersColumns = [
     { label: 'Name', width: 'w-1/3' },
     { label: 'Spec', width: 'w-1/6' },

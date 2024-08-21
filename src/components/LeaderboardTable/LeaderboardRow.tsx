@@ -2,8 +2,8 @@ import React from 'react';
 import LeaderboardCell from './LeaderboardCell';
 import Image from 'next/image';
 import Rank1 from '~/assets/Other/rankOneIcon.png';
-import { Cutoffs } from '~/utils/helper/ratingCutoffsInterface';
 import { LeaderboardRowProps } from './types';
+import Link from 'next/link';
 
 
 
@@ -65,30 +65,40 @@ const LeaderboardRow: React.FC<LeaderboardRowProps> = ({
     searchTabs = searchTabs.filter((tab) => tab.name !== 'updated_at');
   }
 
+  const params = new URLSearchParams({
+    version: queryParams?.version || '',
+    region: queryParams?.region || '',
+    name: characterData.character_name.toLowerCase(),
+    realm: characterData.realm_slug,
+    class: characterData.character_class,
+    spec: characterData.character_spec
+  });
 
   return (
-    <div className={`relative bg-gray-800 flex border-b-[1px] ${getBorderClass()}`} style={{ height: rowHeight }}>
-      {renderRankIcon()}
-      {searchTabs.map((cell, index) => {
-        const cellValue = characterData[cell.name];
-        const str = typeof cellValue === 'string' || typeof cellValue === 'number' ? String(cellValue) : '';
-        return (
-          <LeaderboardCell
-            key={`${characterData.character_id}-${cell.name}`}
-            height={rowHeight}
-            rowIndex={rowIndex}
-            characterData={characterData}
-            path={path ?? null}
-            index={index}
-            str={str}
-            cell={cell.name}
-            characterClass={characterData.character_class}
-            characterSpec={characterData.character_spec}
-            history={characterData.history} legacy={false}
-          />
-        );
-      })}
-    </div>
+    <Link href={`/profile?${params.toString()}`}>
+      <div className={`relative bg-gray-800 flex border-b-[1px] hover:bg-gray-700 cursor-pointer ${getBorderClass()}`} style={{ height: rowHeight }}>
+        {renderRankIcon()}
+        {searchTabs.map((cell, index) => {
+          const cellValue = characterData[cell.name];
+          const str = typeof cellValue === 'string' || typeof cellValue === 'number' ? String(cellValue) : '';
+          return (
+            <LeaderboardCell
+              key={`${characterData.character_id}-${cell.name}`}
+              height={rowHeight}
+              rowIndex={rowIndex}
+              characterData={characterData}
+              path={path ?? null}
+              index={index}
+              str={str}
+              cell={cell.name}
+              characterClass={characterData.character_class}
+              characterSpec={characterData.character_spec}
+              history={characterData.history} legacy={false}
+            />
+          );
+        })}
+      </div>
+    </Link>
   );
 };
 
