@@ -37,10 +37,8 @@ export async function GET(req: NextRequest) {
 
         try {
             if (version === 'retail') {
-                // Use Promise.all to execute all requests in parallel
                 const requests = brackets.map(bracket =>
-                    axios.get(
-                        `https://${region}.api.blizzard.com/profile/wow/character/${realm}/${name.toLowerCase()}/pvp-bracket/${bracket}`,
+                    axios.get(`https://${region}.api.blizzard.com/profile/wow/character/${realm}/${name.toLowerCase()}/pvp-bracket/${bracket}`,
                         {
                             params: {
                                 namespace: `profile-${region}`,

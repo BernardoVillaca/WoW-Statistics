@@ -7,7 +7,7 @@ import Image from 'next/image';
 import axios from 'axios';
 import BracketTab from './Components/BracketTab';
 import ActitivityTab from './Components/ActivityTab';
-import AchievementsTab from './Components/AchievementsTab';
+import TittlesTab from './Components/TittlesTab';
 
 
 type QueryParams = {
@@ -91,7 +91,7 @@ const ProfilePage = () => {
             <div className='flex gap-2'>
                 <div className='flex flex-col w-1/2 gap-2'>
                     <ActitivityTab choosenBracket={choosenBracket} params={params} />
-                    <AchievementsTab params={params} />
+                    <TittlesTab params={params} />
                 </div>
                 <div className='flex place-content-center w-1/2 bg-gray-800'>Talent</div>
             </div>
