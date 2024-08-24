@@ -87,3 +87,75 @@ const specIconsMap = {
 };
 
 export default specIconsMap;
+
+
+export const classSpecIconsMap = {
+
+    'Druid': {
+        'Balance': balance_druid,
+        'Feral': feral_druid,
+        'Restoration': restoration_druid,
+        'Guardian': guardian_druid
+    },
+    'Death Knight': {
+        'Blood': blood_deathknight,
+        'Frost': frost_deathknight,
+        'Unholy': unholy_deathknight
+    },
+    'Demon Hunter': {
+        'Havoc': havoc_demonhunter,
+        'Vengeance': vengeance_demonhunter
+    },
+    'Hunter': {
+        'Beast Mastery': beastmastery_hunter,
+        'Marksmanship': marksmanship_hunter,
+        'Survival': survival_hunter
+    },
+    'Mage': {
+        'Arcane': arcane_mage,
+        'Fire': fire_mage,
+        'Frost': frost_mage
+    },
+    'Monk': {
+        'Brewmaster': brewmaster_monk,
+        'Mistweaver': mistweaver_monk,
+        'Windwalker': windwalker_monk
+    },
+    'Paladin': {
+        'Holy': holy_paladin,
+        'Protection': protection_paladin,
+        'Retribution': retribution_paladin
+    },
+    'Priest': {
+        'Discipline': discipline_priest,
+        'Holy': holy_priest,
+        'Shadow': shadow_priest
+    },
+    'Rogue': {
+        'Assassination': assassination_rogue,
+        'Outlaw': outlaw_rogue,
+        'Subtlety': subtlety_rogue
+    },
+    'Shaman': {
+        'Elemental': elemental_shaman,
+        'Enhancement': enhancement_shaman,
+        'Restoration': restoration_shaman
+    },
+    'Warlock': {
+        'Affliction': affliction_warlock,
+        'Demonology': demonology_warlock,
+        'Destruction': destruction_warlock
+    },
+    'Warrior': {
+        'Arms': arms_warrior,
+        'Fury': fury_warrior,
+        'Protection': protection_warrior
+    },
+    'Evoker': {
+        'Preservation': preservation_evoker,
+        'Devastation': devastation_evoker,
+        'Augmentation': augmentation_evoker
+    }
+}
+
+

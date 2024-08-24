@@ -6,8 +6,10 @@ import heroIcon from '../../../assets/Other/heroIcon.png'
 import rankOneSolo from '../../../assets/Other/rankOneSolo.png'
 import legendIcon from '../../../assets/Other/legendIcon.png'
 import Image, { StaticImageData } from 'next/image';
+import { FiLoader } from 'react-icons/fi';
+import { set } from 'zod';
 
-interface ActitivityTabProps {
+interface TittleTabProps {
     params: {
         version: string | null;
         region: string | null;
@@ -27,23 +29,28 @@ const tittleIconsObj: Record<TitleKey, StaticImageData> = {
 };
 
 
-const TittlesTab = ({ params }: ActitivityTabProps) => {
+const TittlesTab = ({ params }: TittleTabProps) => {
     const [titles, setTitles] = useState({})
+    const [loading, setLoading] = useState(true)
 
 
     useEffect(() => {
         const getAchievementData = async () => {
+            setLoading(true)
             if (params.version && params.region && params.name && params.realm) {
                 const response = await axios.get('/api/getAchievementData',
                     {
                         params: {
                             name: params.name,
                             realm: params.realm,
+                            region: params.region,
+                            version: params.version
 
                         }
                     })
 
                 setTitles(response.data)
+                setLoading(false)
 
             }
         }
@@ -51,20 +58,28 @@ const TittlesTab = ({ params }: ActitivityTabProps) => {
     }, [params])
 
 
-    console.log(titles)
     return (
-        <div className="flex flex-col  items-center bg-gray-800 p-4">
+        <div className="flex flex-col  items-center bg-gray-800 p-4 h-[200px]">
             <h1 className="text-2xl font-bold">Titles</h1>
-            <div className='flex gap-4 py-4'>
-                {Object.entries(titles).map(([name, values], index) => (
-                    <div key={index} className=" relative flex items-center border-[1px] border-gray-500 p-1 rounded-2xl">
-                        {tittleIconsObj[name as TitleKey] && (
-                            <Image src={tittleIconsObj[name as TitleKey]} alt={name} width={80} height={80} />
-                        )}
-                        <span className='absolute bottom-0 right-0 rounded-full h-6 w-6 bg-gray-700 text-center'>{(values as any[]).length}</span>
-                    </div>
-                ))}
-            </div>
+            {loading ? (
+                <div className="h-full flex flex-col place-content-center items-center bg-gray-800 bg-opacity-50">
+                    <FiLoader className="animate-spin text-white" size={50} />
+                </div>
+            ) : (
+                <div className='flex gap-4 pt-4'>
+                    {Object.entries(titles).map(([name, values], index) => (
+                        <div key={index} className=" relative flex items-center border-[1px] border-gray-500 p-1 rounded-2xl">
+                            {tittleIconsObj[name as TitleKey] && (
+                                <Image src={tittleIconsObj[name as TitleKey]} alt={name} width={80}  />
+                            )}
+                            <span className='absolute bottom-0 right-0 rounded-full h-6 w-6 bg-gray-700 text-center'>{(values as any[]).length}</span>
+                        </div>
+                    ))}
+                </div>
+
+
+            )}
+
         </div>
     )
 }

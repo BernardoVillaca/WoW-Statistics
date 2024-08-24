@@ -31,7 +31,7 @@ export async function GET(req: NextRequest) {
     const spec = searchParams.get('spec')?.toLocaleLowerCase() ?? '';
     const authToken = await getAuthToken(false);
 
-    const getProfileData = async (token: string) => {
+    const getBracketData = async (token: string) => {
         const brackets = ['3v3', '2v2', 'rbg', `shuffle-${charClass}-${spec}`];
         const bracketsData: Brackets = {};
 
@@ -75,7 +75,7 @@ export async function GET(req: NextRequest) {
             if (axios.isAxiosError(error) && error.response?.status === 401) {
                 console.log('Token expired, refreshing token and retrying the request...');
                 const newToken = await getAuthToken(true);
-                return getProfileData(newToken);
+                return getBracketData(newToken);
             } else {
                 console.error('Error fetching profile data:', error);
                 throw error;
@@ -84,7 +84,7 @@ export async function GET(req: NextRequest) {
     };
 
     try {
-        const profileData = await getProfileData(authToken);
+        const profileData = await getBracketData(authToken);
 
         return NextResponse.json(profileData);
     } catch (error) {
