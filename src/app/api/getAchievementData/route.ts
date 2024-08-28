@@ -26,7 +26,6 @@ export async function GET(req: NextRequest) {
             )
 
             const achievements = response.data.achievements;
-
             const rankOneTitles: typeof achievements[] = [];
             const gladiatorTitles: typeof achievements[] = [];
             const heroTitles: typeof achievements[] = [];
@@ -49,9 +48,6 @@ export async function GET(req: NextRequest) {
 
                 rankOneTitles.push(achiev);
             });
-
-
-
             return { rankOneTitles, gladiatorTitles, rankOneLegendTitles, legendTitles, heroTitles };
 
         } catch (error) {
