@@ -15,9 +15,9 @@ const MostActivePlayers = ({ name, player, mostActivePlayersColumns }: { name: s
   const truncatedName = truncateName(`${player.character_name}-${player.realm_slug}`, 21);
 
   return (
-    <div key={name} className='flex py-2 gap-2 border-b-[1px] border-opacity-20 border-gray-300'>
+    <div key={name} className='flex py-2 gap-2 border-b-[1px] border-opacity-30 border-secondary-gray'>
       <span className={`text-center ${mostActivePlayersColumns[0]?.width}`} style={{ color: classColors[characterClass] }}>{truncatedName}</span>
-      <div className={`${mostActivePlayersColumns[1]?.width} flex justify-center`}>
+      <div className={`${mostActivePlayersColumns[1]?.width} flex items-center place-content-center`}>
         <Image
           width={20}
           height={20}

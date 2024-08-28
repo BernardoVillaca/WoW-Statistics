@@ -247,19 +247,19 @@ const Home = () => {
 
   return (
 
-    <main className="flex flex-col min-h-screen bg-gradient-to-b from-[#000080] to-black text-white relative gap-4 py-2">
-      <div className=' h-20 bg-gray-800 flex flex-coljustify-between px-20 rounded-xl'>
+    <main className="flex flex-col min-h-screen text-white relative gap-4 py-2">
+      <div className=' h-20 bg-secondary-light_black flex flex-coljustify-between px-20 rounded-xl'>
         <RegionSearch partofLeadeboard={false} />
         <VersionSearch />
         <BracketSearch partofLeadeboard={false} />
       </div>
-      <div className=' flex h-10 w-full bg-gray-800 rounded-xl justify-between items-center place-content-center '>
+      <div className=' flex h-10 w-full bg-secondary-light_black rounded-xl justify-between items-center place-content-center '>
         <span className='pl-16'>{title}   {ratingFilter ? ratingFilter : ''}</span>
         <div className='flex h-full  items-center gap-2 px-2 '>
           {uniqueRatings?.map(rating => (
             <div
               key={rating.key}
-              className={`flex w-15 h-8 place-content-center items-center select-none cursor-pointer rounded-xl px-1 ${ratingFilter === rating.label ? 'text-gray-800 bg-gray-300' : 'text-gray-300 bg-gray-800 '}`}
+              className={`flex w-15 h-8 place-content-center items-center select-none cursor-pointer rounded-xl px-1 ${ratingFilter === rating.label ? 'text-primary' : ''}`}
               onClick={() => onClickHandler(rating.label)}
             >
               {rating.label}

@@ -29,9 +29,9 @@ const RegionSearch = ({partofLeadeboard} : {partofLeadeboard: boolean}) => {
     }, [region]);
 
     return (
-        <div className={`flex text-black items-center justify-center ${partofLeadeboard ? 'w-1/5 border-[1px]' : 'w-[400px]'} rounded-lg gap-8  border-gray-700`}>
+        <div className={`flex text-black items-center justify-center ${partofLeadeboard ? 'w-1/5 border-[1px] border-secondary-gray border-opacity-30' : 'w-[400px]'} rounded-lg gap-8  `}>
             <div
-                className={`cursor-pointer rounded-full w-12 h-12 items-center justify-center ${region === 'us' ? 'border-2 border-blue-500' : ''}`}
+                className={`cursor-pointer rounded-full w-12 h-12 items-center justify-center ${region === 'us' ? 'border-2 border-primary' : ''}`}
                 onClick={() => handleClick('us')}
             >
                 <Image
@@ -43,7 +43,7 @@ const RegionSearch = ({partofLeadeboard} : {partofLeadeboard: boolean}) => {
                 />
             </div>
             <div
-                className={`cursor-pointer rounded-full w-12 h-12 flex items-center justify-center ${region === 'eu' ? 'border-2 border-blue-500' : ''}`}
+                className={`cursor-pointer rounded-full w-12 h-12 flex items-center justify-center ${region === 'eu' ? 'border-2 border-primary' : ''}`}
                 onClick={() => handleClick('eu')}
             >
                 <Image

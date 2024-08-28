@@ -29,13 +29,13 @@ const VersionSearch = () => {
         <div className='flex w-full justify-center'>
             <div className='flex  items-center gap-8'>
                 <button
-                    className={`rounded-xl h-10 w-32 text-xl ${version === 'retail' ? 'text-gray-800 bg-gray-300' : 'text-gray-300 bg-gray-800 border-2 border-white'}`}
+                    className={`rounded-xl h-10 w-32 text-xl ${version === 'retail' ? ' bg-primary ' : 'border-[1px] border-opacity-30 border-secondary-gray'}`}
                     onClick={() => handleClick('retail')}
                 >
                     Retail
                 </button>
                 <button
-                    className={`rounded-xl h-10 w-32 text-xl ${version === 'classic' ? 'text-gray-800 bg-gray-300' : 'text-gray-300 bg-gray-800'}`}
+                    className={`rounded-xl h-10 w-32 text-xl ${version === 'classic' ? ' bg-primary' : 'border-[1px] border-opacity-30 border-secondary-gray'}`}
                     onClick={() => handleClick('classic')}
                 >
                     Classic

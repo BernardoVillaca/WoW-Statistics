@@ -52,19 +52,19 @@ const ActivityChart = ({ localActivityData }: { localActivityData: ActivityStati
 
   return (
     <div className='flex flex-col w-full h-full pt-2 gap-4'>
-      <div className='flex h-10 w-full items-center place-content-center bg-gray-800 rounded-xl px-2'>
+      <div className='flex h-10 w-full items-center place-content-center bg-secondary-light_black rounded-xl px-2'>
         <div className='flex w-1/3'>
           <span>Total Active Characters: {total}</span>
         </div>
         <div className='flex w-1/3 items-center place-content-center'>
-          <span>Activity</span>
+          <span className='text-primary font-bold'>Activity</span>
         </div>
         <div className='flex w-1/3 items-end place-content-end'>
           <div className='flex gap-2 h-16 items-center'>
             {timeFrames.map(tf => (
               <button
                 key={tf}
-                className={`h-10 w-10 rounded-full ${timeFrame === tf ? 'text-gray-800 bg-gray-300' : 'text-gray-300 bg-gray-800 border-[1px] border-white'}`}
+                className={`h-10 w-10 rounded-full ${timeFrame === tf ? 'text-primary' : ''}`}
                 onClick={() => setTimeFrame(tf)}
               >
                 {tf}
@@ -75,11 +75,11 @@ const ActivityChart = ({ localActivityData }: { localActivityData: ActivityStati
       </div>
       <div className='flex flex-col  text-gray-300 gap-2'>
         <div className='flex w-full gap-4'>
-          <div className='flex flex-col w-1/2 bg-gray-800 rounded-xl px-2'>
-            <h3 className='font-bold text-center'>Most Active Players</h3>
-            <div className='flex w-full border-y-[1px] border-gray-300 border-opacity-20'>
+          <div className='flex flex-col w-1/2 bg-secondary-light_black rounded-xl px-2'>
+            <h3 className='font-bold text-center text-primary'>Most Active Players</h3>
+            <div className='flex w-full border-y-[1px] border-gray-300 border-opacity-20 text-center'>
               {mostActivePlayersColumns.map((column, index) => (
-                <span key={index} className={`${column.width} text-xs text-center`}>{column.label}</span>
+                <span key={index} className={`${column.width} text-xs `}>{column.label}</span>
               ))}
             </div>
             {Object.entries(mostActivePlayers).sort(([, a], [, b]) => b.played - a.played).map(([name, player]) => (
@@ -91,8 +91,8 @@ const ActivityChart = ({ localActivityData }: { localActivityData: ActivityStati
               />
             ))}
           </div>
-          <div className='w-1/2 flex flex-col bg-gray-800 rounded-xl px-2'>
-            <h3 className='font-bold text-center'>Most Active Specs</h3>
+          <div className='w-1/2 flex flex-col bg-secondary-light_black rounded-xl px-2'>
+            <h3 className='font-bold text-center text-primary'>Most Active Specs</h3>
             <div className='flex w-full border-y-[1px] border-gray-300 border-opacity-20'>
               {mostActiveSpecsColumns.map((column, index) => (
                 <span key={index} className={`${column.width} text-xs text-center`}>{column.label}</span>
