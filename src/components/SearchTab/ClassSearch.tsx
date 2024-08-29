@@ -93,7 +93,7 @@ const ClassSearch = () => {
     }, [version]);
 
     return (
-        <div className='flex justify-between w-full bg-gray-800 rounded-lg p-4'>
+        <div className='flex justify-between w-full bg-secondary-light_black rounded-lg p-4'>
             {Object.keys(classSpecs).map((className, index) => (
                 <div key={index} className='text-center'>
                     <Image
@@ -103,7 +103,7 @@ const ClassSearch = () => {
                         height={30}
                         className={`
                             rounded-lg overflow-hidden cursor-pointer 
-                            ${classSpecs[className]?.every(spec => classSearch.includes(spec)) ? 'border-2 border-blue-500' : ''} 
+                            ${classSpecs[className]?.every(spec => classSearch.includes(spec)) ? 'border-2 border-primary' : ''} 
                             ${version === 'classic' && ['Evoker', 'Demon Hunter', 'Monk'].includes(className) ? 'grayed-out' : ''}
                             `}
                         onClick={() => toggleClassSelection(className)}
@@ -118,7 +118,7 @@ const ClassSearch = () => {
                                 height={30}
                                 className={`
                                     rounded-lg overflow-hidden cursor-pointer 
-                                    ${classSearch.includes(spec) ? 'border-2 border-blue-500' : ''} 
+                                    ${classSearch.includes(spec) ? 'border-2 border-primary' : ''} 
                                     ${version === 'classic' && ['Evoker', 'Demon Hunter', 'Monk'].includes(className) ? 'grayed-out' : ''}
                                     `}
                                 onClick={() => toggleSpecSelection(spec)}

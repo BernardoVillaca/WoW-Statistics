@@ -80,14 +80,14 @@ const RatingSearch: React.FC = () => {
 
   if (!isDataFetched) {
     return (
-      <div className="flex flex-col items-center justify-center w-1/5 p-4 rounded-lg border border-gray-700">
+      <div className="flex flex-col items-center justify-center w-1/5 p-4 rounded-lg border-[1px] border-opacity-30 border-secondary-gray">
         <FiLoader className="animate-spin text-white" size={50} />
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col items-center justify-center w-1/5 p-4 rounded-lg border border-gray-700">
+    <div className="flex flex-col items-center justify-center w-1/5 p-4 rounded-lg border-[1px] border-opacity-30 border-secondary-gray">
       <div className="relative w-full h-10">
         <input
           type="range"
@@ -107,9 +107,9 @@ const RatingSearch: React.FC = () => {
           className="absolute h-10 bg-transparent pointer-events-none z-40 w-full"
           style={{ zIndex: maxInputValue <= maxSliderValue * 0.5 ? '40' : '30' }}
         />
-        <div className="absolute w-full h-1 bg-gray-300 rounded-lg top-1/2 transform -translate-y-1/2"></div>
+        <div className="absolute w-full h-1 bg-secondary-gray rounded-lg top-1/2 transform -translate-y-1/2"></div>
         <div
-          className="absolute h-1 bg-blue-500 rounded-lg top-1/2 transform -translate-y-1/2"
+          className="absolute h-1 bg-primary rounded-lg top-1/2 transform -translate-y-1/2"
           style={{
             left: `${((minInputValue - minSliderValue) / (maxSliderValue - minSliderValue)) * 100}%`,
             width: `${((maxInputValue - minInputValue) / (maxSliderValue - minSliderValue)) * 100}%`,
@@ -117,8 +117,8 @@ const RatingSearch: React.FC = () => {
         ></div>
       </div>
       <div className="flex justify-between w-full">
-        <span className="text-sm text-gray-300">{minInputValue}</span>
-        <span className="text-sm text-gray-300">{maxInputValue}</span>
+        <span className="text-sm">{minInputValue}</span>
+        <span className="text-sm">{maxInputValue}</span>
       </div>
     </div>
   );

@@ -32,7 +32,7 @@ const BarChart: React.FC<BarChartProps> = ({ highestValue, sortedArray, specific
                         .map(([className, count]) => {
                             const width = Math.max((count / highestValue) * 100, minWidth);
                             return (
-                                <div key={className} style={{ width: `${width}%` }} className='flex bg-primary h-8 items-center justify-between rounded-r-lg px-2'>
+                                <div key={className} style={{ width: `${width}%` }} className='flex bg-secondary-navy h-8 items-center justify-between rounded-r-lg px-2'>
                                     <Image
                                         src={classChart ? classIconsMap[className as keyof typeof classIconsMap] : specIconsMap[className as keyof typeof specIconsMap]}
                                         alt={className}

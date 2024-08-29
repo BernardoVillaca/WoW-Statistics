@@ -57,7 +57,7 @@ const ScrollTab = ({ resultsPerPage }: { resultsPerPage: number }) => {
     }, [currentPage]);
 
     return (
-        <div className="flex h-10 bg-gray-800 justify-between items-center text-sm rounded-xl text-gray-300">
+        <div className="flex h-10 bg-secondary-light_black justify-between items-center text-sm rounded-xl ">
             {resultsCount !== 0 && currentPage !== 0 && (
                 <div className="flex justify-between w-1/2">
                     <div className="items-center flex pl-3">{`Page ${currentPage} from ${resultsCount} characters`}</div>
@@ -69,7 +69,7 @@ const ScrollTab = ({ resultsPerPage }: { resultsPerPage: number }) => {
                             max={totalPages}
                             value={inputValue}
                             onChange={handleInputChange}
-                            className="w-10 h-6 px-2 text-center text-black bg-gray-300 border-none rounded-lg focus:outline-none"
+                            className="w-10 h-6 px-2 text-center text-black bg-secondary-gray border-none rounded-lg focus:outline-none"
                         />
                     </div>
                 </div>
@@ -89,7 +89,7 @@ const ScrollTab = ({ resultsPerPage }: { resultsPerPage: number }) => {
                     {getDisplayedPages().map((page, index) => (
                         <div
                             key={index}
-                            className={`w-8 h-8 flex items-center justify-center cursor-pointer rounded-full select-none ${page === currentPage ? 'bg-gray-600 text-white' : 'bg-gray-300 text-black'}`}
+                            className={`w-8 h-8 flex items-center justify-center cursor-pointer rounded-full select-none ${page === currentPage ? 'bg-secondary-navy text-white' : 'bg-secondary-gray text-primary-dark'}`}
                             onClick={() => handlePageChange(page)}
                         >
                             {page}

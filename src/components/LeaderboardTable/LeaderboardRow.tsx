@@ -76,7 +76,7 @@ const LeaderboardRow: React.FC<LeaderboardRowProps> = ({
 
   return (
     <Link href={`/profile?${params.toString()}`}>
-      <div className={`relative bg-gray-800 flex border-b-[1px] hover:bg-gray-700 cursor-pointer ${getBorderClass()}`} style={{ height: rowHeight }}>
+      <div className={`relative bg-secondary-light_black flex border-b-[1px] hover:bg-primary-dark cursor-pointer ${getBorderClass()}`} style={{ height: rowHeight }}>
         {renderRankIcon()}
         {searchTabs.map((cell, index) => {
           const cellValue = characterData[cell.name];

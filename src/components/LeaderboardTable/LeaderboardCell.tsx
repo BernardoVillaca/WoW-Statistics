@@ -72,14 +72,14 @@ const LeaderboardCell = ({ str, height, index, cell, characterClass, characterSp
 
 
   return (
-    <div className={`relative flex items-center justify-center text-gray-300 w-full ${index === 0 ? '' : 'border-l-[1px] border-gray-700'}`}>
+    <div className={`relative flex items-center justify-center text-gray-300 w-full ${index === 0 ? '' : 'border-l-[1px] border-opacity-30 border-secondary-gray'}`}>
       {factionIcon ? (
         <Image src={factionIcon} alt={str} height={height / 2} width={height / 2} className='rounded-lg overflow-hidden' />
       ) : cell === 'rating' || cell === 'played' ? (
         <div className=''>
           <span>{str}</span>
           {showDifference && (
-            <div className={`absolute bottom-3 left-24 text-xs ${difference > 0 ? 'text-green-600' : 'text-red-600'}`}>
+            <div className={`absolute bottom-3 left-24 text-xs ${difference > 0 ? 'text-green-600' : 'text-secondary-rose'}`}>
               {difference !== 0 ? `(${difference > 0 ? '+' : ''}${difference})` : ''}
             </div>
           )}
@@ -98,14 +98,14 @@ const LeaderboardCell = ({ str, height, index, cell, characterClass, characterSp
           )}
         </div>
       ) : cell === 'win_ratio' ? (
-        <span className={` ${Number(str) >= 70 ? 'text-green-300' : Number(str) >= 55 ? 'text-yellow-300' : 'text-red-300'} `}>
+        <span className={` ${Number(str) >= 70 ? 'text-green-300' : Number(str) >= 55 ? 'text-yellow-300' : 'text-secondary-rose'} `}>
           {str}%
         </span>
       ) : cell === 'rank' && path === '/solo-shuffle' ? (
         <div className='flex'>
           <span>{overallRank}</span>
           {showDifference && (
-            <div className={`absolute bottom-3 left-24 text-xs ${difference > 0 ? 'text-green-600' : 'text-red-600'}`}>
+            <div className={`absolute bottom-3 left-24 text-xs ${difference > 0 ? 'text-green-600' : 'text-secondary-rose'}`}>
               {difference !== 0 ? `(${difference > 0 ? '+' : ''}${difference})` : ''}
             </div>
           )}
@@ -121,7 +121,7 @@ const LeaderboardCell = ({ str, height, index, cell, characterClass, characterSp
         <div >
           {str}
           {showDifference && (
-            <div className={`absolute bottom-3 left-24 text-xs ${difference > 0 ? 'text-green-600' : 'text-red-600'}`}>
+            <div className={`absolute bottom-3 left-24 text-xs ${difference > 0 ? 'text-green-600' : 'text-secondary-rose'}`}>
               {difference !== 0 ? `(${difference > 0 ? '+' : ''}${difference})` : ''}
             </div>
           )}

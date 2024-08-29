@@ -31,9 +31,9 @@ const FactionSearch = () => {
 
 
     return (
-        <div className='flex text-black items-center justify-center w-1/5 rounded-lg gap-8 border-[1px] border-gray-700'>
+        <div className='flex text-black items-center justify-center w-1/5 rounded-lg gap-8 border-[1px] border-secondary-gray border-opacity-30'>
             <div
-                className={`cursor-pointer rounded-full w-12 h-12 flex items-center justify-center ${faction === 'horde' ? 'border-2 border-blue-500' : ''}`}
+                className={`cursor-pointer rounded-full w-12 h-12 flex items-center justify-center ${faction === 'horde' ? 'border-2 border-secondary-gray' : ''}`}
                 onClick={() => handleToggle('horde')}
             >
                 <div className='rounded-full'>
@@ -48,7 +48,7 @@ const FactionSearch = () => {
                 </div>
             </div>
             <div
-                className={`cursor-pointer rounded-full w-12 h-12 flex items-center justify-center ${faction === 'alliance' ? 'border-2 border-blue-500' : ''}`}
+                className={`cursor-pointer rounded-full w-12 h-12 flex items-center justify-center ${faction === 'alliance' ? 'border-2 border-secondary-gray' : ''}`}
                 onClick={() => handleToggle('alliance')}
             >
                 <div className='rounded-full'>

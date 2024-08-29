@@ -105,7 +105,7 @@ const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, results
     <div className="flex flex-col w-full" style={{ height: containerHeight }}>
       {!legacy && <RatingsCutoffTab />}
       {loading ? (
-        <div className="h-full flex flex-col justify-between items-center bg-gray-800 bg-opacity-50 py-24">
+        <div className="h-full flex flex-col justify-between items-center bg-secondary-light_black bg-opacity-50 py-24">
           <FiLoader className="animate-spin text-white" size={50} />
           <FiLoader className="animate-spin text-white" size={50} />
           <FiLoader className="animate-spin text-white" size={50} />

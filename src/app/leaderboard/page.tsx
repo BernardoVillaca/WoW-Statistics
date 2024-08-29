@@ -13,12 +13,12 @@ const rowHeight = 40
 const LeaderboardPage = () => {
 
   return (
-    <main className="flex min-h-screen bg-gradient-to-b from-[#000080] to-black text-white relative">
+    <main className="flex min-h-screen  text-white relative">
       <div className="flex flex-col w-full gap-4 pt-4">
         <VersionSearch />
         <SearchTab isShuffle={false} />
         <ScrollTab resultsPerPage={resultsPerPage} />
-        <div className="flex h-8 bg-gray-800 text-gray-300 justify-between ">
+        <div className="flex h-8 bg-secondary-light_black text-gray-300 justify-between ">
           {searchTabs.map((tab) => (
             <div key={tab.name} className={`flex items-center justify-center text-white text-center h-full w-full '} `}>{tab.label}</div>
           ))}

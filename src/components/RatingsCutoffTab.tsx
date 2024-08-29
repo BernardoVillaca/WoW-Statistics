@@ -93,7 +93,7 @@ const RatingsCutoffTab = () => {
   }
 
   return (
-    <div className={`flex w-48 h-5 ${cutoff ? 'bg-gray-800' : 'bg-transparent'} rounded-md justify-between text-sm px-2 mb-1`}>
+    <div className={`flex h-4 ${cutoff ? '' : 'bg-transparent'} rounded-md gap-2  text-sm px-2 mb-1`}>
       {cutoff && (
         <>
           <div>

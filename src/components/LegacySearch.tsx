@@ -71,14 +71,14 @@ const LegacySearch = () => {
   return (
     <div className='flex h-16 gap-12 justify-center'>
       {Object.entries(legacyExpMap).map(([expansion, seasons]) => (
-        <div key={expansion} className='flex border-[1px] bg-gray-800 border-gray-700 px-2 gap-4 rounded-xl items-center'>
+        <div key={expansion} className='flex border-[1px] bg-secondary-light_black border-secondary-gray border-opacity-30 px-2 gap-4 rounded-xl items-center'>
           <h2 className='text-white'>{expansion}</h2>
           <div className='flex gap-4'>
             {Object.entries(seasons).map(([season, pvpSeasonIndex]) => (
               <button
                 onClick={() => onClickHandler(expansion, season, pvpSeasonIndex)}
                 key={season}
-                className={`h-6 w-6 rounded-md ${isSelected(expansion, season, pvpSeasonIndex) ? 'text-gray-800 bg-gray-300' : 'text-gray-300 bg-gray-800 border-[1px] border-gray-700'}`}
+                className={`h-6 w-6 rounded-md ${isSelected(expansion, season, pvpSeasonIndex) ? ' bg-secondary-gray text-black' : '0 bg-secondary-navy border-[1px] border-gray-700'}`}
               >
                 {season}
               </button>

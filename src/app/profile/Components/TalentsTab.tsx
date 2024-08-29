@@ -152,7 +152,7 @@ const TalentsTab = ({ params }: TalentsTabProps) => {
 
 
     return (
-        <div className='flex flex-col place-content-top items-center w-full bg-gray-800 gap-4 h-[1300px]'>
+        <div className='flex flex-col place-content-top items-center w-full bg-gray-800 gap-4 h-[1330px]'>
             <span className='text-2xl font-bold pt-2'>
                 Talents
             </span>
@@ -169,7 +169,7 @@ const TalentsTab = ({ params }: TalentsTabProps) => {
             </div>
             <div className='w-full h-full px-12'>
                 {loading ? (
-                    <div className="h-full flex flex-col justify-between items-center bg-gray-8400 bg-opacity-50 py-16">
+                    <div className="h-full flex flex-col justify-between items-center bg-gray-400 bg-opacity-50 py-16">
                         <FiLoader className="animate-spin text-white" size={50} />
                         <FiLoader className="animate-spin text-white" size={50} />
                         <FiLoader className="animate-spin text-white" size={50} />
@@ -223,7 +223,6 @@ const TalentsTab = ({ params }: TalentsTabProps) => {
                         </div >
                         <div className='flex flex-col gap-4 items-center '>
                             <div className='border-[1px] p-3 border-gray-500 rounded-lg w-1/2'>
-
                                 <h3 className='text-xl font-semibold text-center'>Hero Talents:</h3>
                                 <ul className='list-disc list-inside'>
                                     {heroTalents.length > 0 ? (

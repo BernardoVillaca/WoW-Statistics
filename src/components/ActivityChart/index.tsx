@@ -57,7 +57,7 @@ const ActivityChart = ({ localActivityData }: { localActivityData: ActivityStati
           <span>Total Active Characters: {total}</span>
         </div>
         <div className='flex w-1/3 items-center place-content-center'>
-          <span className='text-primary font-bold'>Activity</span>
+          <span className='font-bold'>Activity</span>
         </div>
         <div className='flex w-1/3 items-end place-content-end'>
           <div className='flex gap-2 h-16 items-center'>
@@ -76,7 +76,7 @@ const ActivityChart = ({ localActivityData }: { localActivityData: ActivityStati
       <div className='flex flex-col  text-gray-300 gap-2'>
         <div className='flex w-full gap-4'>
           <div className='flex flex-col w-1/2 bg-secondary-light_black rounded-xl px-2'>
-            <h3 className='font-bold text-center text-primary'>Most Active Players</h3>
+            <h3 className='font-bold text-center'>Most Active Players</h3>
             <div className='flex w-full border-y-[1px] border-gray-300 border-opacity-20 text-center'>
               {mostActivePlayersColumns.map((column, index) => (
                 <span key={index} className={`${column.width} text-xs `}>{column.label}</span>
@@ -92,7 +92,7 @@ const ActivityChart = ({ localActivityData }: { localActivityData: ActivityStati
             ))}
           </div>
           <div className='w-1/2 flex flex-col bg-secondary-light_black rounded-xl px-2'>
-            <h3 className='font-bold text-center text-primary'>Most Active Specs</h3>
+            <h3 className='font-bold text-center'>Most Active Specs</h3>
             <div className='flex w-full border-y-[1px] border-gray-300 border-opacity-20'>
               {mostActiveSpecsColumns.map((column, index) => (
                 <span key={index} className={`${column.width} text-xs text-center`}>{column.label}</span>

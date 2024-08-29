@@ -161,14 +161,14 @@ const RealmSearch: React.FC = () => {
 
     if (!isDataFetched) {
         return (
-            <div className='flex flex-col items-center justify-center w-1/5 p-4 rounded-lg border border-gray-700'>
+            <div className='flex flex-col items-center justify-center w-1/5 p-4 rounded-lg border-[1px] border-opacity-30 border-secondary-gray'>
                 <FiLoader className="animate-spin text-white" size={50} />
             </div>
         );
     }
 
     return (
-        <div className='relative flex text-black items-center justify-center w-1/5 rounded-lg border-[1px] border-gray-700'>
+        <div className='relative flex items-center justify-center w-1/5 rounded-lg border-[1px] border-opacity-30 border-secondary-gray'>
 
             <input
                 ref={inputRef}
@@ -177,11 +177,11 @@ const RealmSearch: React.FC = () => {
                 onFocus={handleFocus}
                 onChange={(e) => handleChange(e.target.value)}
                 onKeyDown={handleKeyDown}
-                className="w-32 h-8 px-2 text-center text-black bg-gray-300 border-none focus:outline-none"
+                className="w-32 h-8 px-2 text-center text-primary-dark bg-secondary-gray border-none focus:outline-none"
             />
             {realm !== '' ? (
                 <button
-                    className='bg-gray-400 w-8 h-8 items-center justify-center flex text-red-500'
+                    className='bg-secondary-gray w-8 h-8 items-center justify-center flex text-secondary-rose'
                     onClick={() => {
                         setRealm('');
                         setTextInput(''); 
@@ -194,7 +194,7 @@ const RealmSearch: React.FC = () => {
 
             ) : (
                 <button
-                    className='bg-gray-400 w-8 h-8 items-center justify-center flex'
+                    className='bg-secondary-navy text-primary-dark w-8 h-8 items-center justify-center flex'
                     onClick={toggleDropdown}
                 >
                     <FiChevronDown className={`${isOpen ? 'rotate-180' : ''}`} />
@@ -202,7 +202,7 @@ const RealmSearch: React.FC = () => {
             )}            
             {isOpen && (
                 <div
-                    className='absolute top-12 w-40 max-h-24 bg-gray-600 border-[1px] border-gray-700 overflow-auto snap-mandatory snap-y'
+                    className='absolute top-12 w-40 max-h-24 bg-secondary-navy border-[1px] border-secondary-gray overflow-auto snap-mandatory snap-y'
                 >
                     {filteredRealmList.length > 0 ? (
                         filteredRealmList.map((realm, index) => (
@@ -214,7 +214,7 @@ const RealmSearch: React.FC = () => {
                                     setRealm(realm.realm_name);
                                     setIsOpen(false);
                                 }}
-                                className={`flex cursor-pointer hover:bg-gray-400 snap-start items-center justify-center ${highlightedIndex === index ? 'bg-gray-500' : ''}`}
+                                className={`flex cursor-pointer hover:bg-secondary-light_black snap-start items-center justify-center ${highlightedIndex === index ? 'bg-secondary-light_black' : ''}`}
                             >
                                 {realm.realm_name}
                             </div>
