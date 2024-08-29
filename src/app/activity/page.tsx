@@ -155,17 +155,17 @@ const Activity = () => {
   const bracketText = capitalizeFirstLetter(params.bracket);
 
   return (
-    <main className="flex flex-col min-h-screen bg-gradient-to-b from-[#000080] to-black text-gray-300 relative gap-4 py-2">
-      <div className='h-20 bg-gray-800 flex justify-between px-20 rounded-xl'>
+    <main className="flex flex-col text-white min-h-screen relative gap-4 py-2">
+      <div className='h-20 bg-secondary-light_black flex justify-between px-20 rounded-xl'>
         <RegionSearch partofLeadeboard={false} />
         <VersionSearch />
         <BracketSearch partofLeadeboard={false} />
       </div>
       <span className='text-center text-xl'>
-        {versionText} {regionText} {bracketText} Active Characters Count
+        {versionText} {regionText} {bracketText} - Active Characters Count
       </span>
       <div className='flex w-full items-center place-content-center'>
-        <div className='flex rounded-xl  h-[350px] w-[700px] bg-gray-800'>
+        <div className='flex rounded-xl  h-[350px] w-[700px] bg-secondary-light_black'>
           {graphLoading ? (
             <div className='flex items-center place-content-center w-full h-[340px]'>
               <FiLoader className="animate-spin text-gray-300" size={50} />
@@ -194,15 +194,15 @@ const Activity = () => {
           )}
         </div>
       </div>
-      <div className='flex flex-col gap-4 p-4 border-24 border-[1px] rounded border-opacity-60 border-gray-300 '>
+      <div className='flex flex-col gap-4 p-4 border-24 border-[1px] rounded border-opacity-30 border-secondary-gray '>
         <span className="text-center text-xl">Recent Activity</span>
         <ScrollTab resultsPerPage={10} />
-        <div className="flex h-8 bg-gray-800 text-gray-300 justify-between ">
+        <div className="flex h-8 bg-secondary-light_black text-gray-300 justify-between ">
           {searchTabs.map((tab) => (
             <div key={tab.name} className={`flex items-center justify-center text-white text-center h-full w-full '} `}>{tab.label}</div>
           ))}
         </div>
-        <div className='flex w-full flex-col h-[400px] bg-gray-800 rounded-xl'>
+        <div className='flex w-full flex-col h-[400px] bg-secondary-light_black rounded-xl'>
           {activePlayersLoading ? (
             <div className='flex items-center place-content-center w-full h-[400px]'>
               <FiLoader className="animate-spin text-gray-300" size={50} />

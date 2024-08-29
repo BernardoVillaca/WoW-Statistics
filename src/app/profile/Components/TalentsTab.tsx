@@ -152,7 +152,7 @@ const TalentsTab = ({ params }: TalentsTabProps) => {
 
 
     return (
-        <div className='flex flex-col place-content-top items-center w-full bg-gray-800 gap-4 h-[1330px]'>
+        <div className='flex flex-col place-content-top items-center w-full bg-secondary-light_black gap-4 h-[1330px]'>
             <span className='text-2xl font-bold pt-2'>
                 Talents
             </span>
@@ -160,7 +160,7 @@ const TalentsTab = ({ params }: TalentsTabProps) => {
                 {characterClass && Object.entries(classSpecIconsMap[characterClass as keyof typeof classSpecIconsMap]).map(([specName, specIcon]) => (
                     <button
                         key={specName}
-                        className={`flex w-32 place-content-center items-center p-2 border-[1px] border-gray-500 hover:bg-gray-700 rounded-lg ${displayedSpec === specName ? 'bg-gray-700' : ''}`}
+                        className={`flex w-32 place-content-center items-center p-2 border-[1px] border-gray-500 hover:bg-secondary-navy rounded-lg ${displayedSpec === specName ? 'bg-secondary-navy' : ''}`}
                         onClick={() => setDisplayedSpec(specName)}
                     >
                         <Image alt={specName} src={specIcon} height={40} width={40} className='rounded-lg overflow-hidden' />
@@ -169,7 +169,7 @@ const TalentsTab = ({ params }: TalentsTabProps) => {
             </div>
             <div className='w-full h-full px-12'>
                 {loading ? (
-                    <div className="h-full flex flex-col justify-between items-center bg-gray-400 bg-opacity-50 py-16">
+                    <div className="h-full flex flex-col justify-between items-center bg-secondary-light_black py-16">
                         <FiLoader className="animate-spin text-white" size={50} />
                         <FiLoader className="animate-spin text-white" size={50} />
                         <FiLoader className="animate-spin text-white" size={50} />
@@ -178,7 +178,7 @@ const TalentsTab = ({ params }: TalentsTabProps) => {
                 ) : (
                     <div className='flex flex-col gap-4'>
                         <button
-                            className={`border-[1px] rounded-lg py-2 flex items-center place-content-center gap-2 transition-all duration-300 hover:bg-gray-700 ${copied ? 'border-green-500' : 'border-gray-500'
+                            className={`border-[1px] rounded-lg py-2 flex items-center place-content-center gap-2 transition-all duration-300 hover:bg-secondary-navy ${copied ? 'border-green-500' : 'border-gray-500'
                                 }`}
                             onClick={handleClick}
                         >

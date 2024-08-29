@@ -59,16 +59,16 @@ const TittlesTab = ({ params }: TittleTabProps) => {
 
 
     return (
-        <div className="flex flex-col  items-center bg-gray-800 p-4 h-[200px]">
+        <div className="flex flex-col  items-center bg-secondary-light_black p-4 h-[200px]">
             <h1 className="text-2xl font-bold">Titles</h1>
             {loading ? (
-                <div className="h-full flex flex-col place-content-center items-center bg-gray-800 bg-opacity-50">
+                <div className="h-full flex flex-col place-content-center items-center bg-secondary-light_black bg-opacity-50">
                     <FiLoader className="animate-spin text-white" size={50} />
                 </div>
             ) : (
                 <div className='flex gap-4 pt-4'>
                     {Object.entries(titles).map(([name, values], index) => (
-                        <div key={index} className=" relative flex items-center border-[1px] border-gray-500 p-1 rounded-2xl">
+                        <div key={index} className=" relative flex items-center border-[1px] border-secondary-gray border-opacity-30 p-1 rounded-2xl">
                             {tittleIconsObj[name as TitleKey] && (
                                 <Image src={tittleIconsObj[name as TitleKey]} alt={name} width={80}  />
                             )}

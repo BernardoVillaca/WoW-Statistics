@@ -10,6 +10,7 @@ import ActitivityTab from './Components/ActivityTab';
 import TittlesTab from './Components/TittlesTab';
 import { FiLoader } from 'react-icons/fi';
 import TalentsTab from './Components/TalentsTab';
+import { classColors } from '~/utils/helper/classIconsMap';
 
 
 type QueryParams = {
@@ -82,17 +83,19 @@ const ProfilePage = () => {
 
 
     return (
-        <main className="flex flex-col min-h-screen bg-gradient-to-b from-[#000080] to-black text-white relative gap-4 py-2">
-            <div className="flex h-16 bg-gray-800 items-center place-content-center gap-2 rounded-lg">
-                <span>{params.name}</span>
-                <span>-</span>
-                <span>{params.realm}</span>
+        <main className="flex flex-col min-h-screen  text-white relative gap-4 py-2">
+            <div className="flex h-16 bg-secondary-light_black items-center place-content-center gap-2 rounded-lg">
+                <div className='flex gap-2' style={{ color: params.class ? classColors[params.class] : undefined }}>
+                    <span >{params.name}</span>
+                    <span>-</span>
+                    <span>{params.realm}</span>
+                </div>
                 {params.region === 'us' && <Image src={us} width={25} alt="us" />}
                 {params.region === 'eu' && <Image src={eu} width={25} alt="eu" />}
             </div>
             <div className="flex gap-2 h-32 w-full">
                 {bracketLoading ? (
-                    <div className="h-full flex flex-col place-content-center items-center bg-gray-800 w-full">
+                    <div className="h-full flex flex-col place-content-center items-center bg-secondary-light_black w-full">
                         <FiLoader className="animate-spin text-white" size={50} />
                     </div>
                 ) : (
@@ -116,7 +119,7 @@ const ProfilePage = () => {
                     <TittlesTab params={params} />
                 </div>
                 <div className='flex flex-col w-1/2 gap-2'>
-                    <TalentsTab params={params}/>
+                    <TalentsTab params={params} />
                 </div>
 
             </div>

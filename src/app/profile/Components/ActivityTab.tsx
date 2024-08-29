@@ -17,6 +17,7 @@ import {
 } from 'chart.js';
 import 'chartjs-adapter-date-fns';
 import { FiLoader } from 'react-icons/fi';
+import { classColors } from '~/utils/helper/classIconsMap';
 
 ChartJS.register(
     CategoryScale,
@@ -36,6 +37,7 @@ interface ActitivityTabProps {
         region: string | null;
         name: string | null;
         realm: string | null;
+        class: string | null;
     };
 }
 
@@ -93,8 +95,8 @@ const ActitivityTab = ({ choosenBracket, params }: ActitivityTabProps) => {
                         label: 'Rating',
                         data: ratings,
                         fill: false,
-                        borderColor: 'rgba(75,192,192,1)',
-                        backgroundColor: 'rgba(75,192,192,0.2)',
+                        borderColor: params.class ? classColors[params.class] : undefined,
+                        backgroundColor: params.class ? classColors[params.class] : undefined,
                         tension: 0.1,
                     },
                 ],
@@ -112,13 +114,13 @@ const ActitivityTab = ({ choosenBracket, params }: ActitivityTabProps) => {
     }, [choosenBracket, params]);
 
     return (
-        <div className='flex flex-col items-center place-content-center h-[375px] bg-gray-800 p-4 gap-4'>
+        <div className='flex flex-col items-center place-content-center h-[375px] bg-secondary-light_black p-4 gap-4'>
             <span className='text-2xl font-bold'>
                 {`Activity - ${choosenBracket.includes('shuffle') ? 'Shuffle' : choosenBracket}`}
             </span>
             <div className='w-full h-full'>
                 {loading ? (
-                    <div className="h-full flex flex-col place-content-center items-center bg-gray-800 bg-opacity-50">
+                    <div className="h-full flex flex-col place-content-center items-center bg-secondary-light_black ">
                         <FiLoader className="animate-spin text-white" size={50} />
                     </div>
                 ) : (

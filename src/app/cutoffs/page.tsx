@@ -171,18 +171,19 @@ const RatingCutoffs = () => {
 
 
   return (
-    <div className='flex flex-col w-full min-h-screen bg-gradient-to-b from-[#000080] to-black text-white gap-4 py-2 relative'>
+    <div className='flex flex-col text-white w-full min-h-screen gap-4 py-2 relative'>
       {isOpen && selectedKey && (
         <div
           className='fixed flex top-0 right-0 flex-col w-full h-full bg-black/40 items-center place-content-center'
           onClick={() => oncloseHandler()}
         >
           <div
-            className='flex flex-col  bg-gray-800 p-2 rounded-xl '
             onClick={(e) => e.stopPropagation()}
           >
-            <div className='h-full w-full  flex items-center justify-center'>
-              <div className='flex flex-col  bg-gray-800 p-2 rounded-xl ' onClick={(e) => e.stopPropagation()}>
+            <div 
+            className='h-full w-full  flex items-center justify-center'
+            >
+              <div className='flex flex-col bg-secondary-light_black p-2 rounded-xl ' onClick={(e) => e.stopPropagation()}>
                 <div className='flex h-10 items-center justify-between px-2' >
                   <div className='flex gap-4'>
                     <span style={{ color: classColors[formatKey(selectedKey)] }}>{formatKey(selectedKey)}</span>
@@ -192,16 +193,16 @@ const RatingCutoffs = () => {
                     }
                   </div>
                   <button
-                    className='text-2xl text-gray-300 select-none'
+                    className='text-2xl text-white select-none'
                     onClick={() => oncloseHandler()}
                   >
                     <FiX />
                   </button>
                 </div>
-                <div className='flex h-[400px] w-[800px] border-[1px] items-center place-content-center  border-gray-300 rounded-xl  border-opacity-30 p-4'>
+                <div className='flex h-[400px] w-[800px] border-[1px] items-center place-content-center  border-secondary-gray rounded-xl  border-opacity-30 p-4'>
                   {loading ? (
                     <div className='flex items-center justify-center '>
-                      <FiLoader className="animate-spin text-gray-300" size={50} />
+                      <FiLoader className="animate-spin" size={50} />
                     </div>
                   ) : (
                     <>
@@ -239,7 +240,7 @@ const RatingCutoffs = () => {
         </div>
       )}
       <div className='flex px-24 gap-24'>
-        <div className='flex flex-col w-1/2 place-content-center items-center bg-gray-800 px-2 rounded-xl'>
+        <div className='flex flex-col w-1/2 place-content-center items-center bg-secondary-light_black px-2 rounded-xl'>
           <div className='p-4'>
             <Image
               className=''
@@ -261,7 +262,7 @@ const RatingCutoffs = () => {
             </button>
           ))}
         </div>
-        <div className='flex flex-col w-1/2 place-content-center items-center bg-gray-800 px-2 rounded-xl'>
+        <div className='flex flex-col w-1/2 place-content-center items-center bg-secondary-light_black px-2 rounded-xl'>
           <div className='p-4'>
             <Image
               className=''

@@ -51,7 +51,7 @@ const BracketTab = ({ params, bracket, data, setChoosenBracket, choosenBracket }
     return (
         <>
             <button
-                className={`flex flex-col  ${choosenBracket === bracket ? 'bg-gray-700' : 'bg-slate-800'} w-1/4 pt-2 px-2`}
+                className={`flex flex-col  ${choosenBracket === bracket ? 'bg-secondary-navy' : 'bg-secondary-light_black'} w-1/4 pt-2 px-2`}
                 onClick={() => setChoosenBracket(bracket)}
             >
                 <div className='flex gap-2 place-content-center w-full'>
