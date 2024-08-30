@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FiLoader } from 'react-icons/fi';
 import LeaderboardRow from './LeaderboardRow';
 import axios from 'axios';
@@ -18,6 +18,7 @@ const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, results
   const [loading, setLoading] = useState(false);
   const [paramsToUse, setParamsToUse] = useState({} as QueryParams);
   const [path, setPath] = useState<string | null>(null);
+  const isInitialRender = useRef(true);
 
   const queryParams = useURLChange();
 
@@ -66,7 +67,7 @@ const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, results
         if (key === 'pvpSeasonIndex' && value === '37') return false
         if (key === 'path' && value === '/leaderboard') return false
         if (key === 'path' && value === '/solo-shuffle') return false
-        if (key === 'page' && value === 1) return false;
+        // if (key === 'page' && value === 1) return false;
         if (key === 'minRating' && value === 0) return false;
         if (key === 'maxRating' && value === 4000) return false;
         return value !== '' && value !== null && value !== undefined;
@@ -74,12 +75,16 @@ const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, results
     );
 
     try {
-      const firstResponse = await axios.get(`/api/get50Results`, {
-        params: filteredParams
-      });
-      const firstResponseData = firstResponse.data as { total: number; results: CharacterData[] };
-      setResultsCount(firstResponseData.total);
-      setData(firstResponseData.results);
+      // prevent initial render from fetching data twice
+      if (!isInitialRender.current) {
+        const firstResponse = await axios.get(`/api/get50Results`, {
+          params: filteredParams
+        });
+        const firstResponseData = firstResponse.data as { total: number; results: CharacterData[] };
+        setResultsCount(firstResponseData.total);
+        setData(firstResponseData.results);
+      }
+      isInitialRender.current = false;
 
     } catch (error) {
       console.error('Error fetching data:', error);
