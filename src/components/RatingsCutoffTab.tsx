@@ -53,9 +53,7 @@ const RatingsCutoffTab = () => {
       page: params.get('page') ?? 1,
       search: params.get('search') ?? undefined,
       faction: params.get('faction') ?? undefined,
-      realm: params.get('realm') ?? undefined,
-      minRating: parseInt(params.get('minRating') ?? '0'),
-      maxRating: parseInt(params.get('maxRating') ?? '4000')
+      realm: params.get('realm') ?? undefined,      
     };
   };
 

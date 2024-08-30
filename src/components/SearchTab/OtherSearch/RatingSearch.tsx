@@ -58,16 +58,27 @@ const RatingSearch: React.FC = () => {
     return () => {
       isMounted = false;
     };
-  }, [version, region, bracket, minRating, maxRating]);
+  }, [version, region, bracket]);
 
   useEffect(() => {
-    if (minInputValue || maxInputValue) {
-      updateURL('maxRating', maxInputValue === maxSliderValue ? '' : maxInputValue.toString(), true);
-      updateURL('minRating', minInputValue === minSliderValue ? '' : minInputValue.toString(), true);
-      setCurrentPage(1);
-    }
-  }, [minInputValue, maxInputValue, maxSliderValue, minSliderValue, setCurrentPage]);
+    setMinInputValue(minSliderValue);
+    setMaxInputValue(maxSliderValue);
+    updateURL('minRating', '', true);
+    updateURL('maxRating', '', true);
+  }, [minSliderValue, maxSliderValue]);
 
+
+  // Debounce the input change to avoid too many URL updates
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (minInputValue || maxInputValue) {
+        updateURL('maxRating', maxInputValue === maxSliderValue ? '' : maxInputValue.toString(), true);
+        updateURL('minRating', minInputValue === minSliderValue ? '' : minInputValue.toString(), true);
+        setCurrentPage(1);
+      }
+    }, 1000);
+    return () => clearTimeout(timeoutId);
+  }, [minInputValue, maxInputValue, maxSliderValue, minSliderValue, setCurrentPage]);
   const handleMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = Math.min(Number(e.target.value), maxInputValue - 1);
     setMinInputValue(value);

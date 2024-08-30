@@ -12,8 +12,7 @@ export const calculateDifference = (history: HistoryEntry[], characterData: Char
         const currentDate = new Date();
         const diffTime = currentDate.getTime() - lastUpdate.getTime();
         const diffHours = diffTime / (1000 * 60 * 60);
-        console.log('diffHours', diffHours);
-
+        
         if (diffHours <= 24) {
             let previousValue = lastHistoryEntry[cell as keyof HistoryEntry];
             if (typeof previousValue === 'string') {

@@ -21,6 +21,7 @@ const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, results
 
   const queryParams = useURLChange();
 
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       setPath(window.location.pathname);
@@ -80,15 +81,20 @@ const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, results
       setResultsCount(firstResponseData.total);
       setData(firstResponseData.results);
 
-      const secondResponse = await axios.get(`/api/getRatingCutoffs`);
-      const secondResponseData = secondResponse.data as { cutoffs: RatingCutoffs };
-      setRatingCutoffs(secondResponseData.cutoffs);
-
-
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const getCutoffs = async () => {
+    try {
+      const secondResponse = await axios.get(`/api/getRatingCutoffs`);
+      const secondResponseData = secondResponse.data as { cutoffs: RatingCutoffs };
+      setRatingCutoffs(secondResponseData.cutoffs);
+    } catch (error) {
+      console.error('Error fetching rating cutoffs:', error);
     }
   };
 
@@ -97,6 +103,10 @@ const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, results
       void getData();
     }
   }, [queryParams, path]);
+
+  useEffect(() => {
+    void getCutoffs();
+  }, []);
 
   // dont blame yourself for this
   const containerHeight = (resultsPerPage + 0.5) * rowHeight;
