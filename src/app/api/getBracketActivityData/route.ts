@@ -47,8 +47,8 @@ export async function GET(req: NextRequest) {
       .where(
         and(
           eq(table.character_name, capitalizeFirstChar(name)),
-          eq(table.realm_slug, realm.toLowerCase()),
-          eq(table.character_spec, spec)
+          eq(table.realm_slug, realm),
+          eq(table.character_spec, capitalizeFirstChar(spec))
         )
       );
 

@@ -3,6 +3,7 @@
 import axios from "axios";
 import Image from "next/image";
 import { useEffect } from "react";
+import { capitalizeFirstLetter } from "~/utils/helper/capitalizeFirstLetter";
 import specIconsMap from "~/utils/helper/specIconsMap";
 
 // Define a type for QueryParams
@@ -37,16 +38,16 @@ type BracketTabProps = {
     data: BracketStatistics;
     setChoosenBracket: (bracket: string) => void;
     choosenBracket: string;
-    };
+};
+
+
 
 const BracketTab = ({ params, bracket, data, setChoosenBracket, choosenBracket }: BracketTabProps) => {
 
     const className = params.class || '';
     const specName = params.spec || '';
-    const specClassKey = `${specName} ${className}`;
+    const specClassKey = `${capitalizeFirstLetter(specName)} ${capitalizeFirstLetter(className)}`;
     const specIcon = specIconsMap[specClassKey as keyof typeof specIconsMap];
-
-
 
     return (
         <>

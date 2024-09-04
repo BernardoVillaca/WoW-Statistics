@@ -27,8 +27,8 @@ export async function GET(req: NextRequest) {
     const region = searchParams.get('region') ?? 'us';
     const name = searchParams.get('name') ?? '';
     const realm = searchParams.get('realm') ?? '';
-    const charClass = searchParams.get('class')?.toLocaleLowerCase() ?? '';
-    const spec = searchParams.get('spec')?.toLocaleLowerCase() ?? '';
+    const charClass = searchParams.get('class') ?? '';
+    const spec = searchParams.get('spec') ?? '';
     const authToken = await getAuthToken(false);
 
     const getBracketData = async (token: string) => {
@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
         try {
             if (version === 'retail') {
                 const requests = brackets.map(bracket =>
-                    axios.get(`https://${region}.api.blizzard.com/profile/wow/character/${realm}/${name.toLowerCase()}/pvp-bracket/${bracket}`,
+                    axios.get(`https://${region}.api.blizzard.com/profile/wow/character/${realm}/${name}/pvp-bracket/${bracket}`,
                         {
                             params: {
                                 namespace: `profile-${region}`,

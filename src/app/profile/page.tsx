@@ -67,7 +67,7 @@ const ProfilePage = () => {
 
 
     }, [queryParams]);
-
+    console.log(profileData)
 
     const getQueryParams = () => {
         const params = new URLSearchParams(queryParams ?? '');

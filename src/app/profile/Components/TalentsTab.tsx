@@ -4,6 +4,7 @@ import axios from 'axios'
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react'
 import { FiCheck, FiLoader } from 'react-icons/fi';
+import { capitalizeFirstLetter } from '~/utils/helper/capitalizeFirstLetter';
 import { classSpecIconsMap } from '~/utils/helper/specIconsMap';
 
 interface TalentsTabProps {
@@ -120,13 +121,9 @@ const TalentsTab = ({ params }: TalentsTabProps) => {
     );
 
     const handleClick = () => {
-        // Copy the loadout code to the clipboard
         navigator.clipboard.writeText(currentTalents?.loadouts?.[0]?.talent_loadout_code || '');
-
-        // Show the copied animation
         setCopied(true);
 
-        // Revert back to the original state after 2 seconds
         setTimeout(() => {
             setCopied(false);
         }, 2000);
@@ -134,30 +131,27 @@ const TalentsTab = ({ params }: TalentsTabProps) => {
 
 
 
-    // Extract talent names from the first loadout if available
+    
     const classTalents = currentTalents?.loadouts?.[0]?.selected_class_talents
-        ?.filter((talent) => talent?.tooltip) // Only include talents that have a tooltip
+        ?.filter((talent) => talent?.tooltip) 
         ?.map((talent) => talent?.tooltip?.talent?.name) || [];
 
     const specTalents = currentTalents?.loadouts?.[0]?.selected_spec_talents
-        ?.filter((talent) => talent?.tooltip) // Only include talents that have a tooltip
+        ?.filter((talent) => talent?.tooltip) 
         ?.map((talent) => talent?.tooltip?.talent?.name) || [];
 
     const heroTalents = currentTalents?.loadouts?.[0]?.selected_hero_talents
-        ?.filter((talent) => talent?.tooltip) // Only include talents that have a tooltip
+        ?.filter((talent) => talent?.tooltip) 
         ?.map((talent) => talent?.tooltip?.talent?.name) || [];
 
 
-
-
-
     return (
-        <div className='flex flex-col place-content-top items-center w-full bg-secondary-light_black gap-4 h-[1330px]'>
+        <div className='flex flex-col place-content-top items-center w-full bg-secondary-light_black gap-4 min-h-[1330px] pt-4'>
             <span className='text-2xl font-bold pt-2'>
                 Talents
             </span>
             <div className="flex justify-between w-full px-12 h-14">
-                {characterClass && Object.entries(classSpecIconsMap[characterClass as keyof typeof classSpecIconsMap]).map(([specName, specIcon]) => (
+                {characterClass && Object.entries(classSpecIconsMap[capitalizeFirstLetter(characterClass) as keyof typeof classSpecIconsMap]).map(([specName, specIcon]) => (
                     <button
                         key={specName}
                         className={`flex w-32 place-content-center items-center p-2 border-[1px] border-gray-500 hover:bg-secondary-navy rounded-lg ${displayedSpec === specName ? 'bg-secondary-navy' : ''}`}

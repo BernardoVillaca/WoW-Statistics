@@ -66,14 +66,15 @@ const LeaderboardRow: React.FC<LeaderboardRowProps> = ({
   }
 
   const params = new URLSearchParams({
-    version: queryParams?.version || '',
-    region: queryParams?.region || '',
-    name: characterData.character_name.toLowerCase(),
-    realm: characterData.realm_slug,
-    class: characterData.character_class,
-    spec: characterData.character_spec
+    version: queryParams?.version ?? '',
+    region: queryParams?.region ?? '',
+    name: characterData.character_name.toLowerCase() ,
+    realm: characterData.realm_slug ,
+    class: characterData.character_class.toLowerCase() ,
+    spec: characterData.character_spec.toLowerCase() ,
   });
 
+  
   return (
     <Link href={`/profile?${params.toString()}`}>
       <div className={`relative bg-secondary-light_black flex border-b-[1px] hover:bg-primary-dark cursor-pointer ${getBorderClass()}`} style={{ height: rowHeight }}>

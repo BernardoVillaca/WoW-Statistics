@@ -12,10 +12,10 @@ export async function GET(req: NextRequest) {
     const authToken = await getAuthToken(false);
 
 
-    const getAchievementData = async (token: string) => {
+    const getAchievementData = async () => {
 
         try {
-            const response = await axios.get(`https://${region}.api.blizzard.com/profile/wow/character/${realm}/${name.toLowerCase()}/achievements`,
+            const response = await axios.get(`https://${region}.api.blizzard.com/profile/wow/character/${realm}/${name}/achievements`,
                 {
                     params: {
                         namespace: `profile-${region}`,
@@ -53,18 +53,17 @@ export async function GET(req: NextRequest) {
         } catch (error) {
             if (axios.isAxiosError(error) && error.response?.status === 401) {
                 console.log('Token expired, refreshing token and retrying the request...');
-                const newToken = await getAuthToken(true);
-                return getAchievementData(newToken);
+                await getAuthToken(true);
+                return getAchievementData();
             } else {
                 console.error('Error fetching profile data:', error);
                 throw error;
             }
         }
-
     }
 
     try {
-        const achievementData = await getAchievementData(authToken);
+        const achievementData = await getAchievementData();
         return NextResponse.json(achievementData)
 
     } catch (error) {

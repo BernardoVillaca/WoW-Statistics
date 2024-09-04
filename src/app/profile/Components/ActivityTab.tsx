@@ -18,6 +18,7 @@ import {
 import 'chartjs-adapter-date-fns';
 import { FiLoader } from 'react-icons/fi';
 import { classColors } from '~/utils/helper/classIconsMap';
+import { capitalizeFirstLetter } from '~/utils/helper/capitalizeFirstLetter';
 
 ChartJS.register(
     CategoryScale,
@@ -54,6 +55,8 @@ const ActitivityTab = ({ choosenBracket, params }: ActitivityTabProps) => {
     const [historyData, setHistoryData] = useState<HistoryEntry[]>([]);
     const [chartData, setChartData] = useState<ChartData<'line'> | null>(null);
     const [loading, setLoading] = useState(false);
+
+    const lineColor = params.class ? classColors[capitalizeFirstLetter(params.class)] : undefined;
 
     // Fetch bracket activity data
     const getBracketActivityData = async (bracket: string) => {
@@ -95,8 +98,8 @@ const ActitivityTab = ({ choosenBracket, params }: ActitivityTabProps) => {
                         label: 'Rating',
                         data: ratings,
                         fill: false,
-                        borderColor: params.class ? classColors[params.class] : undefined,
-                        backgroundColor: params.class ? classColors[params.class] : undefined,
+                        borderColor: lineColor,
+                        backgroundColor: lineColor,
                         tension: 0.1,
                     },
                 ],

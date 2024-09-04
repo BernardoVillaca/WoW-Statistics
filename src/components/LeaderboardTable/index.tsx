@@ -40,6 +40,7 @@ const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, results
     if (path?.includes('solo-shuffle')) {
       bracket = 'shuffle';
     }
+ 
 
     return {
       path: path,
@@ -51,8 +52,8 @@ const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, results
       search: params.get('search') ?? undefined,
       faction: params.get('faction') ?? undefined,
       realm: params.get('realm') ?? undefined,
-      minRating: parseInt(params.get('minRating') ?? '0'),
-      maxRating: parseInt(params.get('maxRating') ?? '4000')
+      minRating: isInitialRender.current ? parseInt(params.get('minRating') ?? '0') : 0,
+      maxRating: isInitialRender.current ? parseInt(params.get('maxRating') ?? '4000') : 4000
     };
   };
 
