@@ -5,12 +5,13 @@ import { useEffect, useState } from "react";
 import useURLChange from "~/utils/hooks/useURLChange";
 import Image from 'next/image';
 import axios from 'axios';
-import BracketTab from './Components/BracketTab';
 import ActitivityTab from './Components/ActivityTab';
 import TittlesTab from './Components/TittlesTab';
 import { FiLoader } from 'react-icons/fi';
 import TalentsTab from './Components/TalentsTab';
 import { classColors } from '~/utils/helper/classIconsMap';
+import { capitalizeFirstLetter } from '~/utils/helper/capitalizeFirstLetter';
+import BracketButton from './Components/BracketButton';
 
 
 type QueryParams = {
@@ -52,7 +53,7 @@ const ProfilePage = () => {
     useEffect(() => {
         const params = getQueryParams();
         setParams(params);
-        const getProfileData = async () => {
+        const getBracketData = async () => {
             setBracketLoading(true);
             if (params.version || params.region || params.name || params.realm) {
                 const response = await axios.get('/api/getBracketData', { params })
@@ -61,13 +62,9 @@ const ProfilePage = () => {
             setBracketLoading(false);
 
         }
-
-        void getProfileData();
-
-
-
+        void getBracketData();
     }, [queryParams]);
-    console.log(profileData)
+    
 
     const getQueryParams = () => {
         const params = new URLSearchParams(queryParams ?? '');
@@ -85,10 +82,10 @@ const ProfilePage = () => {
     return (
         <main className="flex flex-col min-h-screen  text-white relative gap-4 py-2">
             <div className="flex h-16 bg-secondary-light_black items-center place-content-center gap-2 rounded-lg">
-                <div className='flex gap-2' style={{ color: params.class ? classColors[params.class] : undefined }}>
-                    <span >{params.name}</span>
+                <div className='flex gap-2' style={{ color: params.class ? classColors[capitalizeFirstLetter( params.class)] : undefined }}>
+                    <span >{capitalizeFirstLetter(params.name ?? '')}</span>
                     <span>-</span>
-                    <span>{params.realm}</span>
+                    <span>{capitalizeFirstLetter(params.realm ?? '')}</span>
                 </div>
                 {params.region === 'us' && <Image src={us} width={25} alt="us" />}
                 {params.region === 'eu' && <Image src={eu} width={25} alt="eu" />}
@@ -101,7 +98,7 @@ const ProfilePage = () => {
                 ) : (
                     <>
                         {profileData && Object.entries(profileData).map(([bracket, data]) => (
-                            <BracketTab
+                            <BracketButton
                                 key={bracket}
                                 params={params}
                                 bracket={bracket}

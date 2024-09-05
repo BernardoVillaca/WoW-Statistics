@@ -42,12 +42,13 @@ type BracketTabProps = {
 
 
 
-const BracketTab = ({ params, bracket, data, setChoosenBracket, choosenBracket }: BracketTabProps) => {
+const BracketButton = ({ params, bracket, data, setChoosenBracket, choosenBracket }: BracketTabProps) => {
 
     const className = params.class || '';
     const specName = params.spec || '';
     const specClassKey = `${capitalizeFirstLetter(specName)} ${capitalizeFirstLetter(className)}`;
     const specIcon = specIconsMap[specClassKey as keyof typeof specIconsMap];
+    
 
     return (
         <>
@@ -93,4 +94,4 @@ const BracketTab = ({ params, bracket, data, setChoosenBracket, choosenBracket }
     );
 }
 
-export default BracketTab;
+export default BracketButton;

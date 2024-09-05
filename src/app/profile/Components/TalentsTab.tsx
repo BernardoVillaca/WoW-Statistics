@@ -128,9 +128,6 @@ const TalentsTab = ({ params }: TalentsTabProps) => {
             setCopied(false);
         }, 2000);
     };
-
-
-
     
     const classTalents = currentTalents?.loadouts?.[0]?.selected_class_talents
         ?.filter((talent) => talent?.tooltip) 

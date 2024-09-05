@@ -45,8 +45,25 @@ export async function GET(req: NextRequest) {
                                 locale: region === 'us' ? 'en_US' : 'en_GB',
                                 access_token: token,
                             },
-                        }
-                    )
+                        }).catch(error => {
+                            console.error(`Error fetching data for bracket ${bracket}:`, error.message);
+                            return {
+                                bracket,
+                                data: {
+                                    rating: 0,
+                                    season_match_statistics: {
+                                        played: 0,
+                                        won: 0,
+                                        lost: 0,
+                                    },
+                                    weekly_match_statistics: {
+                                        played: 0,
+                                        won: 0,
+                                        lost: 0,
+                                    },
+                                }
+                            };
+                        })
                 );
 
                 // Wait for all requests to complete
@@ -77,7 +94,7 @@ export async function GET(req: NextRequest) {
                 const newToken = await getAuthToken(true);
                 return getBracketData(newToken);
             } else {
-                console.error('Error fetching profile data:', error);
+                console.error('Error fetching bracket data:', error);
                 throw error;
             }
         }
