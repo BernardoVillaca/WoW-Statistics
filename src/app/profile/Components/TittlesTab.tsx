@@ -48,7 +48,7 @@ const TittlesTab = ({ params }: TittleTabProps) => {
 
                         }
                     })
-
+                
                 setTitles(response.data)
                 setLoading(false)
 

@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
             const response = await axios.get(`https://${region}.api.blizzard.com/profile/wow/character/${realm}/${name}/achievements`,
                 {
                     params: {
-                        namespace: `profile-${region}`,
+                        namespace: version === 'retail' ? `profile-${region}` : `profile-classic-${region}`,
                         locale: region === 'us' ? 'en_US' : 'en_GB',
                         access_token: authToken,
                     },
@@ -26,29 +26,52 @@ export async function GET(req: NextRequest) {
             )
 
             const achievements = response.data.achievements;
-            const rankOneTitles: typeof achievements[] = [];
+            let rankOneTitles: typeof achievements[] = [];
             const gladiatorTitles: typeof achievements[] = [];
-            const heroTitles: typeof achievements[] = [];
+            let heroTitles: typeof achievements[] = [];
             const rankOneLegendTitles: typeof achievements[] = [];
             const legendTitles: typeof achievements[] = [];
 
-            achievements.forEach((achiev: { achievement: { name: string; }; }) => {
-                const name = achiev.achievement.name.toLowerCase();
+            achievements.forEach((item: { achievement: { name: string; }; }) => {
+                const name = item.achievement.name.toLowerCase();
 
-                if (name.includes('legend:')) {
-                    if (name.startsWith('legend')) return legendTitles.push(achiev);
-                    return rankOneLegendTitles.push(achiev);
+                if (version === 'retail') {
+                    // Retail filtering
+                    if (name.includes('legend:')) {
+                        if (name.startsWith('legend')) return legendTitles.push(item);
+                        return rankOneLegendTitles.push(item);
+                    }
+                    if (name.includes('hero of the alliance') || name.includes('hero of the horde')) return heroTitles.push(item);
+
+                    if (!name.includes('gladiator:')) return;
+
+                    if (name.startsWith('gladiator')) return gladiatorTitles.push(item);
+
+                    rankOneTitles.push(item);
+                } else {
+                    // Classic filtering
+                    if (name.includes('vengeful nether drake')
+                        || name.includes('merciless nether drake')
+                        || name.includes('brutal nether drake')
+                        || name.includes('swift nether drake')) return gladiatorTitles.push(item);
+
+                    if (!name.includes('gladiator')) return;
+
+                    if (name.includes('frost wyrm')) return gladiatorTitles.push(item);
+
+                    if (name.includes('hero of the alliance') || name.includes('hero of the horde')) return heroTitles.push(item)
+
+                    rankOneTitles.push(item);
+
                 }
-
-                if (name.includes('hero of the alliance') || name.includes('hero of the horde')) return heroTitles.push(achiev);
-
-                if (!name.includes('gladiator:')) return;
-
-                if (name.startsWith('gladiator')) return gladiatorTitles.push(achiev)
-
-                rankOneTitles.push(achiev);
             });
+            // filter the baseline achievements
+            rankOneTitles = rankOneTitles.filter((item) => item.achievement.name.toLowerCase() !== 'gladiator');
+            heroTitles = heroTitles.filter((item) => item.achievement.name.toLowerCase() !== 'hero of the alliance' && item.achievement.name.toLowerCase() !== 'hero of the horde');
+            
+            if (version === 'classic') return ({ rankOneTitles, gladiatorTitles, heroTitles });
             return { rankOneTitles, gladiatorTitles, rankOneLegendTitles, legendTitles, heroTitles };
+
 
         } catch (error) {
             if (axios.isAxiosError(error) && error.response?.status === 401) {

@@ -96,7 +96,7 @@ const ProfilePage = () => {
                         <FiLoader className="animate-spin text-white" size={50} />
                     </div>
                 ) : (
-                    <>
+                    <div className='flex w-full justify-center gap-2'>
                         {profileData && Object.entries(profileData).map(([bracket, data]) => (
                             <BracketButton
                                 key={bracket}
@@ -107,7 +107,7 @@ const ProfilePage = () => {
                                 choosenBracket={choosenBracket}
                             />
                         ))}
-                    </>
+                    </div>
                 )}
             </div>
             <div className='flex gap-2'>
@@ -116,7 +116,7 @@ const ProfilePage = () => {
                     <TittlesTab params={params} />
                 </div>
                 <div className='flex flex-col w-1/2 gap-2'>
-                    <TalentsTab params={params} />
+                    {/* <TalentsTab params={params} /> */}
                 </div>
 
             </div>

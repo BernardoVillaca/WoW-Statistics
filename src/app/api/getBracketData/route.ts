@@ -32,16 +32,16 @@ export async function GET(req: NextRequest) {
     const authToken = await getAuthToken(false);
 
     const getBracketData = async (token: string) => {
-        const brackets = ['3v3', '2v2', 'rbg', `shuffle-${charClass}-${spec}`];
+        const brackets = version === 'retail' ? ['3v3', '2v2', 'rbg', `shuffle-${charClass}-${spec}`] : ['2v2', '3v3', 'rbg'];
         const bracketsData: Brackets = {};
 
         try {
-            if (version === 'retail') {
+            
                 const requests = brackets.map(bracket =>
                     axios.get(`https://${region}.api.blizzard.com/profile/wow/character/${realm}/${name}/pvp-bracket/${bracket}`,
                         {
                             params: {
-                                namespace: `profile-${region}`,
+                                namespace: version === 'retail' ? `profile-${region}` : `profile-classic-${region}`,
                                 locale: region === 'us' ? 'en_US' : 'en_GB',
                                 access_token: token,
                             },
@@ -87,7 +87,7 @@ export async function GET(req: NextRequest) {
                     };
                 });
                 return bracketsData;
-            }
+            
         } catch (error) {
             if (axios.isAxiosError(error) && error.response?.status === 401) {
                 console.log('Token expired, refreshing token and retrying the request...');
