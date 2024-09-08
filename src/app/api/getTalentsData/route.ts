@@ -3,6 +3,7 @@
 import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthToken } from "~/server/actions/getAuthToken";
+import { determineSpecWithMostPoints } from "~/utils/helper/determineSpecWithMostPoints";
 
 
 
@@ -23,15 +24,17 @@ export async function GET(req: NextRequest) {
             const response = await axios.get(`https://${region}.api.blizzard.com/profile/wow/character/${realm}/${name}/specializations`,
                 {
                     params: {
-                        namespace: `profile-${region}`,
+                        namespace: version === 'retail' ? `profile-${region}` : `profile-classic-${region}`,
                         locale: region === 'us' ? 'en_US' : 'en_GB',
                         access_token: token,
                     },
                 }
             )
 
-            const activeSpec = response.data.active_specialization;
-            const specs = response.data.specializations;
+            const activeSpec =  version === 'retail' ? response.data.active_specialization: determineSpecWithMostPoints(response.data);
+            const specs = version === 'retail' ? response.data.specializations : response.data.specialization_groups[0].specializations;
+              
+            
             return { activeSpec, specs };
 
         } catch (error) {

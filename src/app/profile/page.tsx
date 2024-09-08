@@ -8,10 +8,12 @@ import axios from 'axios';
 import ActitivityTab from './Components/ActivityTab';
 import TittlesTab from './Components/TittlesTab';
 import { FiLoader } from 'react-icons/fi';
-import TalentsTab from './Components/TalentsTab';
+import TalentsTab from './Components/RetailTalentsTab';
 import { classColors } from '~/utils/helper/classIconsMap';
 import { capitalizeFirstLetter } from '~/utils/helper/capitalizeFirstLetter';
 import BracketButton from './Components/BracketButton';
+import RetailTalentsTab from './Components/RetailTalentsTab';
+import ClassicTalentsTab from './Components/ClassicTalentsTab';
 
 
 type QueryParams = {
@@ -116,7 +118,11 @@ const ProfilePage = () => {
                     <TittlesTab params={params} />
                 </div>
                 <div className='flex flex-col w-1/2 gap-2'>
-                    {/* <TalentsTab params={params} /> */}
+                    {params.version === 'retail' ? 
+                    <RetailTalentsTab params={params}/>
+                    : <ClassicTalentsTab params={params}/>
+                
+                }
                 </div>
 
             </div>

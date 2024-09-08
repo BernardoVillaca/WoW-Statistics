@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
                     params: {
                         namespace: version === 'retail' ? `profile-${region}` : `profile-classic-${region}`,
                         locale: region === 'us' ? 'en_US' : 'en_GB',
-                        access_token: authToken,
+                        access_token: token,
                     },
                 }
             )

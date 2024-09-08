@@ -53,7 +53,7 @@ const BracketButton = ({ params, bracket, data, setChoosenBracket, choosenBracke
     return (
         <>
             <button
-                className={`flex flex-col  ${choosenBracket === bracket ? 'bg-secondary-navy' : 'bg-secondary-light_black'} w-1/4 pt-2 px-2`}
+                className={`flex flex-col  ${choosenBracket === bracket ? 'bg-secondary-navy' : 'bg-secondary-light_black'} w-full pt-2 px-2`}
                 onClick={() => setChoosenBracket(bracket)}
             >
                 <div className='flex gap-2 place-content-center w-full'>

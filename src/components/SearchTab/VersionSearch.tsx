@@ -11,27 +11,10 @@ const VersionSearch = () => {
         setVersion(newVersion);
     };
 
-    const updateVersionFromURL = () => {
+    useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
         const initialVersion = urlParams.get('version') ?? 'retail';
         setVersion(initialVersion);
-    };
-
-    // Initialize version from URL when the component mounts
-    useEffect(() => {
-        updateVersionFromURL();
-
-        // Add an event listener to detect URL changes
-        const handlePopState = () => {
-            updateVersionFromURL();
-        };
-
-        window.addEventListener('popstate', handlePopState);
-
-        // Cleanup the event listener
-        return () => {
-            window.removeEventListener('popstate', handlePopState);
-        };
     }, []);
 
     useEffect(() => {

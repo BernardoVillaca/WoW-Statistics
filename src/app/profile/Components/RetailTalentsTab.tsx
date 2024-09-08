@@ -85,8 +85,7 @@ interface SpecializationDataItem {
 }
 
 
-const TalentsTab = ({ params }: TalentsTabProps) => {
-    const [activeSpec, setActiveSpec] = useState({})
+const RetailTalentsTab = ({ params }: TalentsTabProps) => {
     const [characterClass, setCharacterClass] = useState<string>('')
     const [specializationData, setSpecializationData] = useState<SpecializationDataItem[]>([])
     const [loading, setLoading] = useState(true)
@@ -108,7 +107,6 @@ const TalentsTab = ({ params }: TalentsTabProps) => {
                     }
                 })
                 setSpecializationData(response.data.specs || [])
-                setActiveSpec(response.data.activeSpec || {})
                 setDisplayedSpec(response.data.activeSpec?.name || '')
             }
             setLoading(false)
@@ -128,25 +126,23 @@ const TalentsTab = ({ params }: TalentsTabProps) => {
             setCopied(false);
         }, 2000);
     };
-    
+
     const classTalents = currentTalents?.loadouts?.[0]?.selected_class_talents
-        ?.filter((talent) => talent?.tooltip) 
+        ?.filter((talent) => talent?.tooltip)
         ?.map((talent) => talent?.tooltip?.talent?.name) || [];
 
     const specTalents = currentTalents?.loadouts?.[0]?.selected_spec_talents
-        ?.filter((talent) => talent?.tooltip) 
+        ?.filter((talent) => talent?.tooltip)
         ?.map((talent) => talent?.tooltip?.talent?.name) || [];
 
     const heroTalents = currentTalents?.loadouts?.[0]?.selected_hero_talents
-        ?.filter((talent) => talent?.tooltip) 
+        ?.filter((talent) => talent?.tooltip)
         ?.map((talent) => talent?.tooltip?.talent?.name) || [];
 
 
     return (
         <div className='flex flex-col place-content-top items-center w-full bg-secondary-light_black gap-4 min-h-[1330px] pt-4'>
-            <span className='text-2xl font-bold pt-2'>
-                Talents
-            </span>
+            <span className='text-2xl font-bold pt-2'>Talents</span>
             <div className="flex justify-between w-full px-12 h-14">
                 {characterClass && Object.entries(classSpecIconsMap[capitalizeFirstLetter(characterClass) as keyof typeof classSpecIconsMap]).map(([specName, specIcon]) => (
                     <button
@@ -235,4 +231,4 @@ const TalentsTab = ({ params }: TalentsTabProps) => {
     )
 }
 
-export default TalentsTab
+export default RetailTalentsTab
