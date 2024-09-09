@@ -43,7 +43,7 @@ const BracketSearch = ({ partofLeadeboard }: { partofLeadeboard: boolean }) => {
             updateURL('bracket', bracket === '3v3' ? '' : bracket, true);
             setCurrentPage(1);
         }
-    }, [bracket]);
+    }, [bracket, setCurrentPage]);
 
     return (
         <div className={`flex items-center justify-center ${partofLeadeboard ? 'w-1/5 border-[1px] border-opacity-30 border-secondary-gray' : 'w-[400px]'}  rounded-lg gap-8 select-none`}>

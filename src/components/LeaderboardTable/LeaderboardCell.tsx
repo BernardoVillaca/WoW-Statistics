@@ -5,7 +5,7 @@ import alliance from '../../assets/Factions/alliance.png'
 import { calculateDifference } from '~/utils/helper/calculateDifference';
 import { useSearch } from '../Context/SearchContext';
 import { classColors } from '~/utils/helper/classIconsMap';
-import { LeaderboardCellProps } from './types';
+import type { LeaderboardCellProps } from './types';
 
 
 const LeaderboardCell = ({ str, height, index, cell, characterClass, characterSpec, history, rowIndex, path, characterData}: LeaderboardCellProps) => {

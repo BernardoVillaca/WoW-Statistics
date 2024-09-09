@@ -1,8 +1,6 @@
 'use client'
 
-import axios from "axios";
 import Image from "next/image";
-import { useEffect } from "react";
 import { capitalizeFirstLetter } from "~/utils/helper/capitalizeFirstLetter";
 import specIconsMap from "~/utils/helper/specIconsMap";
 
@@ -44,8 +42,8 @@ type BracketTabProps = {
 
 const BracketButton = ({ params, bracket, data, setChoosenBracket, choosenBracket }: BracketTabProps) => {
 
-    const className = params.class || '';
-    const specName = params.spec || '';
+    const className = params.class ?? '';
+    const specName = params.spec ?? '';
     const specClassKey = `${capitalizeFirstLetter(specName)} ${capitalizeFirstLetter(className)}`;
     const specIcon = specIconsMap[specClassKey as keyof typeof specIconsMap];
     

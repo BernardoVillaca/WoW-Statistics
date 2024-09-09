@@ -1,6 +1,18 @@
 import axios from "axios";
-import { NextRequest, NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 import { getAuthToken } from "~/server/actions/getAuthToken";
+
+interface Achievement {
+    achievement: {
+        name: string;
+    };
+}
+
+interface AchievementsResponse {
+    achievements: Achievement[];
+}
+
 
 export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
@@ -15,7 +27,7 @@ export async function GET(req: NextRequest) {
     const getAchievementData = async (token: string) => {
 
         try {
-            const response = await axios.get(`https://${region}.api.blizzard.com/profile/wow/character/${realm}/${name}/achievements`,
+            const response = await axios.get<AchievementsResponse>(`https://${region}.api.blizzard.com/profile/wow/character/${realm}/${name}/achievements`,
                 {
                     params: {
                         namespace: version === 'retail' ? `profile-${region}` : `profile-classic-${region}`,
@@ -26,12 +38,12 @@ export async function GET(req: NextRequest) {
             )
 
             const achievements = response.data.achievements;
-            let rankOneTitles: typeof achievements[] = [];
-            const gladiatorTitles: typeof achievements[] = [];
-            let heroTitles: typeof achievements[] = [];
-            const rankOneLegendTitles: typeof achievements[] = [];
-            const legendTitles: typeof achievements[] = [];
-
+            let rankOneTitles: Achievement[] = [];
+            const gladiatorTitles: Achievement[] = [];
+            let heroTitles: Achievement[] = [];
+            const rankOneLegendTitles: Achievement[] = [];
+            const legendTitles: Achievement[] = [];
+            
             achievements.forEach((item: { achievement: { name: string; }; }) => {
                 const name = item.achievement.name.toLowerCase();
 
@@ -73,7 +85,7 @@ export async function GET(req: NextRequest) {
             return { rankOneTitles, gladiatorTitles, rankOneLegendTitles, legendTitles, heroTitles };
 
 
-        } catch (error) {
+        } catch (error: unknown) {
             if (axios.isAxiosError(error) && error.response?.status === 401) {
                 console.log('Token expired, refreshing token and retrying the request...');
                 const newToken = await getAuthToken(true);

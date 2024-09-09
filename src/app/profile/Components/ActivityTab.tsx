@@ -13,8 +13,10 @@ import {
     Tooltip,
     Legend,
     TimeScale,
-    ChartData,
+    
 } from 'chart.js';
+
+import type { ChartData } from 'chart.js';
 import 'chartjs-adapter-date-fns';
 import { FiLoader } from 'react-icons/fi';
 import { classColors } from '~/utils/helper/classIconsMap';
@@ -63,7 +65,7 @@ const ActitivityTab = ({ choosenBracket, params }: ActitivityTabProps) => {
         if (params.version && params.region && params.name && params.realm) {
             try {
                 setLoading(true);
-                const response = await axios.get('/api/getBracketActivityData', {
+                const response = await axios.get<{history: HistoryEntry[], message: string}>('/api/getBracketActivityData', {
                     params: {
                         ...params,
                         bracket,

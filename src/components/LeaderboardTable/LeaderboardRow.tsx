@@ -2,7 +2,7 @@ import React from 'react';
 import LeaderboardCell from './LeaderboardCell';
 import Image from 'next/image';
 import Rank1 from '~/assets/Other/rankOneIcon.png';
-import { LeaderboardRowProps } from './types';
+import type { LeaderboardRowProps } from './types';
 import Link from 'next/link';
 
 

@@ -14,12 +14,12 @@ import { resetLeaderboardDb } from '../actions/resetLeaderboardDb';
 
 export const db = drizzle(sql, { schema });
 
-let first = true;
+// let first = true;
 
-if (first) {
+// if (first) {
 
-    resetLeaderboardDb('retail', 'eu', 'shuffle');
+//     resetLeaderboardDb('retail', 'eu', 'shuffle');
    
     
-    first = false;
-}
+//     first = false;
+// }

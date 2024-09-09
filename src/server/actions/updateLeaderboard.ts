@@ -139,7 +139,7 @@ export const updateLeaderboard = async (version: keyof VersionMapping, region: k
 
             for (const data of formattedData) {
                 if (table !== null) {
-                    requests.push(handleDataInsert(data, table, region, version, bracket));
+                    requests.push(handleDataInsert(data, table));
                 }
 
                 if (requests.length >= 100) {
@@ -172,7 +172,7 @@ export const updateLeaderboard = async (version: keyof VersionMapping, region: k
 
 };
 
-const handleDataInsert = async (formattedData: LeaderboardEntry, table: LeaderboardTable, region: string, version: string, bracket: string): Promise<void> => {
+const handleDataInsert = async (formattedData: LeaderboardEntry, table: LeaderboardTable): Promise<void> => {
 
     let updateData: LeaderboardEntry = { ...formattedData };
 

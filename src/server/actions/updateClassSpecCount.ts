@@ -1,5 +1,5 @@
 import { db } from '~/server/db';
-import { desc, and, eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { leaderboardTablesMap } from "~/utils/helper/leaderboardTablesMap";
 import { classStatisticsMap, type ClassStatisticsMap } from "~/utils/helper/classStatisticsMap";
 import { classSpecStatistics } from '../db/schema';

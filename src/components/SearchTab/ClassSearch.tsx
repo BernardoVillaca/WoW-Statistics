@@ -83,7 +83,7 @@ const ClassSearch = () => {
             setCurrentPage(1);
             updateURL('search', classSearch.length > 0 ? classSearch.join(',') : null, true);
         }
-    }, [classSearch]);
+    }, [classSearch, setCurrentPage]);
 
     useEffect(() => {
         if (prevVersionRef.current && prevVersionRef.current !== version) {

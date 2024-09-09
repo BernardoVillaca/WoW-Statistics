@@ -1,5 +1,7 @@
 import axios from "axios";
-import { NextRequest, NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
+
 import { getAuthToken } from "~/server/actions/getAuthToken";
 
 type BracketData = {
@@ -16,9 +18,7 @@ type BracketData = {
     };
 };
 
-type Brackets = {
-    [key: string]: BracketData;
-};
+type Brackets = Record<string, BracketData>;
 
 export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
         try {
             
                 const requests = brackets.map(bracket =>
-                    axios.get(`https://${region}.api.blizzard.com/profile/wow/character/${realm}/${name}/pvp-bracket/${bracket}`,
+                    axios.get<BracketData>(`https://${region}.api.blizzard.com/profile/wow/character/${realm}/${name}/pvp-bracket/${bracket}`,
                         {
                             params: {
                                 namespace: version === 'retail' ? `profile-${region}` : `profile-classic-${region}`,
@@ -46,7 +46,7 @@ export async function GET(req: NextRequest) {
                                 access_token: token,
                             },
                         }).catch(error => {
-                            console.error(`Error fetching data for bracket ${bracket}:`, error.message);
+                            console.error(`Error fetching data for bracket ${bracket}:`, (error as Error).message);
                             return {
                                 bracket,
                                 data: {
@@ -71,7 +71,7 @@ export async function GET(req: NextRequest) {
 
                 // Process the responses
                 responses.forEach((response, index) => {
-                    const bracket = brackets[index] as string;
+                    const bracket = brackets[index]!;
                     bracketsData[bracket] = {
                         rating: response.data.rating,
                         season_match_statistics: {

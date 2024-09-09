@@ -1,6 +1,6 @@
 // src/types/types.ts
 
-import { Cutoffs } from "~/utils/helper/ratingCutoffsInterface";
+import type { Cutoffs } from "~/utils/helper/ratingCutoffsInterface";
 
 export type SearchTab = {
     name: string;

@@ -18,8 +18,8 @@ import {
   Tooltip,
   Legend,
   TimeScale,
-  ChartData,
 } from 'chart.js';
+import { ChartData } from 'chart.js';
 import 'chartjs-adapter-date-fns';
 
 ChartJS.register(

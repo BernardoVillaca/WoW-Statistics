@@ -27,7 +27,7 @@ const FactionSearch = () => {
             updateURL('faction', faction === 'none' ? '' : faction, true);
             setCurrentPage(1);
         }
-    }, [faction]);
+    }, [faction, setCurrentPage]);
 
 
     return (

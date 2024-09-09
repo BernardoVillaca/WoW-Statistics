@@ -86,7 +86,7 @@ const RealmSearch: React.FC = () => {
             updateURL('realm', realm, true);
             setCurrentPage(1);
         }
-    }, [realm]);
+    }, [realm, setCurrentPage]);
 
     const handleFocus = () => {
         setFilteredRealmList(realmList);

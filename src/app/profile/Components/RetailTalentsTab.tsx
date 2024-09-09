@@ -98,16 +98,17 @@ const RetailTalentsTab = ({ params }: TalentsTabProps) => {
         const getTalentsData = async () => {
             setLoading(true)
             if (params.version && params.region && params.name && params.realm) {
-                const response = await axios.get('/api/getTalentsData', {
+                const response = await axios.get<{ specs: SpecializationDataItem[], activeSpec: { name: string } }>('/api/getTalentsData', {
                     params: {
                         name: params.name,
                         realm: params.realm,
                         region: params.region,
                         version: params.version
                     }
-                })
-                setSpecializationData(response.data.specs || [])
-                setDisplayedSpec(response.data.activeSpec?.name || '')
+                });
+
+                setSpecializationData(response.data.specs ?? []);
+                setDisplayedSpec(response.data.activeSpec?.name ?? '');
             }
             setLoading(false)
         }
@@ -118,8 +119,8 @@ const RetailTalentsTab = ({ params }: TalentsTabProps) => {
         (item) => item?.specialization?.name === displayedSpec
     );
 
-    const handleClick = () => {
-        navigator.clipboard.writeText(currentTalents?.loadouts?.[0]?.talent_loadout_code || '');
+    const handleClick = async () => {
+        await navigator.clipboard.writeText(currentTalents?.loadouts?.[0]?.talent_loadout_code ?? '');
         setCopied(true);
 
         setTimeout(() => {
@@ -129,15 +130,15 @@ const RetailTalentsTab = ({ params }: TalentsTabProps) => {
 
     const classTalents = currentTalents?.loadouts?.[0]?.selected_class_talents
         ?.filter((talent) => talent?.tooltip)
-        ?.map((talent) => talent?.tooltip?.talent?.name) || [];
+        ?.map((talent) => talent?.tooltip?.talent?.name) ?? [];
 
     const specTalents = currentTalents?.loadouts?.[0]?.selected_spec_talents
         ?.filter((talent) => talent?.tooltip)
-        ?.map((talent) => talent?.tooltip?.talent?.name) || [];
+        ?.map((talent) => talent?.tooltip?.talent?.name) ?? [];
 
     const heroTalents = currentTalents?.loadouts?.[0]?.selected_hero_talents
         ?.filter((talent) => talent?.tooltip)
-        ?.map((talent) => talent?.tooltip?.talent?.name) || [];
+        ?.map((talent) => talent?.tooltip?.talent?.name) ?? [];
 
 
     return (

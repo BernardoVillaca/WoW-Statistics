@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
+import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 import { updateActivityStatistics } from '~/server/actions/updateActivityStatistics';
 import { updateClassSpecCount } from '~/server/actions/updateClassSpecCount';
-import { updateLeaderboard } from '~/server/actions/updateLeaderboard';
 import { updateRatingsCutoffs } from '~/server/actions/updateRatingsCutoffs';
 
 export const maxDuration = 300;

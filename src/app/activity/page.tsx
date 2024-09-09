@@ -12,9 +12,10 @@ import {
   Title,
   Tooltip,
   Legend,
-  TimeScale,
-  ChartData,
+  TimeScale,  
 } from 'chart.js';
+
+import type { ChartData } from 'chart.js';
 import 'chartjs-adapter-date-fns';
 import { SearchProvider, useSearch } from '~/components/Context/SearchContext';
 import RegionSearch from '~/components/SearchTab/OtherSearch/RegionSearch';

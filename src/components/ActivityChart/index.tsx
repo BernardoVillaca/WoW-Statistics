@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ActivityStatistics } from '~/utils/helper/activityMap';
+import type { ActivityStatistics } from '~/utils/helper/activityMap';
 import MostActivePlayers from './MostActivePlayers';
 import MostActiveSpecs from './MostActiveSpecs';
 

@@ -7,7 +7,7 @@ import axios from 'axios';
 import { useSearch } from '../Context/SearchContext';
 import useURLChange from '~/utils/hooks/useURLChange';
 import RatingsCutoffTab from '../RatingsCutoffTab';
-import { CharacterData, LeaderBoardTableProps, QueryParams, RatingCutoffs } from './types';
+import type { CharacterData, LeaderBoardTableProps, QueryParams, RatingCutoffs } from './types';
 
 
 

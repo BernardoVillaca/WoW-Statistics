@@ -46,7 +46,7 @@ const ClassicTalentsTab = ({ params }: ClassicTalentsTabProps) => {
         const getTalentsData = async () => {
             setLoading(true);
             if (params.version && params.region && params.name && params.realm) {
-                const response = await axios.get('/api/getTalentsData', {
+                const response = await axios.get<{specs : SpecializationDataItem[]}>('/api/getTalentsData', {
                     params: {
                         name: params.name,
                         realm: params.realm,
@@ -54,7 +54,7 @@ const ClassicTalentsTab = ({ params }: ClassicTalentsTabProps) => {
                         version: params.version
                     }
                 });
-                setSpecializationData(response.data.specs || []);
+                setSpecializationData(response.data.specs ?? []);
             }
             setLoading(false);
         };

@@ -5,7 +5,19 @@ import { NextRequest, NextResponse } from "next/server";
 import { getAuthToken } from "~/server/actions/getAuthToken";
 import { determineSpecWithMostPoints } from "~/utils/helper/determineSpecWithMostPoints";
 
+interface RetailSpecData {
+    active_specialization: string;
+    specializations: Array<{ id: number; name: string }>;
+}
 
+interface ClassicSpecData {
+    specialization_groups: {
+        specializations: {
+            spent_points?: number;
+            specialization_name: string;
+        }[];
+    }[];
+}
 
 export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
@@ -21,7 +33,8 @@ export async function GET(req: NextRequest) {
     const getTalentsData = async (token: string) => {
 
         try {
-            const response = await axios.get(`https://${region}.api.blizzard.com/profile/wow/character/${realm}/${name}/specializations`,
+            const response = await axios.get<RetailSpecData | ClassicSpecData>(
+                `https://${region}.api.blizzard.com/profile/wow/character/${realm}/${name}/specializations`,
                 {
                     params: {
                         namespace: version === 'retail' ? `profile-${region}` : `profile-classic-${region}`,
@@ -29,13 +42,20 @@ export async function GET(req: NextRequest) {
                         access_token: token,
                     },
                 }
-            )
+            );
 
-            const activeSpec =  version === 'retail' ? response.data.active_specialization: determineSpecWithMostPoints(response.data);
-            const specs = version === 'retail' ? response.data.specializations : response.data.specialization_groups[0].specializations;
-              
+            if (version === 'retail') {
+                const retailData = response.data as RetailSpecData;
+                const activeSpec = retailData.active_specialization;
+                const specs = retailData.specializations;
+                return { activeSpec, specs };
+            }
             
+            const classicData = response.data as ClassicSpecData;
+            const activeSpec = determineSpecWithMostPoints(classicData);
+            const specs = classicData.specialization_groups[0]?.specializations;
             return { activeSpec, specs };
+
 
         } catch (error) {
             if (axios.isAxiosError(error) && error.response?.status === 401) {
@@ -50,7 +70,7 @@ export async function GET(req: NextRequest) {
     };
 
     try {
-        const {activeSpec, specs} = await getTalentsData(authToken);
+        const { activeSpec, specs } = await getTalentsData(authToken);
         return NextResponse.json({ activeSpec, specs });
     } catch (error) {
         return NextResponse.json({ error: 'Failed to fetch profile data' }, { status: 500 });
