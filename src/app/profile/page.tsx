@@ -8,7 +8,6 @@ import axios from 'axios';
 import ActitivityTab from './Components/ActivityTab';
 import TittlesTab from './Components/TittlesTab';
 import { FiLoader } from 'react-icons/fi';
-import TalentsTab from './Components/RetailTalentsTab';
 import { classColors } from '~/utils/helper/classIconsMap';
 import { capitalizeFirstLetter } from '~/utils/helper/capitalizeFirstLetter';
 import BracketButton from './Components/BracketButton';
@@ -40,9 +39,8 @@ type BracketStatistics = {
     };
 };
 
-type ProfileData = {
-    [key: string]: BracketStatistics;
-};
+type ProfileData = Record<string, BracketStatistics>;
+
 
 const ProfilePage = () => {
     const [params, setParams] = useState<QueryParams>({} as QueryParams);
@@ -57,9 +55,9 @@ const ProfilePage = () => {
         setParams(params);
         const getBracketData = async () => {
             setBracketLoading(true);
-            if (params.version || params.region || params.name || params.realm) {
+            if (params.version ?? params.region ?? params.name ?? params.realm) {
                 const response = await axios.get('/api/getBracketData', { params })
-                setProfileData(response.data);
+                setProfileData(response.data as ProfileData);
             }
             setBracketLoading(false);
 

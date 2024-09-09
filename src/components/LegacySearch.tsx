@@ -18,6 +18,7 @@ const legacyExpMap = {
     '1': 34,
     '2': 35,
     '3': 36,
+    '4': 37,
   }
 };
 
@@ -28,11 +29,11 @@ interface SeasonState {
 }
 
 const LegacySearch = () => {
-  const [selectedSeason, setSelectedSeason] = useState<SeasonState>({ expansion: 'Dragonflight', season: '3', pvpSeasonIndex: 36 });
+  const [selectedSeason, setSelectedSeason] = useState<SeasonState>({ expansion: 'Dragonflight', season: '4', pvpSeasonIndex: 37 });
   const { setCurrentPage } = useSearch();
 
   useEffect(() => {
-    if (selectedSeason.expansion !== 'Dragonflight' || selectedSeason.season !== '3') {
+    if (selectedSeason.expansion !== 'Dragonflight' || selectedSeason.season !== '4') {
       updateURL('pvpSeasonIndex', selectedSeason.pvpSeasonIndex.toString(), true);
     } else {
       updateURL('pvpSeasonIndex', '', true);
@@ -42,7 +43,7 @@ const LegacySearch = () => {
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const initialSeasonIndex = urlParams.get('pvpSeasonIndex') ?? '36';
+    const initialSeasonIndex = urlParams.get('pvpSeasonIndex') ?? '37';
     const initialSeason = findSeasonByIndex(parseInt(initialSeasonIndex, 10));
 
     setSelectedSeason(initialSeason);
@@ -56,7 +57,7 @@ const LegacySearch = () => {
         }
       }
     }
-    return { expansion: 'Dragonflight', season: '3', pvpSeasonIndex: 36 };
+    return { expansion: 'Dragonflight', season: '4', pvpSeasonIndex: 37 };
   };
 
   const onClickHandler = (expansion: string, season: string, pvpSeasonIndex: number) => {

@@ -57,10 +57,10 @@ const ScrollTab = ({ resultsPerPage }: { resultsPerPage: number }) => {
     }, [currentPage]);
 
     return (
-        <div className="flex h-10 bg-secondary-light_black justify-between items-center text-sm rounded-xl ">
+        <div className="flex h-10 bg-secondary-light_black justify-between items-center text-sm rounded-xl">
             {resultsCount !== 0 && currentPage !== 0 && (
                 <div className="flex justify-between w-1/2">
-                    <div className="items-center flex pl-3">{`Page ${currentPage} from ${resultsCount} characters`}</div>
+                    <div className="items-center flex pl-3">{`Page ${currentPage} - ${totalPages} from ${resultsCount} characters`}</div>
                     <div className="flex gap-2 items-center">
                         <span>Go to page:</span>
                         <input
@@ -69,7 +69,7 @@ const ScrollTab = ({ resultsPerPage }: { resultsPerPage: number }) => {
                             max={totalPages}
                             value={inputValue}
                             onChange={handleInputChange}
-                            className="w-10 h-6 px-2 text-center text-black bg-secondary-gray border-none rounded-lg focus:outline-none"
+                            className="w-14 h-6 px-2 text-center text-black bg-secondary-gray border-none rounded-lg focus:outline-none"
                         />
                     </div>
                 </div>

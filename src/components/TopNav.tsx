@@ -10,8 +10,7 @@ const TopNavLinks = [
   { href: '/activity', label: 'Activity' },
   { href: '/cutoffs', label: 'Cutoffs' },
   { href: '/about', label: 'About' },
-  { href: '/contact', label: 'Contact' },
-];
+  ];
 
 const TopNav = () => {
   const [selectedLink, setSelectedLink] = useState('');
@@ -20,7 +19,7 @@ const TopNav = () => {
     // If the current path matches the href, prevent navigation
     if (currentPath === href) event.preventDefault();
 
-    setSelectedLink(TopNavLinks.find(link => link.href === href)?.label || '');
+    setSelectedLink(TopNavLinks.find(link => link.href === href)?.label ?? '');
 
   };
 

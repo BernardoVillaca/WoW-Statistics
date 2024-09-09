@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
 
   // Other parameters
   const resultsperPage = searchParams.has('resultsPerPage') ? Number(searchParams.get('resultsPerPage')) : 50;
-  const pvpSeasonIndex = searchParams.has('pvpSeasonIndex') ? Number(searchParams.get('pvpSeasonIndex')) : 36;
+  const pvpSeasonIndex = searchParams.has('pvpSeasonIndex') ? Number(searchParams.get('pvpSeasonIndex')) : 37;
  
   const orderBy=  searchParams.get('orderBy') ?? '';
   const path = searchParams.get('path') ?? '';
@@ -71,7 +71,7 @@ export async function GET(req: NextRequest) {
       });
     }
     const queryTable = path === '/legacy' ? retailLegacyLeaderboard : table;
-
+   
     if (path === '/legacy') {
       if (pvpSeasonIndex) andConditions.push(eq(retailLegacyLeaderboard.pvp_season_index, pvpSeasonIndex));
       andConditions.push(eq(retailLegacyLeaderboard.bracket, bracket));

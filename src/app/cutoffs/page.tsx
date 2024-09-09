@@ -253,7 +253,7 @@ const RatingCutoffs = () => {
           {uscutoffs && sortCutoffs(uscutoffs).map(([key, value]) => (
             <button
               key={key}
-              className='flex justify-between w-full border-y-[1px] border-gray-300 border-opacity-20 hover:bg-gray-700 outline-none'
+              className='flex justify-between w-full items-center border-y-[1px] border-gray-300 border-opacity-20 hover:bg-primary-dark outline-none'
               onClick={() => onClickHandler(key, 'us')}
             >
               <span className='w-1/2' key={key} style={{ color: classColors[formatKey(key)] }}>{formatKey(key)}</span>
@@ -275,7 +275,7 @@ const RatingCutoffs = () => {
           {eucutoffs && sortCutoffs(eucutoffs).map(([key, value]) => (
             <button
               key={key}
-              className='flex justify-between w-full border-y-[1px] border-gray-300 border-opacity-20 hover:bg-gray-700 outline-none'
+              className='flex justify-between w-full items-center border-y-[1px] border-gray-300 border-opacity-20 hover:bg-primary-dark outline-none'
               onClick={() => onClickHandler(key, 'eu')}
             >
               <span
