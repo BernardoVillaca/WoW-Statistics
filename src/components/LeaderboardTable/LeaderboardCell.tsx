@@ -57,7 +57,7 @@ const LeaderboardCell = ({ str, height, index, cell, characterClass, characterSp
     } else {
       const diffDays = Math.floor(diffMinutes / 1440);
       timeString = `${diffDays} day${diffDays > 1 ? 's' : ''}`;
-      className = 'text-red-500';
+      className = 'text-secondary-red';
     }
 
     return { timeString, className };
@@ -98,14 +98,14 @@ const LeaderboardCell = ({ str, height, index, cell, characterClass, characterSp
           )}
         </div>
       ) : cell === 'win_ratio' ? (
-        <span className={` ${Number(str) >= 70 ? 'text-green-300' : Number(str) >= 55 ? 'text-yellow-300' : 'text-secondary-rose'} `}>
+        <span className={` ${Number(str) >= 70 ? 'text-green-300' : Number(str) >= 55 ? 'text-yellow-300' : 'text-secondary-red'} `}>
           {str}%
         </span>
       ) : cell === 'rank' && path === '/solo-shuffle' ? (
         <div className='flex'>
           <span>{overallRank}</span>
           {showDifference && (
-            <div className={`absolute bottom-3 left-24 text-xs ${difference > 0 ? 'text-green-600' : 'text-secondary-rose'}`}>
+            <div className={`absolute bottom-3 left-24 text-xs ${difference > 0 ? 'text-green-600' : 'text-secondary-red'}`}>
               {difference !== 0 ? `(${difference > 0 ? '+' : ''}${difference})` : ''}
             </div>
           )}
@@ -121,7 +121,7 @@ const LeaderboardCell = ({ str, height, index, cell, characterClass, characterSp
         <div >
           {str}
           {showDifference && (
-            <div className={`absolute bottom-3 left-24 text-xs ${difference > 0 ? 'text-green-600' : 'text-secondary-rose'}`}>
+            <div className={`absolute bottom-3 left-24 text-xs ${difference > 0 ? 'text-green-600' : 'text-red-500'}`}>
               {difference !== 0 ? `(${difference > 0 ? '+' : ''}${difference})` : ''}
             </div>
           )}

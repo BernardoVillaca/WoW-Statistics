@@ -12,7 +12,7 @@ const SoloShuffle = () => {
     const rowHeight = 40
 
     return (
-        <main className="flex min-h-screen text-white relative">
+        <main className="flex min-h-screen text-white relative py-2">
             <div className="flex flex-col w-full gap-4 pt-4">
                 <SearchTab isShuffle={true} />
                 <ScrollTab resultsPerPage={resultsPerPage} />

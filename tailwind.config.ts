@@ -16,6 +16,7 @@ export default {
         },
         secondary: {
           light_black: "#2A2A2A",// 80% of #F98A28
+          red: "#C25454",
           rose: "#9E4784",  // Rose color
           purple: "#66347F",  // Purple color
           gray: "#CCCCCC",  // Gray color

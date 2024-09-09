@@ -171,7 +171,7 @@ const RatingCutoffs = () => {
 
 
   return (
-    <div className='flex flex-col text-white w-full min-h-screen gap-4 py-2 relative'>
+    <main className='flex flex-col text-white w-full min-h-screen gap-4 py-2 relative'>
       {isOpen && selectedKey && (
         <div
           className='fixed flex top-0 right-0 flex-col w-full h-full bg-black/40 items-center place-content-center'
@@ -288,7 +288,7 @@ const RatingCutoffs = () => {
           ))}
         </div>
       </div>
-    </div>
+    </main>
   );
 };
 

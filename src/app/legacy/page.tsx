@@ -16,7 +16,7 @@ const LegacyPage = () => {
 
     return (
         <main className="flex min-h-screen text-white relative">
-            <div className="flex flex-col w-full gap-4 pt-4">
+            <div className="flex flex-col w-full gap-4 py-4">
                 <SearchTab isShuffle={false} />
                 <LegacySearch />
                 <ScrollTab resultsPerPage={resultsPerPage} />

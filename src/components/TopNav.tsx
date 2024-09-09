@@ -1,6 +1,6 @@
 'use client'
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 const TopNavLinks = [
   { href: '/', label: 'Home' },
@@ -15,7 +15,6 @@ const TopNavLinks = [
 
 const TopNav = () => {
   const [selectedLink, setSelectedLink] = useState('');
-
   const handleLinkClick = (event: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     const currentPath = window.location.pathname;
     // If the current path matches the href, prevent navigation

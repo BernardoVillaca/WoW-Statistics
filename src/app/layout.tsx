@@ -2,6 +2,7 @@ import "~/styles/globals.css";
 
 // import { Inter } from "next/font/google";
 import TopNav from "~/components/TopNav";
+import Footer from "~/components/Footer";
 
 // const inter = Inter({
 //   subsets: ["latin"],
@@ -33,6 +34,7 @@ export default function RootLayout({
           {/* right */}
           <div className="flex flex-col w-1/6 bg-primary-dark "> </div>
         </div>
+        <Footer />
       </body>
     </html>
   );

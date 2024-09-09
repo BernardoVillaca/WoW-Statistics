@@ -40,12 +40,18 @@ export type VersionMapping = {
     retail: RegionMapping;
     classic: RegionMapping;
 };
+
+
+const CURRENT_RETAIL_SEASON = '38'
+
+const CURRENT_CLASSIC_SEASON = '9'
+
 export const versionRegionBracketMapping: VersionMapping = {
     retail: {
         eu: {
             '3v3': {
                 table: eu3v3Leaderboard,
-                apiEndpoint: 'https://eu.api.blizzard.com/data/wow/pvp-season/37/pvp-leaderboard/3v3',
+                apiEndpoint: `https://eu.api.blizzard.com/data/wow/pvp-season/${CURRENT_RETAIL_SEASON}/pvp-leaderboard/3v3`,
                 characterApiEndpoint: 'https://eu.api.blizzard.com/profile/wow/character/',
                 armoryEndpoint: 'https://worldofwarcraft.blizzard.com/en-gb/character/eu/',
                 params: {
@@ -59,7 +65,7 @@ export const versionRegionBracketMapping: VersionMapping = {
             },
             '2v2': {
                 table: eu2v2Leaderboard,
-                apiEndpoint: 'https://eu.api.blizzard.com/data/wow/pvp-season/37/pvp-leaderboard/2v2',
+                apiEndpoint: `https://eu.api.blizzard.com/data/wow/pvp-season/${CURRENT_RETAIL_SEASON}/pvp-leaderboard/2v2`,
                 characterApiEndpoint: 'https://eu.api.blizzard.com/profile/wow/character/',
                 armoryEndpoint: 'https://worldofwarcraft.blizzard.com/en-gb/character/eu/',
                 params: {
@@ -73,7 +79,7 @@ export const versionRegionBracketMapping: VersionMapping = {
             },
             'rbg': {
                 table: euRBGLeaderboard,
-                apiEndpoint: 'https://eu.api.blizzard.com/data/wow/pvp-season/37/pvp-leaderboard/rbg',
+                apiEndpoint: `https://eu.api.blizzard.com/data/wow/pvp-season/${CURRENT_RETAIL_SEASON}/pvp-leaderboard/rbg`,
                 characterApiEndpoint: 'https://eu.api.blizzard.com/profile/wow/character/',
                 armoryEndpoint: 'https://worldofwarcraft.blizzard.com/en-gb/character/eu/',
                 params: {
@@ -87,7 +93,7 @@ export const versionRegionBracketMapping: VersionMapping = {
             },
             'shuffle': {
                 table: euShuffleLeaderboard,
-                apiEndpoint: 'https://eu.api.blizzard.com/data/wow/pvp-season/37/pvp-leaderboard/shuffle',
+                apiEndpoint: `https://eu.api.blizzard.com/data/wow/pvp-season/${CURRENT_RETAIL_SEASON}/pvp-leaderboard/shuffle`,
                 characterApiEndpoint: 'https://eu.api.blizzard.com/profile/wow/character/',
                 armoryEndpoint: 'https://worldofwarcraft.blizzard.com/en-gb/character/eu/',
                 params: {
@@ -103,7 +109,7 @@ export const versionRegionBracketMapping: VersionMapping = {
         us: {
             '3v3': {
                 table: us3v3Leaderboard,
-                apiEndpoint: 'https://us.api.blizzard.com/data/wow/pvp-season/37/pvp-leaderboard/3v3',
+                apiEndpoint: `https://us.api.blizzard.com/data/wow/pvp-season/${CURRENT_RETAIL_SEASON}/pvp-leaderboard/3v3`,
                 characterApiEndpoint: 'https://us.api.blizzard.com/profile/wow/character/',
                 armoryEndpoint: 'https://worldofwarcraft.blizzard.com/en-us/character/us/',
                 params: {
@@ -117,7 +123,7 @@ export const versionRegionBracketMapping: VersionMapping = {
             },
             '2v2': {
                 table: us2v2Leaderboard,
-                apiEndpoint: 'https://us.api.blizzard.com/data/wow/pvp-season/37/pvp-leaderboard/2v2',
+                apiEndpoint: `https://us.api.blizzard.com/data/wow/pvp-season/${CURRENT_RETAIL_SEASON}/pvp-leaderboard/2v2`,
                 characterApiEndpoint: 'https://us.api.blizzard.com/profile/wow/character/',
                 armoryEndpoint: 'https://worldofwarcraft.blizzard.com/en-us/character/us/',
                 params: {
@@ -131,7 +137,7 @@ export const versionRegionBracketMapping: VersionMapping = {
             },
             'rbg': {
                 table: usRBGLeaderboard,
-                apiEndpoint: 'https://us.api.blizzard.com/data/wow/pvp-season/37/pvp-leaderboard/rbg',
+                apiEndpoint: `https://us.api.blizzard.com/data/wow/pvp-season/${CURRENT_RETAIL_SEASON}/pvp-leaderboard/rbg`,
                 characterApiEndpoint: 'https://us.api.blizzard.com/profile/wow/character/',
                 armoryEndpoint: 'https://worldofwarcraft.blizzard.com/en-us/character/us/',
                 params: {
@@ -145,7 +151,7 @@ export const versionRegionBracketMapping: VersionMapping = {
             },
             'shuffle': {
                 table: usShuffleLeaderboard,
-                apiEndpoint: 'https://us.api.blizzard.com/data/wow/pvp-season/37/pvp-leaderboard/shuffle',
+                apiEndpoint: `https://us.api.blizzard.com/data/wow/pvp-season/${CURRENT_RETAIL_SEASON}/pvp-leaderboard/shuffle`,
                 characterApiEndpoint: 'https://us.api.blizzard.com/profile/wow/character/',
                 armoryEndpoint: 'https://worldofwarcraft.blizzard.com/en-us/character/us/',
                 params: {
@@ -163,7 +169,7 @@ export const versionRegionBracketMapping: VersionMapping = {
         eu: {
             '3v3': {
                 table: classicEu3v3Leaderboard,
-                apiEndpoint: 'https://eu.api.blizzard.com/data/wow/pvp-season/9/pvp-leaderboard/3v3',
+                apiEndpoint: `https://eu.api.blizzard.com/data/wow/pvp-season/${CURRENT_CLASSIC_SEASON}/pvp-leaderboard/3v3`,
                 characterApiEndpoint: 'https://eu.api.blizzard.com/profile/wow/character/',
                 armoryEndpoint: '',
                 params: {
@@ -177,7 +183,7 @@ export const versionRegionBracketMapping: VersionMapping = {
             },
             '2v2': {
                 table: classicEu2v2Leaderboard,
-                apiEndpoint: 'https://eu.api.blizzard.com/data/wow/pvp-season/9/pvp-leaderboard/2v2',
+                apiEndpoint: `https://eu.api.blizzard.com/data/wow/pvp-season/${CURRENT_CLASSIC_SEASON}/pvp-leaderboard/2v2`,
                 characterApiEndpoint: 'https://eu.api.blizzard.com/profile/wow/character/',
                 armoryEndpoint: '',
                 params: {
@@ -191,7 +197,7 @@ export const versionRegionBracketMapping: VersionMapping = {
             },
             'rbg': {
                 table: classicEuRBGLeaderboard,
-                apiEndpoint: 'https://us.api.blizzard.com/data/wow/pvp-season/9/pvp-leaderboard/rbg',
+                apiEndpoint: `https://us.api.blizzard.com/data/wow/pvp-season/${CURRENT_CLASSIC_SEASON}/pvp-leaderboard/rbg`,
                 characterApiEndpoint: 'https://us.api.blizzard.com/profile/wow/character/',
                 armoryEndpoint: '',
                 params: {
@@ -208,7 +214,7 @@ export const versionRegionBracketMapping: VersionMapping = {
         us: {
             '3v3': {
                 table: classicUs3v3Leaderboard,
-                apiEndpoint: 'https://us.api.blizzard.com/data/wow/pvp-season/9/pvp-leaderboard/3v3',
+                apiEndpoint: `https://us.api.blizzard.com/data/wow/pvp-season/${CURRENT_CLASSIC_SEASON}/pvp-leaderboard/3v3`,
                 characterApiEndpoint: 'https://us.api.blizzard.com/profile/wow/character/',
                 armoryEndpoint: '',
                 params: {
@@ -222,7 +228,7 @@ export const versionRegionBracketMapping: VersionMapping = {
             },
             '2v2': {
                 table: classicUs2v2Leaderboard,
-                apiEndpoint: 'https://us.api.blizzard.com/data/wow/pvp-season/9/pvp-leaderboard/2v2',
+                apiEndpoint: `https://us.api.blizzard.com/data/wow/pvp-season/${CURRENT_CLASSIC_SEASON}/pvp-leaderboard/2v2`,
                 characterApiEndpoint: 'https://us.api.blizzard.com/profile/wow/character/',
                 armoryEndpoint: '',
                 params: {
@@ -236,7 +242,7 @@ export const versionRegionBracketMapping: VersionMapping = {
             },
             'rbg': {
                 table: classicUsRBGLeaderboard,
-                apiEndpoint: 'https://us.api.blizzard.com/data/wow/pvp-season/9/pvp-leaderboard/rbg',
+                apiEndpoint: `https://us.api.blizzard.com/data/wow/pvp-season/${CURRENT_CLASSIC_SEASON}/pvp-leaderboard/rbg`,
                 characterApiEndpoint: 'https://us.api.blizzard.com/profile/wow/character/',
                 armoryEndpoint: '',
                 params: {
