@@ -79,7 +79,7 @@ const LeaderboardCell = ({ str, height, index, cell, characterClass, characterSp
         <div className=''>
           <span>{str}</span>
           {showDifference && (
-            <div className={`absolute bottom-3 left-24 text-xs ${difference > 0 ? 'text-green-600' : 'text-secondary-rose'}`}>
+            <div className={`absolute bottom-3 left-24 text-xs ${difference > 0 ? 'text-green-600' : 'text-secondary-red'}`}>
               {difference !== 0 ? `(${difference > 0 ? '+' : ''}${difference})` : ''}
             </div>
           )}

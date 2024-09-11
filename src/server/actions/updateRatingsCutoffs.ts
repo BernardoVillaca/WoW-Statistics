@@ -18,7 +18,7 @@ interface RegionParams {
 
 const regionParams: Record<string, RegionParams> = {
     us: {
-        url: 'https://us.api.blizzard.com/data/wow/pvp-season/37/pvp-reward/index',
+        url: 'https://us.api.blizzard.com/data/wow/pvp-season/38/pvp-reward/index',
         db3v3: us3v3Leaderboard,
         dbShuffle: usShuffleLeaderboard,
         dbRbg: usRBGLeaderboard,
@@ -28,7 +28,7 @@ const regionParams: Record<string, RegionParams> = {
         },
     },
     eu: {
-        url: 'https://eu.api.blizzard.com/data/wow/pvp-season/37/pvp-reward/index',
+        url: 'https://eu.api.blizzard.com/data/wow/pvp-season/38/pvp-reward/index',
         db3v3: eu3v3Leaderboard,
         dbShuffle: euShuffleLeaderboard,
         dbRbg: euRBGLeaderboard,
