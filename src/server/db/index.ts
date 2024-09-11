@@ -19,6 +19,7 @@ export const db = drizzle(sql, { schema });
 // if (first) {
 
 //     resetLeaderboardDb('retail', 'eu', 'shuffle');
+//     resetLeaderboardDb('retail', 'us', 'shuffle');
    
     
 //     first = false;

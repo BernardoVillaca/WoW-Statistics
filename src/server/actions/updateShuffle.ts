@@ -127,7 +127,7 @@ export const updateShuffle = async (region: 'eu' | 'us' , part: number): Promise
 
         for (const { class: characterClass, specs } of selectedSpecs) {
             for (const spec of specs) {
-                const apiEndpoint = `https://${region}.api.blizzard.com/data/wow/pvp-season/37/pvp-leaderboard/shuffle-${characterClass}-${spec}`;
+                const apiEndpoint = `https://${region}.api.blizzard.com/data/wow/pvp-season/38/pvp-leaderboard/shuffle-${characterClass}-${spec}`;
                 console.log(`Fetching shuffle leaderboard data for ${region} ${characterClass} ${spec}...`);
                 const response = await axios.get<ApiResponse>(apiEndpoint, {
                     params: {
