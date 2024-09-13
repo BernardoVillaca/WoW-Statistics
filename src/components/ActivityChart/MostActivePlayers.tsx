@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import React from 'react';
-import { PlayerActivity } from '~/utils/helper/activityMap';
+import type { PlayerActivity } from '~/utils/helper/activityMap';
 import { classColors } from '~/utils/helper/classIconsMap';
 import specIconsMap from '~/utils/helper/specIconsMap';
 

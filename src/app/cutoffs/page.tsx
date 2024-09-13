@@ -19,7 +19,7 @@ import {
   Legend,
   TimeScale,
 } from 'chart.js';
-import { ChartData } from 'chart.js';
+import type { ChartData } from 'chart.js';
 import 'chartjs-adapter-date-fns';
 
 ChartJS.register(

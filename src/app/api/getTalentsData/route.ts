@@ -1,7 +1,8 @@
 
 
 import axios from "axios";
-import { NextRequest, NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 import { getAuthToken } from "~/server/actions/getAuthToken";
 import { determineSpecWithMostPoints } from "~/utils/helper/determineSpecWithMostPoints";
 

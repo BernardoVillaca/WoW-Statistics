@@ -1,4 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 import { db } from '~/server/db';
 import { BracketMapping, RegionMapping, VersionMapping, versionRegionBracketMapping } from "~/utils/helper/versionRegionBracketMapping";
 import { eq, and } from 'drizzle-orm';

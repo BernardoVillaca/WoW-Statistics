@@ -79,6 +79,7 @@ const RatingSearch: React.FC = () => {
     }, 1000);
     return () => clearTimeout(timeoutId);
   }, [minInputValue, maxInputValue, maxSliderValue, minSliderValue, setCurrentPage]);
+  
   const handleMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = Math.min(Number(e.target.value), maxInputValue - 1);
     setMinInputValue(value);

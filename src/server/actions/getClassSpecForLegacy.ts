@@ -50,7 +50,9 @@ export const getClassSpecForLegacy = async (region: keyof RegionMapping, bracket
         .from(retailLegacyLeaderboard)
         .where(and(
             eq(retailLegacyLeaderboard.character_spec, ''),
-            // eq(retailLegacyLeaderboard.pvp_season_index, season),
+            eq(retailLegacyLeaderboard.pvp_season_index, season),
+            eq(retailLegacyLeaderboard.bracket, bracket),
+            eq(retailLegacyLeaderboard.region, region)
 
         ))
         .orderBy(desc(retailLegacyLeaderboard.rating));
@@ -63,7 +65,7 @@ export const getClassSpecForLegacy = async (region: keyof RegionMapping, bracket
             requests.push(updateCharacterData(characterName, realmSlug, characterId, characterApiEndpoint, armoryEndpoint, profileParams));
 
 
-            if (requests.length >= 5) {
+            if (requests.length >= 20) {
                 await Promise.all(requests);
                 requests.length = 0;
             }

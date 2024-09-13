@@ -1,6 +1,8 @@
 'use client'
+import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
+import logo from '../assets/logos/darkLogo.png';
 
 const TopNavLinks = [
   { href: '/', label: 'Home' },
@@ -25,6 +27,10 @@ const TopNav = () => {
 
   return (
     <nav className="bg-primary-dark h-16 flex items-center justify-center gap-12 z-30 border-b-[1px] border-primary">
+      <div className='flex w-1/4 items-center place-content-left'>
+      <Image src={logo} alt='logo' width={230} height={230} />
+      
+      </div>
       {TopNavLinks.map((link) => (
         <Link
           className={`flex h-full items-center hover:text-primary ${link.label === selectedLink ? 'text-primary' : 'text-white'} select-none`}
@@ -35,6 +41,7 @@ const TopNav = () => {
           <span>{link.label}</span>
         </Link>
       ))}
+      <div className='flex w-1/4'></div>
     </nav>
   );
 };

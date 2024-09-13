@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import specIconsMap from '~/utils/helper/specIconsMap';
-import {classIconsMap }from '~/utils/helper/classIconsMap';
+import { classIconsMap } from '~/utils/helper/classIconsMap';
 import { useSearch } from '../Context/SearchContext';
 import { updateURL } from '~/utils/helper/updateURL';
 import useURLChange from '~/utils/hooks/useURLChange';
@@ -68,7 +68,7 @@ const ClassSearch = () => {
             setClassSearch([...classSearch, spec]);
         }
     };
-    
+
 
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
@@ -95,7 +95,7 @@ const ClassSearch = () => {
     return (
         <div className='flex justify-between w-full bg-secondary-light_black rounded-lg p-4'>
             {Object.keys(classSpecs).map((className, index) => (
-                <div key={index} className='text-center'>
+                <div key={index} className='flex flex-col gap-4'>
                     <Image
                         src={classIconsMap[className as keyof typeof classIconsMap]}
                         alt={className}
@@ -108,23 +108,22 @@ const ClassSearch = () => {
                             `}
                         onClick={() => toggleClassSelection(className)}
                     />
-                    <div className='flex flex-col gap-4 pt-4'>
-                        {classSpecs[className]?.map((spec, idx) => (
-                            <Image
-                                key={idx}
-                                src={specIconsMap[spec as keyof typeof specIconsMap]}
-                                alt={spec}
-                                width={30}
-                                height={30}
-                                className={`
+                    {classSpecs[className]?.map((spec, idx) => (
+                        <Image
+                            key={idx}
+                            src={specIconsMap[spec as keyof typeof specIconsMap]}
+                            alt={spec}
+                            width={30}
+                            height={30}
+                            className={`
                                     rounded-lg overflow-hidden cursor-pointer 
                                     ${classSearch.includes(spec) ? 'border-2 border-primary' : ''} 
                                     ${version === 'classic' && ['Evoker', 'Demon Hunter', 'Monk'].includes(className) ? 'grayed-out' : ''}
                                     `}
-                                onClick={() => toggleSpecSelection(spec)}
-                            />
-                        ))}
-                    </div>
+                            onClick={() => toggleSpecSelection(spec)}
+                        />
+                    ))}
+
                 </div>
             ))}
         </div>

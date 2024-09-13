@@ -112,7 +112,7 @@ const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, results
 
   useEffect(() => {
     void getCutoffs();
-  }, []);
+  },  []);
 
   // dont blame yourself for this
   const containerHeight = (resultsPerPage + 0.5) * rowHeight;

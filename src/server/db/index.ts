@@ -1,14 +1,6 @@
 import { drizzle } from 'drizzle-orm/vercel-postgres';
 import { sql } from "@vercel/postgres";
 import * as schema from './schema'
-import { updateActivityStatistics } from '../actions/updateActivityStatistics';
-import { updateShuffle } from '../actions/updateShuffle';
-import { updateClassSpecCount } from '../actions/updateClassSpecCount';
-import { updateLeaderboard } from '../actions/updateLeaderboard';
-import { getExtraDataForEachPlayer } from '../actions/getExtraDataForEachPlayer';
-import { updateLegacyLeaderboard } from '../actions/updateLegacyLeaderboards';
-import { getClassSpecForLegacy } from '../actions/getClassSpecForLegacy';
-import { resetLeaderboardDb } from '../actions/resetLeaderboardDb';
 
 
 
@@ -18,9 +10,8 @@ export const db = drizzle(sql, { schema });
 
 // if (first) {
 
-//     resetLeaderboardDb('retail', 'eu', 'shuffle');
-//     resetLeaderboardDb('retail', 'us', 'shuffle');
-   
-    
+//     await getClassSpecForLegacy('eu', '3v3', 37)
+//     await getClassSpecForLegacy('eu', '2v2', 37)
+//     await getClassSpecForLegacy('eu', 'rbg', 37)
 //     first = false;
 // }
