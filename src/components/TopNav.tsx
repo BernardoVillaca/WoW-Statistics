@@ -28,7 +28,12 @@ const TopNav = () => {
   return (
     <nav className="bg-primary-dark h-16 flex items-center justify-center gap-12 z-30 border-b-[1px] border-primary">
       <div className='flex w-1/4 items-center place-content-left'>
+      <Link
+       href={'/'}
+       onClick={(event) => handleLinkClick(event, '/')}
+      >
       <Image src={logo} alt='logo' width={230} height={230} />
+      </Link>
       
       </div>
       {TopNavLinks.map((link) => (

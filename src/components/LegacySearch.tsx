@@ -79,7 +79,7 @@ const LegacySearch = () => {
               <button
                 onClick={() => onClickHandler(expansion, season, pvpSeasonIndex)}
                 key={season}
-                className={`h-6 w-6 rounded-md ${isSelected(expansion, season, pvpSeasonIndex) ? ' bg-secondary-gray text-black' : '0 bg-secondary-navy border-[1px] border-gray-700'}`}
+                className={`h-6 w-6 rounded-full ${isSelected(expansion, season, pvpSeasonIndex) ? ' bg-secondary-navy border-[1px] border-gray-700' : ' bg-secondary-gray text-black'}`}
               >
                 {season}
               </button>

@@ -29,8 +29,10 @@ const grayedOutSpecs = [
 
 const ClassSearch = () => {
     const { setCurrentPage, classSearch, setClassSearch } = useSearch();
+    const [hoveredClassSpec, setHoveredClassSpec] = useState<string | null>(null);
     const queryParams = useURLChange();
     const prevVersionRef = useRef<string | null>(null);
+
 
     const getQueryParams = () => {
         const params = new URLSearchParams(queryParams ?? '');
@@ -92,36 +94,51 @@ const ClassSearch = () => {
         prevVersionRef.current = version;
     }, [version]);
 
+
     return (
         <div className='flex justify-between w-full bg-secondary-light_black rounded-lg p-4'>
             {Object.keys(classSpecs).map((className, index) => (
                 <div key={index} className='flex flex-col gap-4'>
-                    <Image
-                        src={classIconsMap[className as keyof typeof classIconsMap]}
-                        alt={className}
-                        width={30}
-                        height={30}
-                        className={`
+                    <div className='relative'>
+                        <Image
+                            src={classIconsMap[className as keyof typeof classIconsMap]}
+                            alt={className}
+                            width={30}
+                            height={30}
+                            className={`
                             rounded-lg overflow-hidden cursor-pointer 
                             ${classSpecs[className]?.every(spec => classSearch.includes(spec)) ? 'border-2 border-primary' : ''} 
                             ${version === 'classic' && ['Evoker', 'Demon Hunter', 'Monk'].includes(className) ? 'grayed-out' : ''}
                             `}
-                        onClick={() => toggleClassSelection(className)}
-                    />
-                    {classSpecs[className]?.map((spec, idx) => (
-                        <Image
-                            key={idx}
-                            src={specIconsMap[spec as keyof typeof specIconsMap]}
-                            alt={spec}
-                            width={30}
-                            height={30}
-                            className={`
-                                    rounded-lg overflow-hidden cursor-pointer 
-                                    ${classSearch.includes(spec) ? 'border-2 border-primary' : ''} 
-                                    ${version === 'classic' && ['Evoker', 'Demon Hunter', 'Monk'].includes(className) ? 'grayed-out' : ''}
-                                    `}
-                            onClick={() => toggleSpecSelection(spec)}
+                            onClick={() => toggleClassSelection(className)}
+                            onMouseOver={() => setHoveredClassSpec(className)}
+                            onMouseLeave={() => setHoveredClassSpec(null)}
                         />
+                        {hoveredClassSpec === className && (
+                            <div className='z-2 absolute bottom-7 whitespace-nowrap left-7 text-xs text-secondary-gray '>{className}</div>
+                        )}
+                    </div>
+                    {classSpecs[className]?.map((spec, idx) => (
+                        <div className='relative'>
+                            <Image
+                                key={idx}
+                                src={specIconsMap[spec as keyof typeof specIconsMap]}
+                                alt={spec}
+                                width={30}
+                                height={30}
+                                className={`
+                                rounded-lg overflow-hidden cursor-pointer 
+                                ${classSearch.includes(spec) ? 'border-2 border-primary' : ''} 
+                                ${version === 'classic' && ['Evoker', 'Demon Hunter', 'Monk'].includes(className) ? 'grayed-out' : ''}
+                                `}
+                                onClick={() => toggleSpecSelection(spec)}
+                                onMouseOver={() => setHoveredClassSpec(spec)}
+                                onMouseLeave={() => setHoveredClassSpec(null)}
+                            />
+                            {hoveredClassSpec === spec && (
+                            <div className='z-2 absolute bottom-7 whitespace-nowrap left-7 text-xs text-secondary-gray'>{spec.split(' ')[0]}</div>
+                        )}
+                        </div>
                     ))}
 
                 </div>
