@@ -119,9 +119,8 @@ const ClassSearch = () => {
                         )}
                     </div>
                     {classSpecs[className]?.map((spec, idx) => (
-                        <div className='relative'>
+                        <div key={idx} className='relative'>
                             <Image
-                                key={idx}
                                 src={specIconsMap[spec as keyof typeof specIconsMap]}
                                 alt={spec}
                                 width={30}
@@ -136,8 +135,8 @@ const ClassSearch = () => {
                                 onMouseLeave={() => setHoveredClassSpec(null)}
                             />
                             {hoveredClassSpec === spec && (
-                            <div className='z-2 absolute bottom-7 whitespace-nowrap left-7 text-xs text-secondary-gray'>{spec.split(' ')[0]}</div>
-                        )}
+                                <div className='z-2 absolute bottom-7 whitespace-nowrap left-7 text-xs text-secondary-gray'>{spec.split(' ')[0]}</div>
+                            )}
                         </div>
                     ))}
 

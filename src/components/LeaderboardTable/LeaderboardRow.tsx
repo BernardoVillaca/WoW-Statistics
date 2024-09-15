@@ -47,7 +47,10 @@ const LeaderboardRow: React.FC<LeaderboardRowProps> = ({
   };
 
   const getBorderClass = (): string => {
-    return isRankHighlighted() ? 'border-orange-200 border-opacity-30' : 'border-gray-700';
+    if (path === '/legacy') {
+      return 'border-secondary-gray border-opacity-30';
+    }
+    return isRankHighlighted() ? 'border-orange-200 border-opacity-30' : 'border-secondary-gray border-opacity-30';
   };
 
   const renderRankIcon = () => {
