@@ -130,6 +130,7 @@ export const updateRatingsCutoffs = async (): Promise<void> => {
                 },
             });
             const data = response.data;
+            
 
             const cutoffs: Cutoffs = {};
 
@@ -148,7 +149,7 @@ export const updateRatingsCutoffs = async (): Promise<void> => {
             }
 
             console.log(`Ratings cutoff collected for ${region.toUpperCase()} region!`);
-        }// Fetch current history from the database
+        }
 
         await db.insert(RatingsCutoff).values({
             created_at: new Date(),

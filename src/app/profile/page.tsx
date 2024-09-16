@@ -64,7 +64,7 @@ const ProfilePage = () => {
         }
         void getBracketData();
     }, [queryParams]);
-    
+
 
     const getQueryParams = () => {
         const params = new URLSearchParams(queryParams ?? '');
@@ -82,11 +82,17 @@ const ProfilePage = () => {
     return (
         <main className="flex flex-col min-h-screen  text-white relative gap-4 py-2">
             <div className="flex h-16 bg-secondary-light_black items-center place-content-center gap-2 rounded-lg">
-                <div className='flex gap-2' style={{ color: params.class ? classColors[capitalizeFirstLetter( params.class)] : undefined }}>
-                    <span >{capitalizeFirstLetter(params.name ?? '')}</span>
+                <a
+                    href={`https://worldofwarcraft.blizzard.com/en-us/character/${params.region}/${params.realm?.toLowerCase()}/${params.name?.toLowerCase()}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className='flex gap-2'
+                    style={{ color: params.class ? classColors[capitalizeFirstLetter(params.class)] : undefined }}
+                >
+                    <span>{capitalizeFirstLetter(params.name ?? '')}</span>
                     <span>-</span>
                     <span>{capitalizeFirstLetter(params.realm ?? '')}</span>
-                </div>
+                </a>
                 {params.region === 'us' && <Image src={us} width={25} alt="us" />}
                 {params.region === 'eu' && <Image src={eu} width={25} alt="eu" />}
             </div>
@@ -116,11 +122,11 @@ const ProfilePage = () => {
                     <TittlesTab params={params} />
                 </div>
                 <div className='flex flex-col w-1/2 gap-2'>
-                    {params.version === 'retail' ? 
-                    <RetailTalentsTab params={params}/>
-                    : <ClassicTalentsTab params={params}/>
-                
-                }
+                    {params.version === 'retail' ?
+                        <RetailTalentsTab params={params} />
+                        : <ClassicTalentsTab params={params} />
+
+                    }
                 </div>
 
             </div>

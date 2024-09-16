@@ -35,9 +35,28 @@ interface Titles {
     legendTitles?: string[];
 }
 
+const displayTittles = (name: string) => {
+    switch (name) {
+        case 'rankOneTitles':
+            return 'R1 Gladiator';
+        case 'gladiatorTitles':
+            return 'Gladiator';
+        case 'heroTitles':
+            return 'Hero';
+        case 'rankOneLegendTitles':
+            return 'R1 Legend';
+        case 'legendTitles':
+            return 'Legend ';
+        default:
+            return '';
+    }
+}
+
+
 const TittlesTab = ({ params }: TittleTabProps) => {
     const [titles, setTitles] = useState<Titles>({});
     const [loading, setLoading] = useState(true);
+    const [hoverTittle, setHoverTittle] = useState<string | null>(null);
 
     useEffect(() => {
         const getAchievementData = async () => {
@@ -69,13 +88,23 @@ const TittlesTab = ({ params }: TittleTabProps) => {
             ) : (
                 <div className="flex gap-4 pt-4">
                     {Object.entries(titles).map(([name, values], index) => (
-                        <div key={index} className="relative flex items-center border-[1px] border-secondary-gray border-opacity-30 p-1 rounded-2xl">
+                        <div
+                            key={index}
+                            className="relative flex items-center border-[1px] border-secondary-gray border-opacity-30 p-1 rounded-lg"
+                            onMouseOver={() => setHoverTittle(name)}
+                            onMouseLeave={() => setHoverTittle(null)}
+                        >
                             {tittleIconsObj[name as TitleKey] && (
                                 <Image src={tittleIconsObj[name as TitleKey]} alt={name} width={80} />
                             )}
                             <span className="absolute bottom-0 right-0 rounded-full h-6 w-6 bg-gray-700 text-center">
                                 {(values as string[]).length}
                             </span>
+                            {hoverTittle === name && (
+                                <div className='absolute flex place-content-center items-center w-[80px] bottom-[90px] text-xs text-secondary-gray'>
+                                    <span>{displayTittles(name)}</span>
+                                </div>
+                            )}
                         </div>
                     ))}
                 </div>
