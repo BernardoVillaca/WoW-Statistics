@@ -28,10 +28,11 @@ const grayedOutSpecs = [
 ];
 
 const ClassSearch = () => {
-    const { setCurrentPage, classSearch, setClassSearch } = useSearch();
+    const { classSearch, setClassSearch } = useSearch();
     const [hoveredClassSpec, setHoveredClassSpec] = useState<string | null>(null);
     const queryParams = useURLChange();
     const prevVersionRef = useRef<string | null>(null);
+
 
 
     const getQueryParams = () => {
@@ -82,10 +83,9 @@ const ClassSearch = () => {
 
     useEffect(() => {
         if (classSearch) {
-            setCurrentPage(1);
-            updateURL('search', classSearch.length > 0 ? classSearch.join(',') : null, true);
+            updateURL('search', classSearch.length > 0 ? classSearch.join(',') : null, false);
         }
-    }, [classSearch, setCurrentPage]);
+    }, [classSearch]);
 
     useEffect(() => {
         if (prevVersionRef.current && prevVersionRef.current !== version) {
