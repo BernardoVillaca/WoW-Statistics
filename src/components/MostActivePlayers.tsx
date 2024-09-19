@@ -1,10 +1,11 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import useURLChange from "~/utils/hooks/useURLChange";
-import { CharacterData } from "./LeaderboardTable/types";
+import { CharacterData, QueryParams } from "./LeaderboardTable/types";
 import { FiLoader } from "react-icons/fi";
 import LeaderboardRow from "./LeaderboardTable/LeaderboardRow";
 import { searchTabs } from "~/utils/helper/searchTabsMap";
+import { set } from "zod";
 
 
 
@@ -13,11 +14,22 @@ type MostActivePlayersResponse = {
     total: number;
 };
 
+type Params = {
+    resultsPerPage: number;
+    version: string;
+    region: string;
+    bracket: string;
+    orderBy: string;
+};
+
+
 const MostActivePlayers = () => {
     const [data, setData] = useState<CharacterData[]>([]);
     const [loading, setLoading] = useState(true);
+    const [paramsToUse, setParamsToUse] = useState({} as Params);
 
     const queryParams = useURLChange();
+
     const getQueryParams = () => {
         const params = new URLSearchParams(queryParams ?? '');
         return {
@@ -29,25 +41,24 @@ const MostActivePlayers = () => {
 
         };
     };
-    const params = getQueryParams();
-    const { version, region, bracket } = params;
-
+      
+    const getData = async () => {
+        setLoading(true);
+        const params = getQueryParams();
+        setParamsToUse(params);
+        const response = await axios.get<MostActivePlayersResponse>('/api/get50Results', {
+            params,
+        });
+        setData(response.data.results);
+        setLoading(false);
+    }
 
     useEffect(() => {
-
-        const getData = async () => {
-            setLoading(true);
-            const response = await axios.get<MostActivePlayersResponse>('/api/get50Results', {
-                params,
-
-            });
-            setData(response.data.results);
-            setLoading(false);
+        if (queryParams !== null) {
+          void getData();
         }
-
-        void getData();
-    }, [version, region, bracket]);
-
+      }, [queryParams]);
+    
 
     return (
         <div className="flex flex-col gap-4 p-4 border-24 border-[1px] rounded border-opacity-30 border-secondary-gray items">
@@ -65,11 +76,12 @@ const MostActivePlayers = () => {
                 ) : (
                     <>
                         {data.length > 0 ? (
-                            data.map((player, index) => (
+                            data.map((characterData, index) => (
                                 <LeaderboardRow
                                     rowIndex={index}
-                                    key={`${player.id}-${index}`}
-                                    characterData={player}
+                                    queryParams={paramsToUse}
+                                    key={`${characterData.id}-${index}`}
+                                    characterData={characterData}
                                     searchTabs={searchTabs}
                                     rowHeight={40}
                                 />

@@ -76,7 +76,7 @@ const LeaderboardRow: React.FC<LeaderboardRowProps> = ({
     class: characterData.character_class.toLowerCase() ,
     spec: characterData.character_spec.toLowerCase() ,
   });
-
+  console.log(queryParams);
   
   return (
     <Link href={`/profile?${params.toString()}`}>

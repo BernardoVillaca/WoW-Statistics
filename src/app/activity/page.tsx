@@ -215,6 +215,7 @@ const Activity = () => {
                   .map((player, index) => (
                     <LeaderboardRow
                       rowIndex={index}
+                      queryParams={params}
                       key={`${player.id}-${index}`}
                       characterData={player}
                       searchTabs={searchTabs}
