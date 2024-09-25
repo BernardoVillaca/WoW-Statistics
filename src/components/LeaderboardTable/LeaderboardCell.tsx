@@ -8,7 +8,7 @@ import { classColors } from '~/utils/helper/classIconsMap';
 import type { LeaderboardCellProps } from './types';
 
 
-const LeaderboardCell = ({ str, height, index, cell, characterClass, characterSpec, history, rowIndex, path, characterData}: LeaderboardCellProps) => {
+const LeaderboardCell = ({ str, height, index, cell, characterClass, characterSpec, history, rowIndex, path, characterData }: LeaderboardCellProps) => {
   const { currentPage, classSearch } = useSearch();  // Added resultsPerPage to calculate the correct rank
   const resultsPerPage = 50;  // Added resultsPerPage to calculate the correct rank
   const specClass = `${characterSpec} ${characterClass}`;
@@ -72,60 +72,61 @@ const LeaderboardCell = ({ str, height, index, cell, characterClass, characterSp
 
 
   return (
-    <div className={`relative flex items-center justify-center text-gray-300 w-full ${index === 0 ? '' : 'border-l-[1px] border-opacity-30 border-secondary-gray'}`}>
+    <div className={`flex items-center text-xs 2xl:text-base justify-center text-gray-300 w-full ${index === 0 ? '' : 'border-l-[1px] border-opacity-30 border-secondary-gray'}`}>
       {factionIcon ? (
         <Image src={factionIcon} alt={str} height={height / 2} width={height / 2} className='rounded-lg overflow-hidden' />
-      ) : cell === 'rating' || cell === 'played' ? (
-        <div className=''>
+      ) : cell === 'rating' ? (
+        <div className='flex justify-between items-center  w-full px-2'>
+          <div className='w-4 flex items-end'>
+            {classSearch?.length !== 1 && path === '/solo-shuffle' && (
+              <div className=''>
+                <span style={{ color: classColor }} className='text-xs text-gray-500'>{characterData.rank < 99 ? characterData.rank : ''}</span>
+              </div>
+            )}
+          </div>
           <span>{str}</span>
-          {showDifference && (
-            <div className={`absolute bottom-3 left-24 text-xs ${difference > 0 ? 'text-green-600' : 'text-secondary-red'}`}>
-              {difference !== 0 ? `(${difference > 0 ? '+' : ''}${difference})` : ''}
-            </div>
-          )}
+          <div className='w-7'>
+            {showDifference && (
+              <div className={`text-xs  ${difference > 0 ? 'text-green-600' : 'text-secondary-red'}`}>
+                {difference !== 0 ? `(${difference > 0 ? '+' : ''}${difference})` : ''}
+              </div>
+            )}
+          </div>
+        </div>
+
+      ) : cell === 'rank' || cell === 'played' ? (
+        <div className='flex justify-between items-center  w-full px-2'>
+         <div className='w-7'></div>
+          <span>{str}</span>
+          <div className='w-7'>
+            {showDifference && (
+              <div className={`text-xs  ${difference > 0 ? 'text-green-600' : 'text-secondary-red'}`}>
+                {difference !== 0 ? `(${difference > 0 ? '+' : ''}${difference})` : ''}
+              </div>
+            )}
+          </div>
         </div>
       ) : cell === 'character_spec' ? (
         <Image src={specIcon} alt={str} height={height / 1.8} width={height / 1.8} className='rounded-lg overflow-none' />
       ) : cell === 'character_name' ? (
-        <div>
+        <div className='flex '>
           <span style={{ color: classColor }}>
             {str}
           </span>
-          {classSearch?.length !== 1 && path === '/solo-shuffle' && (
-            <div className='flex absolute top-[24px] right-[123px] w-4 h-4 place-content-star items-end'>
-              <span style={{ color: classColor }} className='text-xs text-gray-500'>{characterData.rank < 99 ? characterData.rank : ''}</span>
-            </div>
-          )}
+
         </div>
       ) : cell === 'win_ratio' ? (
         <span className={` ${Number(str) >= 70 ? 'text-green-300' : Number(str) >= 55 ? 'text-yellow-300' : 'text-secondary-red'} `}>
           {str}%
-        </span>
-      ) : cell === 'rank' && path === '/solo-shuffle' ? (
-        <div className='flex'>
-          <span>{overallRank}</span>
-          {showDifference && (
-            <div className={`absolute bottom-3 left-24 text-xs ${difference > 0 ? 'text-green-600' : 'text-secondary-red'}`}>
-              {difference !== 0 ? `(${difference > 0 ? '+' : ''}${difference})` : ''}
-            </div>
-          )}
-
-        </div>
+        </span>      
       ) : cell === 'realm_slug' ? (
-        <span>{formatRealmName(str)}</span>
+        <span className='text-xs 2xl:text-base'>{formatRealmName(str)}</span>
       ) : cell === 'updated_at' ? (
         <div className={className}>
           {timeString}
         </div>
       ) : (
-        <div >
-          {str}
-          {showDifference && (
-            <div className={`absolute bottom-3 left-24 text-xs ${difference > 0 ? 'text-green-600' : 'text-red-500'}`}>
-              {difference !== 0 ? `(${difference > 0 ? '+' : ''}${difference})` : ''}
-            </div>
-          )}
-        </div>
+        <span>{str}</span>
       )}
     </div>
   );

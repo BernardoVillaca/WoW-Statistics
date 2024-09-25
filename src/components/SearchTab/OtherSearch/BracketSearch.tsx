@@ -46,32 +46,32 @@ const BracketSearch = ({ partofLeadeboard }: { partofLeadeboard: boolean }) => {
     }, [bracket, setCurrentPage]);
 
     return (
-        <div className={`flex items-center justify-center ${partofLeadeboard ? 'w-1/5 border-[1px] border-opacity-30 border-secondary-gray' : 'w-[400px]'}  rounded-lg gap-8 select-none`}>
+        <div className={`flex items-center  px-4 justify-between ${partofLeadeboard ? 'w-1/5 border-[1px] border-opacity-30 border-secondary-gray' : 'w-[400px]'}  rounded-lg  select-none`}>
             <button
-                className={`flex ${bracket === '3v3' ? ' bg-secondary-navy ' : 'border-[1px] border-opacity-30 border-secondary-gray'}  rounded-full w-12 h-12 items-center justify-center`}
+                className={`flex ${bracket === '3v3' ? ' bg-secondary-navy ' : 'border-[1px] border-opacity-30 border-secondary-gray'}  rounded-full w-8 h-8 text-sm 2xl:w-12 2xl:h-12 2xl:text-base items-center justify-center`}
                 onClick={() => handleClick('3v3')}
             >
                 3v3
             </button>
             <button
-                className={`flex ${bracket === '2v2' ? ' bg-secondary-navy ' : 'border-[1px] border-opacity-30 border-secondary-gray'}  rounded-full w-12 h-12 items-center justify-center`}
+                className={`flex ${bracket === '2v2' ? ' bg-secondary-navy ' : 'border-[1px] border-opacity-30 border-secondary-gray'}  rounded-full w-8 h-8 text-sm 2xl:w-12 2xl:h-12 2xl:text-base items-center justify-center`}
                 onClick={() => handleClick('2v2')}
             >
                 2v2
             </button>
             <button
-                className={`flex ${bracket === 'rbg' ? ' bg-secondary-navy ' : 'border-[1px] border-opacity-30 border-secondary-gray'}  rounded-full w-12 h-12 items-center justify-center`}
+                className={`flex ${bracket === 'rbg' ? ' bg-secondary-navy ' : 'border-[1px] border-opacity-30 border-secondary-gray'}  rounded-full w-8 h-8 text-sm 2xl:w-12 2xl:h-12 2xl:text-base items-center justify-center`}
                 onClick={() => handleClick('rbg')}
             >
-                RBG
+                Rbg
             </button>
             {!partofLeadeboard  && (
                 <button
-                    className={`flex ${bracket === 'shuffle' ? ' bg-secondary-navy ' : 'border-[1px] border-opacity-30 border-secondary-gray'} rounded-full w-12 h-12 items-center justify-center`}
+                    className={`flex ${bracket === 'shuffle' ? ' bg-secondary-navy ' : 'border-[1px] border-opacity-30 border-secondary-gray'} rounded-full w-8 h-8 text-sm 2xl:w-12 2xl:h-12 2xl:text-base items-center justify-center`}
                     disabled={version === 'classic'}
                     onClick={() => handleClick('shuffle')}
                 >
-                    SFL
+                    Sfl
                 </button>
 
             )}

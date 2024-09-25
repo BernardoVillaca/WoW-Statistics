@@ -7,7 +7,7 @@ import logo from '../assets/logos/darkLogo.png';
 const TopNavLinks = [
   { href: '/', label: 'Home' },
   { href: '/leaderboard', label: 'Leaderboard' },
-  { href: '/solo-shuffle', label: 'Solo Shuffle' },
+  { href: '/shuffle', label: 'Shuffle' },
   { href: '/legacy', label: 'Legacy' },
   { href: '/activity', label: 'Activity' },
   { href: '/cutoffs', label: 'Cutoffs' },
@@ -26,7 +26,7 @@ const TopNav = () => {
   };
 
   return (
-    <nav className="bg-primary-dark h-16 flex items-center justify-center gap-12 z-30 border-b-[1px] border-primary">
+    <nav className="bg-primary-dark h-16 flex items-center justify-center gap-12 z-30 border-b-[1px] border-primary ">
       <div className='flex w-1/4 items-center place-content-left'>
       <Link
        href={'/'}

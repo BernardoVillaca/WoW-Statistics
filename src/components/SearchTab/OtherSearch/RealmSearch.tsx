@@ -177,7 +177,7 @@ const RealmSearch: React.FC = () => {
                 onFocus={handleFocus}
                 onChange={(e) => handleChange(e.target.value)}
                 onKeyDown={handleKeyDown}
-                className="w-32 h-8 px-2 text-center text-primary-dark bg-secondary-gray border-none focus:outline-none"
+                className="w-24 2xl:w-32 h-8 p-2 text-center text-primary-dark bg-secondary-gray border-none focus:outline-none text-xs 2xl:text-base"
             />
             {realm !== '' ? (
                 <button
@@ -194,7 +194,7 @@ const RealmSearch: React.FC = () => {
 
             ) : (
                 <button
-                    className='bg-secondary-navy text-primary-dark w-8 h-8 items-center justify-center flex'
+                    className='bg-secondary-navy text-white w-8 h-8 items-center justify-center flex'
                     onClick={toggleDropdown}
                 >
                     <FiChevronDown className={`${isOpen ? 'rotate-180' : ''}`} />
@@ -202,7 +202,7 @@ const RealmSearch: React.FC = () => {
             )}            
             {isOpen && (
                 <div
-                    className='absolute top-12 w-40 max-h-24 bg-secondary-navy border-[1px] border-secondary-gray overflow-auto snap-mandatory snap-y'
+                    className='absolute top-12 w-32 2xl:w-40 max-h-24 bg-secondary-navy border-[1px] border-secondary-gray overflow-auto snap-mandatory snap-y'
                 >
                     {filteredRealmList.length > 0 ? (
                         filteredRealmList.map((realm, index) => (
