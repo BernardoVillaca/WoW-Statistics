@@ -42,7 +42,7 @@ const RatingsCutoffTab = () => {
     const params = new URLSearchParams(queryParams ?? '');
     let bracket = params.get('bracket') ?? '3v3';
 
-    if (path?.includes('solo-shuffle')) {
+    if (path?.includes('/shuffle')) {
       bracket = 'shuffle';
     }
 
@@ -65,7 +65,7 @@ const RatingsCutoffTab = () => {
 
     let specificCutoff: RatingCountObj | null = null;
 
-    if (version === 'retail' && !path?.includes('solo-shuffle')) {
+    if (version === 'retail' && !path?.includes('/shuffle')) {
       if (bracket === '3v3') {
         specificCutoff = (region === 'us' ? ratingCutoffs.us_cutoffs.arena_3v3_cutoff : ratingCutoffs.eu_cutoffs.arena_3v3_cutoff) ?? null;
       }

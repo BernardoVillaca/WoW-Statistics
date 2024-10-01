@@ -37,7 +37,7 @@ const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, results
     if (classSearchParam) {
       setClassSearch(classSearchParam.split(',') ?? null);
     }
-    if (path?.includes('solo-shuffle')) {
+    if (path?.includes('shuffle')) {
       bracket = 'shuffle';
     }
  
@@ -67,7 +67,7 @@ const LeaderBoardTable: React.FC<LeaderBoardTableProps> = ({ searchTabs, results
       Object.entries(queryParams).filter(([key, value]) => {
         if (key === 'pvpSeasonIndex' && value === '37') return false
         if (key === 'path' && value === '/leaderboard') return false
-        if (key === 'path' && value === '/solo-shuffle') return false
+        if (key === 'path' && value === '/shuffle') return false
         // if (key === 'page' && value === 1) return false;
         if (key === 'minRating' && value === 0) return false;
         if (key === 'maxRating' && value === 4000) return false;

@@ -33,7 +33,7 @@ const LeaderboardRow: React.FC<LeaderboardRowProps> = ({
     if (queryParams?.bracket === '3v3') {
       return ratingCutoffs.us_cutoffs?.arena_3v3_cutoff.count + 1 || null;
     }
-    if (path === '/solo-shuffle') {
+    if (path === '/shuffle') {
       const classSpecKey = getClassSpecKey(characterData.character_class, characterData.character_spec);
       const cutoff = ratingCutoffs.us_cutoffs?.[classSpecKey];
       return cutoff ? cutoff.count + 1 : null;

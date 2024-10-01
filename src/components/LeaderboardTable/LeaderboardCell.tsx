@@ -78,7 +78,7 @@ const LeaderboardCell = ({ str, height, index, cell, characterClass, characterSp
       ) : cell === 'rating' ? (
         <div className='flex justify-between items-center  w-full px-2'>
           <div className='w-4 flex items-end'>
-            {classSearch?.length !== 1 && path === '/solo-shuffle' && (
+            {classSearch?.length !== 1 && path === '/shuffle' && (
               <div className=''>
                 <span style={{ color: classColor }} className='text-xs text-gray-500'>{characterData.rank < 99 ? characterData.rank : ''}</span>
               </div>
