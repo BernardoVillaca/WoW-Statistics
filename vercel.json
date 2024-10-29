@@ -70,11 +70,11 @@
         },
         {
             "path": "/api/cronJobs/getPossibleRealms",
-            "schedule": "48 */24 * * *"
+            "schedule": "48 0 * * *"
         },
         {
             "path": "/api/cronJobs/updateStatistics",
-            "schedule": "51 */24 * * *"
+            "schedule": "51 0 * * *"
         }
     ]
 }
