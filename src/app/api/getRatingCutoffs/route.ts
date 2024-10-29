@@ -6,7 +6,7 @@ import { desc } from 'drizzle-orm';
 
 export async function GET(req: NextRequest) {
   try {
-    const url = new URL(req.url);
+    const url = new URL(req.nextUrl);
     const history = url.searchParams.get('history') === 'true';
 
     let response;
