@@ -1,11 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import useURLChange from "~/utils/hooks/useURLChange";
-import { CharacterData, QueryParams } from "./LeaderboardTable/types";
+import type { CharacterData} from "../../../components/LeaderboardTable/types";
 import { FiLoader } from "react-icons/fi";
-import LeaderboardRow from "./LeaderboardTable/LeaderboardRow";
+import LeaderboardRow from "../../../components/LeaderboardTable/LeaderboardRow";
 import { searchTabs } from "~/utils/helper/searchTabsMap";
-import { set } from "zod";
 
 
 
@@ -41,7 +40,7 @@ const MostActivePlayers = () => {
 
         };
     };
-      
+
     const getData = async () => {
         setLoading(true);
         const params = getQueryParams();
@@ -55,10 +54,10 @@ const MostActivePlayers = () => {
 
     useEffect(() => {
         if (queryParams !== null) {
-          void getData();
+            void getData();
         }
-      }, [queryParams]);
-    
+    }, [queryParams]);
+
 
     return (
         <div className="flex flex-col gap-4 p-4 border-24 border-[1px] rounded border-opacity-30 border-secondary-gray items">
@@ -80,7 +79,7 @@ const MostActivePlayers = () => {
                                 <LeaderboardRow
                                     rowIndex={index}
                                     queryParams={paramsToUse}
-                                    key={`${characterData.id}-${index}`}
+                                    key={`${characterData.character_id}-${index}`}
                                     characterData={characterData}
                                     searchTabs={searchTabs}
                                     rowHeight={40}

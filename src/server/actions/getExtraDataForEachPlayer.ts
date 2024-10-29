@@ -180,9 +180,11 @@ const getSpecData = async (characterName: string, realmSlug: string, characterAp
 
     try {
         const response = await axios.get<SpecData>(specUrl, {
+            headers: {
+                Authorization: `Bearer ${authToken}`,
+            },    
             params: {
-                ...profileParams,
-                access_token: authToken
+                ...profileParams,                
             },
         });
         return response.data;
