@@ -130,9 +130,11 @@ export const updateShuffle = async (region: 'eu' | 'us' , part: number): Promise
                 const apiEndpoint = `https://${region}.api.blizzard.com/data/wow/pvp-season/38/pvp-leaderboard/shuffle-${characterClass}-${spec}`;
                 console.log(`Fetching shuffle leaderboard data for ${region} ${characterClass} ${spec}...`);
                 const response = await axios.get<ApiResponse>(apiEndpoint, {
+                    headers: {
+                        Authorization: `Bearer ${authToken}`,
+                    },
                     params: {
-                        ...regionParams,
-                        access_token: authToken
+                        ...regionParams,                       
                     }
                 });
 

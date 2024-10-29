@@ -37,10 +37,12 @@ export async function GET(req: NextRequest) {
             const response = await axios.get<RetailSpecData | ClassicSpecData>(
                 `https://${region}.api.blizzard.com/profile/wow/character/${realm}/${name}/specializations`,
                 {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
                     params: {
                         namespace: version === 'retail' ? `profile-${region}` : `profile-classic-${region}`,
                         locale: region === 'us' ? 'en_US' : 'en_GB',
-                        access_token: token,
                     },
                 }
             );
@@ -51,7 +53,7 @@ export async function GET(req: NextRequest) {
                 const specs = retailData.specializations;
                 return { activeSpec, specs };
             }
-            
+
             const classicData = response.data as ClassicSpecData;
             const activeSpec = determineSpecWithMostPoints(classicData);
             const specs = classicData.specialization_groups[0]?.specializations;

@@ -79,10 +79,12 @@ export const updateLegacyLeaderboard = async (): Promise<void> => {
 const fetchAndStoreData = async (apiEndpoint: string, authToken: string, season: number, bracket: string, region: string): Promise<void> => {
     try {
         const response = await axios.get<ApiResponse>(apiEndpoint, {
+            headers: {
+                Authorization: `Bearer ${authToken}`,
+            },
             params: {
                 locale: 'en_US',
-                namespace: `dynamic-${region}`,
-                access_token: authToken,
+                namespace: `dynamic-${region}`,                
             },
         });
 

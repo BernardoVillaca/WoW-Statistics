@@ -10,6 +10,7 @@ interface TokenResponse {
 }
 
 export const getAuthToken = async (tokenHasExpired: boolean): Promise<string> => {
+    console.log('Getting new token')
     const tokenData = await db.query.authToken.findFirst();
     if (!tokenData || tokenHasExpired) {
         return refreshToken();
@@ -22,14 +23,14 @@ export const getAuthToken = async (tokenHasExpired: boolean): Promise<string> =>
 const refreshToken = async (): Promise<string> => {
     const clientId = process.env.BLIZZARD_ID;
     const clientSecret = process.env.BLIZZARD_SECRET;
-    const response = await axios.post<TokenResponse>('https://us.battle.net/oauth/token', null, {
+    const response = await axios.post<TokenResponse>('https://oauth.battle.net/token', null, {
         params: {
             grant_type: 'client_credentials',
             client_id: clientId,
             client_secret: clientSecret,
         },
     });
-
+    console.log(response)
     const { access_token, token_type, expires_in } = response.data;
 
     // Upsert the token into the database

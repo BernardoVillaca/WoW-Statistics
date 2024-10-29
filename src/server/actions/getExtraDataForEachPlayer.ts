@@ -115,13 +115,13 @@ const updateCharacterData = async (
         if (characterData) {
             await db.update(table)
                 .set({
-                    character_spec: specName,  
+                    character_spec: specName,
                     character_class: characterData.character_class.name,
                 })
                 .where(and(
                     eq(table.character_name, characterName),
                     eq(table.realm_slug, realmSlug)
-                
+
                 ));
         } else if (version === 'retail') {
             const playerArmoryData = await scrapPlayerArmory(characterName, realmSlug, armoryEndpoint);
@@ -135,7 +135,7 @@ const updateCharacterData = async (
                     .where(and(
                         eq(table.character_name, characterName),
                         eq(table.realm_slug, realmSlug)
-                    
+
                     ));
                 return;
             }
@@ -144,7 +144,7 @@ const updateCharacterData = async (
         }
     } catch (error: unknown) {
         console.error(`Failed to update for ${characterName}: ${(error as Error).message}`);
-        
+
     };
 }
 
@@ -155,9 +155,11 @@ const getPlayerData = async (characterName: string, realmSlug: string, character
 
     try {
         const response = await axios.get<CharacterData>(url, {
+            headers: {
+                Authorization: `Bearer ${authToken}`,
+            },
             params: {
                 ...profileParams,
-                access_token: authToken
             },
         });
         return response.data;

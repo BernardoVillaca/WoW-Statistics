@@ -102,9 +102,11 @@ export const updateLeaderboard = async (version: keyof VersionMapping, region: k
     try {
         const authToken = await getAuthToken(false);
         const response = await axios.get<ApiResponse>(apiEndpoint, {
+            headers: {
+                Authorization: `Bearer ${authToken}`,
+            },
             params: {
-                ...params,
-                access_token: authToken
+                ...params,                
             }
         });
 

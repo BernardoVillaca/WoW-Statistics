@@ -7,7 +7,7 @@ import Image from "next/image";
 import logo from '../assets/logos/darkLogo.png';
 
 export const metadata = {
-  title: "Innnate Gaming",
+  title: "Innate Gaming",
   description: "A hub for your wow statistics",
   icons: [{ rel: "icon", url: "/assets/logos/icon.png" }],
 };

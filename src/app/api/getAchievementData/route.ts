@@ -29,10 +29,12 @@ export async function GET(req: NextRequest) {
         try {
             const response = await axios.get<AchievementsResponse>(`https://${region}.api.blizzard.com/profile/wow/character/${realm}/${name}/achievements`,
                 {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
                     params: {
                         namespace: version === 'retail' ? `profile-${region}` : `profile-classic-${region}`,
-                        locale: region === 'us' ? 'en_US' : 'en_GB',
-                        access_token: token,
+                        locale: region === 'us' ? 'en_US' : 'en_GB',                       
                     },
                 }
             )

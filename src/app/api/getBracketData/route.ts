@@ -40,10 +40,12 @@ export async function GET(req: NextRequest) {
                 const requests = brackets.map(bracket =>
                     axios.get<BracketData>(`https://${region}.api.blizzard.com/profile/wow/character/${realm}/${name}/pvp-bracket/${bracket}`,
                         {
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                            },
                             params: {
                                 namespace: version === 'retail' ? `profile-${region}` : `profile-classic-${region}`,
-                                locale: region === 'us' ? 'en_US' : 'en_GB',
-                                access_token: token,
+                                locale: region === 'us' ? 'en_US' : 'en_GB',                                
                             },
                         }).catch(error => {
                             console.error(`Error fetching data for bracket ${bracket}:`, (error as Error).message);

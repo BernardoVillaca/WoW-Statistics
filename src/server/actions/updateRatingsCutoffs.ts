@@ -124,9 +124,11 @@ export const updateRatingsCutoffs = async (): Promise<void> => {
 
             const { url, params, db3v3, dbShuffle, dbRbg } = regionParam;
             const response = await axios.get<ApiResponse>(url, {
+                headers: {
+                    Authorization: `Bearer ${authToken}`,
+                },
                 params: {
-                    ...params,
-                    access_token: authToken,
+                    ...params,                    
                 },
             });
             const data = response.data;

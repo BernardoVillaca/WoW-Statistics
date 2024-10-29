@@ -131,9 +131,11 @@ const getPlayerData = async (characterName: string, realmSlug: string, character
 
     try {
         const response = await axios.get<CharacterData>(url, {
+            headers: {
+                Authorization: `Bearer ${authToken}`,
+            },            
             params: {
-                ...profileParams,
-                access_token: authToken
+                ...profileParams,                
             },
         });
         return response.data;
