@@ -30,7 +30,6 @@ const refreshToken = async (): Promise<string> => {
             client_secret: clientSecret,
         },
     });
-    console.log(response)
     const { access_token, token_type, expires_in } = response.data;
 
     // Upsert the token into the database

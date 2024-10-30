@@ -44,7 +44,7 @@ export type VersionMapping = {
 
 const CURRENT_RETAIL_SEASON = '38'
 
-const CURRENT_CLASSIC_SEASON = '9'
+const CURRENT_CLASSIC_SEASON = '10'
 
 export const versionRegionBracketMapping: VersionMapping = {
     retail: {

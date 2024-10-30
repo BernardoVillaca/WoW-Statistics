@@ -52,6 +52,7 @@ type LeaderboardTable = typeof eu3v3Leaderboard | typeof eu2v2Leaderboard | type
 
 
 export const getExtraDataForEachPlayer = async (version: keyof VersionMapping, region: keyof RegionMapping, bracket: keyof BracketMapping) => {
+    const authToken = await getAuthToken(false);
     const versionMapping = versionRegionBracketMapping[version];
     if (!versionMapping) {
         throw new Error(`Invalid version: ${version}`);
@@ -75,7 +76,7 @@ export const getExtraDataForEachPlayer = async (version: keyof VersionMapping, r
         const { character_name: characterName, realm_slug: realmSlug, character_id: characterId } = character as LeaderboardEntry;
 
         if (characterName && realmSlug) {
-            requests.push(updateCharacterData(version, characterName, realmSlug, characterId, table, characterApiEndpoint, armoryEndpoint, profileParams));
+            requests.push(updateCharacterData(version, characterName, realmSlug, authToken, characterId, table, characterApiEndpoint, armoryEndpoint, profileParams));
 
 
             if (requests.length >= 10) {
@@ -95,6 +96,7 @@ const updateCharacterData = async (
     version: keyof VersionMapping,
     characterName: string,
     realmSlug: string,
+    authToken: string,
     characterId: number,
     table: LeaderboardTable,
     characterApiEndpoint: string,
@@ -102,11 +104,11 @@ const updateCharacterData = async (
     profileParams: LeaderboardParams
 ): Promise<void> => {
     try {
-        const characterData = await getPlayerData(characterName, realmSlug, characterApiEndpoint, profileParams);
+        const characterData = await getPlayerData(characterName, realmSlug, characterApiEndpoint, profileParams, authToken);
         let specName = '';
 
         if (version === 'classic' && characterData) {
-            const specData = await getSpecData(characterName, realmSlug, characterApiEndpoint, profileParams);
+            const specData = await getSpecData(characterName, realmSlug, characterApiEndpoint, profileParams, authToken);
             specName = determineSpecWithMostPoints(specData);
         } else if (characterData?.active_spec) {
             specName = characterData.active_spec.name;
@@ -149,8 +151,7 @@ const updateCharacterData = async (
 }
 
 
-const getPlayerData = async (characterName: string, realmSlug: string, characterApiEndpoint: string, profileParams: LeaderboardParams): Promise<CharacterData | null> => {
-    const authToken = await getAuthToken(false);
+const getPlayerData = async (characterName: string, realmSlug: string, characterApiEndpoint: string, profileParams: LeaderboardParams, authToken: string): Promise<CharacterData | null> => {
     const url = `${characterApiEndpoint}${realmSlug}/${characterName.toLowerCase()}`;
 
     try {
@@ -167,24 +168,23 @@ const getPlayerData = async (characterName: string, realmSlug: string, character
         if (axios.isAxiosError(error) && error.response?.status === 401) {
             console.log('Token expired, refreshing token and retrying the request...');
             await getAuthToken(true);
-            return getPlayerData(characterName, realmSlug, characterApiEndpoint, profileParams);
+            return getPlayerData(characterName, realmSlug, characterApiEndpoint, profileParams, authToken);
         }
         return null;
     }
 };
 
 
-const getSpecData = async (characterName: string, realmSlug: string, characterApiEndpoint: string, profileParams: LeaderboardParams): Promise<SpecData | null> => {
-    const authToken = await getAuthToken(false);
+const getSpecData = async (characterName: string, realmSlug: string, characterApiEndpoint: string, profileParams: LeaderboardParams, authToken: string): Promise<SpecData | null> => {
     const specUrl = `${characterApiEndpoint}${realmSlug}/${characterName.toLowerCase()}/specializations`;
 
     try {
         const response = await axios.get<SpecData>(specUrl, {
             headers: {
                 Authorization: `Bearer ${authToken}`,
-            },    
+            },
             params: {
-                ...profileParams,                
+                ...profileParams,
             },
         });
         return response.data;
