@@ -2,7 +2,7 @@ import { db } from '~/server/db';
 import { desc, sql } from "drizzle-orm";
 import { leaderboardTablesMap } from "~/utils/helper/leaderboardTablesMap";
 import { activityStatistics } from '../db/schema';
-import type { ActivityStatistics, PlayerActivity, SpecActivity } from '~/utils/helper/activityMap';
+import type { ActivityStatistics, PlayerActivity, RatingsCount, SpecActivity } from '~/utils/helper/activityMap';
 
 type OverallActivityStatisticsData = {
     created_at: Date;
@@ -52,6 +52,15 @@ export const updateActivityStatistics = async () => {
         let total48h = 0;
         let total72h = 0;
 
+        const ratingsCount: RatingsCount = {
+            above2600: 0,
+            above2500: 0,
+            above2400: 0,
+            above2300: 0,
+            above2200: 0,
+            above2100: 0,
+            above2000: 0
+        }
         const playerActivity24h = new Map<string, PlayerActivity>();
         const playerActivity48h = new Map<string, PlayerActivity>();
         const playerActivity72h = new Map<string, PlayerActivity>();
@@ -92,7 +101,28 @@ export const updateActivityStatistics = async () => {
 
                 if (queryTime === oneDay) {
                     total24h += 1;
-
+                    
+                    if (row.rating > 2600 && row.updated_at) {
+                        ratingsCount.above2600++
+                    }
+                    if (row.rating > 2500 && row.updated_at) {
+                        ratingsCount.above2500++
+                    }
+                    if (row.rating > 2400 && row.updated_at) {
+                        ratingsCount.above2400++
+                    }
+                    if (row.rating > 2300 && row.updated_at) {
+                        ratingsCount.above2300++
+                    }
+                    if (row.rating > 2200 && row.updated_at) {
+                        ratingsCount.above2200++
+                    }
+                    if (row.rating > 2100 && row.updated_at) {
+                        ratingsCount.above2100++
+                    }
+                    if (row.rating > 2000 && row.updated_at) {
+                        ratingsCount.above2000++
+                    }
                     const specKey = `${row.character_spec}-${row.character_class}`;
                     const currentSpecActivity = specActivity24h.get(specKey);
 
@@ -196,6 +226,9 @@ export const updateActivityStatistics = async () => {
             mostActiveSpecs24h: getTop5(specActivity24h),
             mostActiveSpecs48h: getTop5(specActivity48h),
             mostActiveSpecs72h: getTop5(specActivity72h),
+
+            ratingsCount
+            
         };
         console.log(`Finished updating activity statistics for ${column}`);
     }

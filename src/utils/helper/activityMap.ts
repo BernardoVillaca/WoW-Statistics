@@ -10,6 +10,18 @@ export interface ActivityStatistics  {
     mostActiveSpecs24h: Record<string, SpecActivity>;
     mostActiveSpecs48h: Record<string, SpecActivity>;
     mostActiveSpecs72h: Record<string, SpecActivity>;
+    ratingsCount?: RatingsCount;
+    
+}
+
+export type RatingsCount = {
+    above2600: number;
+    above2500: number;
+    above2400: number;
+    above2300: number;
+    above2200: number;
+    above2100: number;
+    above2000: number;
 }
     
 export type PlayerActivity = {
