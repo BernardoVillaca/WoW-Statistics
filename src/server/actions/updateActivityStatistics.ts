@@ -101,7 +101,7 @@ export const updateActivityStatistics = async () => {
 
                 if (queryTime === oneDay) {
                     total24h += 1;
-                    
+                    // Update activity statistics for players based on their rating
                     if (row.rating > 2600 && row.updated_at) {
                         ratingsCount.above2600++
                     }
@@ -123,6 +123,8 @@ export const updateActivityStatistics = async () => {
                     if (row.rating > 2000 && row.updated_at) {
                         ratingsCount.above2000++
                     }
+
+
                     const specKey = `${row.character_spec}-${row.character_class}`;
                     const currentSpecActivity = specActivity24h.get(specKey);
 

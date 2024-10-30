@@ -1,3 +1,5 @@
+'use client'
+
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { FiLoader } from 'react-icons/fi'
@@ -19,15 +21,14 @@ type Params = {
     bracket: string;
 
 };
-const RecentActivity = () => {
+const RecentActivity = ({path} : {path: string}) => {
     const { setResultsCount } = useSearch();
     const [activePlayers, setActivePlayers] = useState<CharacterData[]>([]);
     const [activePlayersLoading, setActivePlayersLoading] = useState(true);
     const [paramsToUse, setParamsToUse] = useState({} as Params);
 
     const queryParams = useURLChange();
-    const path = window.location.pathname
-
+    
     const getQueryParams = () => {
         const params = new URLSearchParams(queryParams ?? '');
         return {

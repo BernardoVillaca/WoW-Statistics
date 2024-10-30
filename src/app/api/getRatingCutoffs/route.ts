@@ -6,8 +6,8 @@ import { desc } from 'drizzle-orm';
 
 export async function GET(req: NextRequest) {
   try {
-    const url = new URL(req.nextUrl);
-    const history = url.searchParams.get('history') === 'true';
+    // Only parse URL when needed to avoid static rendering issues
+    const history = req.nextUrl.searchParams.get('history') === 'true';
 
     let response;
     if (history) {
@@ -19,7 +19,8 @@ export async function GET(req: NextRequest) {
         .limit(20);
       return NextResponse.json({ history: response });
     }
-    // Fetch the latest record
+
+    // Fetch the latest record if history is false
     response = await db
       .select()
       .from(RatingsCutoff)

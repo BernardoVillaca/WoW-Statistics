@@ -80,7 +80,7 @@ const Activity = () => {
   const { version, region, bracket } = params;
 
   useEffect(() => {
-    if (typeof window !== 'undefined') setPath(window.location.pathname);
+    setPath(window.location.pathname);
     const getData = async () => {
       const response = await axios.get<WowStatisticsResponse>('/api/getWowStatistics?history=true');
       setData(response.data.activityHistory);
@@ -169,7 +169,7 @@ const Activity = () => {
           )}
         </div>
       </div>
-      <RecentActivity  />
+      <RecentActivity  path={path}/>
       <MostActivePlayers />
     </main>
   );
