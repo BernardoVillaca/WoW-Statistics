@@ -10,11 +10,16 @@ import { getExtraDataForEachPlayer } from '../actions/getExtraDataForEachPlayer'
 
 export const db = drizzle(sql, { schema });
 
-let first = true
-if (first) {
+// let first = true
+// if (first) {
 
-    // updateLeaderboard('classic', 'us', '3v3',)
-    getExtraDataForEachPlayer('classic', 'us', '3v3')
-    
-    first = false
-}
+//     await resetLeaderboardDb('classic', 'us', '3v3')
+//     await resetLeaderboardDb('classic', 'us', '2v2')
+//     await resetLeaderboardDb('classic', 'us', 'rbg')
+//     await resetLeaderboardDb('classic', 'eu', '3v3')
+//     await resetLeaderboardDb('classic', 'eu', '2v2')
+//     await resetLeaderboardDb('classic', 'eu', 'rbg')
+
+
+//     first = false
+// }

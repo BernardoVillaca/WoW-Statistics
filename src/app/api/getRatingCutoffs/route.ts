@@ -5,9 +5,11 @@ import { RatingsCutoff } from '~/server/db/schema';
 import { desc } from 'drizzle-orm';
 
 export async function GET(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const history = searchParams.get('history') === 'true';
+
   try {
     // Only parse URL when needed to avoid static rendering issues
-    const history = req.nextUrl.searchParams.get('history') === 'true';
 
     let response;
     if (history) {
