@@ -21,12 +21,13 @@ type Params = {
     bracket: string;
 
 };
-const RecentActivity = ({path} : {path: string}) => {
+const RecentActivity = () => {
     const { setResultsCount } = useSearch();
     const [activePlayers, setActivePlayers] = useState<CharacterData[]>([]);
     const [activePlayersLoading, setActivePlayersLoading] = useState(true);
     const [paramsToUse, setParamsToUse] = useState({} as Params);
-
+    const [path, setPath] = useState('');
+   
     const queryParams = useURLChange();
     
     const getQueryParams = () => {
@@ -56,6 +57,7 @@ const RecentActivity = ({path} : {path: string}) => {
     };
 
     useEffect(() => {
+        setPath(window.location.pathname);
         if (queryParams !== null) {
             void getActivePlayers();
         }

@@ -13,12 +13,7 @@ export const db = drizzle(sql, { schema });
 // let first = true
 // if (first) {
 
-//     await resetLeaderboardDb('classic', 'us', '3v3')
-//     await resetLeaderboardDb('classic', 'us', '2v2')
-//     await resetLeaderboardDb('classic', 'us', 'rbg')
-//     await resetLeaderboardDb('classic', 'eu', '3v3')
-//     await resetLeaderboardDb('classic', 'eu', '2v2')
-//     await resetLeaderboardDb('classic', 'eu', 'rbg')
+//     await updateActivityStatistics()
 
 
 //     first = false

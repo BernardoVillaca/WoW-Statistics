@@ -1,8 +1,9 @@
 import { db } from '~/server/db';
-import { desc, sql } from "drizzle-orm";
+import { desc, max, min, sql } from "drizzle-orm";
 import { leaderboardTablesMap } from "~/utils/helper/leaderboardTablesMap";
 import { activityStatistics } from '../db/schema';
-import type { ActivityStatistics, PlayerActivity, RatingsCount, SpecActivity } from '~/utils/helper/activityMap';
+import type { ActivityStatistics, PlayerActivity, RatingBrackets, SpecActivity } from '~/utils/helper/activityMap';
+import { start } from 'repl';
 
 type OverallActivityStatisticsData = {
     created_at: Date;
@@ -52,15 +53,6 @@ export const updateActivityStatistics = async () => {
         let total48h = 0;
         let total72h = 0;
 
-        const ratingsCount: RatingsCount = {
-            above2600: 0,
-            above2500: 0,
-            above2400: 0,
-            above2300: 0,
-            above2200: 0,
-            above2100: 0,
-            above2000: 0
-        }
         const playerActivity24h = new Map<string, PlayerActivity>();
         const playerActivity48h = new Map<string, PlayerActivity>();
         const playerActivity72h = new Map<string, PlayerActivity>();
@@ -71,20 +63,38 @@ export const updateActivityStatistics = async () => {
 
         const queryTimes = [oneDay, oneDay * 2, oneDay * 3];
 
+        // Get the highest rating in the table
+        const highestRatingResult = await db
+            .select({ highestRating: max(table.rating) })
+            .from(table);
+
+        const highestRating = highestRatingResult[0]?.highestRating ?? 0;
+
+        // Initialize rating brackets
+        const startRating = 1500;
+        const ratingStep = 100;
+        const ratingBrackets = {} as RatingBrackets;
+        const adjustedHighestRating = Math.floor(highestRating / ratingStep) * ratingStep;
+
+        // Populate rating brackets
+        for (let i = startRating; i <= adjustedHighestRating; i += ratingStep) {
+            ratingBrackets[`above${i}`] = 0;
+        }
+
         for (const queryTime of queryTimes) {
             const tableData = await db.select().from(table)
                 .where(sql`${table.updated_at} > ${sql.raw(`'${new Date(now.getTime() - queryTime).toISOString()}'`)}`)
                 .orderBy(desc(table.rating))
-                
+
             for (const row of tableData) {
                 if (!row.updated_at || !row.played || !row.won || !row.lost || !row.character_name
                     || !row.character_spec || !row.character_class || !row.realm_slug
                     || !row.history || !row.rating || !row.rank) {
                     continue;
                 }
-                
+
                 const history: IHistory[] = (row.history as IHistory[]);
-               
+
 
                 const findHistoryRecordToCalculate = (timeFrame: number): IHistory | undefined => {
                     for (let i = history.length - 1; i >= 0; i--) {
@@ -102,28 +112,14 @@ export const updateActivityStatistics = async () => {
                 if (queryTime === oneDay) {
                     total24h += 1;
                     // Update activity statistics for players based on their rating
-                    if (row.rating > 2600 && row.updated_at) {
-                        ratingsCount.above2600++
+                    for (const bracket in ratingBrackets) {
+                        const bracketThreshold = parseInt(bracket.replace("above", ""), 10);
+                        if (row.rating > bracketThreshold) {
+                            if (ratingBrackets[bracket] !== undefined) {
+                                ratingBrackets[bracket]++;
+                            }
+                        }
                     }
-                    if (row.rating > 2500 && row.updated_at) {
-                        ratingsCount.above2500++
-                    }
-                    if (row.rating > 2400 && row.updated_at) {
-                        ratingsCount.above2400++
-                    }
-                    if (row.rating > 2300 && row.updated_at) {
-                        ratingsCount.above2300++
-                    }
-                    if (row.rating > 2200 && row.updated_at) {
-                        ratingsCount.above2200++
-                    }
-                    if (row.rating > 2100 && row.updated_at) {
-                        ratingsCount.above2100++
-                    }
-                    if (row.rating > 2000 && row.updated_at) {
-                        ratingsCount.above2000++
-                    }
-
 
                     const specKey = `${row.character_spec}-${row.character_class}`;
                     const currentSpecActivity = specActivity24h.get(specKey);
@@ -220,6 +216,8 @@ export const updateActivityStatistics = async () => {
             total24h,
             total48h,
             total72h,
+            
+            ratingBrackets,
 
             mostActivePlayers24h: getTop5(playerActivity24h),
             mostActivePlayers48h: getTop5(playerActivity48h),
@@ -229,8 +227,8 @@ export const updateActivityStatistics = async () => {
             mostActiveSpecs48h: getTop5(specActivity48h),
             mostActiveSpecs72h: getTop5(specActivity72h),
 
-            ratingsCount
             
+
         };
         console.log(`Finished updating activity statistics for ${column}`);
     }

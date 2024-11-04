@@ -1,4 +1,4 @@
-export interface ActivityStatistics  {
+export interface ActivityStatistics {
     total24h: number;
     total48h: number;
     total72h: number;
@@ -10,20 +10,13 @@ export interface ActivityStatistics  {
     mostActiveSpecs24h: Record<string, SpecActivity>;
     mostActiveSpecs48h: Record<string, SpecActivity>;
     mostActiveSpecs72h: Record<string, SpecActivity>;
-    ratingsCount?: RatingsCount;
-    
+    ratingBrackets?: RatingBrackets;
+
 }
 
-export type RatingsCount = {
-    above2600: number;
-    above2500: number;
-    above2400: number;
-    above2300: number;
-    above2200: number;
-    above2100: number;
-    above2000: number;
-}
-    
+export type RatingBrackets = Record<string, number>;
+
+
 export type PlayerActivity = {
     played: number;
     won: number;
@@ -56,8 +49,9 @@ const createActivityData = (): ActivityStatistics => ({
     mostActiveSpecs24h: {},
     mostActiveSpecs48h: {},
     mostActiveSpecs72h: {},
+    ratingBrackets: {},
 
-   });
+});
 
 export const activityMap: ActivityMap = {
     retail_us_3v3: createActivityData(),
@@ -73,7 +67,7 @@ export const activityMap: ActivityMap = {
     classic_us_3v3: createActivityData(),
     classic_us_2v2: createActivityData(),
     classic_us_rbg: createActivityData(),
-    
+
     classic_eu_3v3: createActivityData(),
     classic_eu_2v2: createActivityData(),
     classic_eu_rbg: createActivityData(),
