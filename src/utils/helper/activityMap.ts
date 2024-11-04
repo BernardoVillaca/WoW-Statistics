@@ -53,6 +53,24 @@ const createActivityData = (): ActivityStatistics => ({
 
 });
 
+export const brightColors = [
+    "#FF5733", // Bright Red-Orange
+    "#FFC300", // Bright Yellow
+    "#DAF7A6", // Light Lime Green
+    "#FF33FF", // Magenta
+    "#33FF57", // Bright Green
+    "#33CFFF", // Sky Blue
+    "#FF5733", // Coral
+    "#FF6F61", // Sunset Orange
+    "#FFD700", // Golden Yellow
+    "#B19CD9", // Light Purple
+    "#FF00FF", // Pure Magenta
+    "#FF4500", // Orange-Red
+    "#8A2BE2", // Blue-Violet
+    "#7FFF00", // Chartreuse Green
+    "#FF1493", // Deep Pink
+];
+
 export const activityMap: ActivityMap = {
     retail_us_3v3: createActivityData(),
     retail_us_2v2: createActivityData(),
