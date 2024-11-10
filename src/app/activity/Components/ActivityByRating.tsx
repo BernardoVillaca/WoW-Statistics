@@ -249,7 +249,7 @@ const ActivityByRating = () => {
                         )}
                     </div>
                     {graphLoading ? (
-                        <div className='flex items-center place-content-center w-full h-[340px]'>
+                        <div className='flex items-center place-content-center w-full h-[300px]'>
                             <FiLoader className="animate-spin text-gray-300" size={50} />
                         </div>
                     ) : (

@@ -98,7 +98,10 @@ const ActivityChart = ({ localActivityData }: { localActivityData: ActivityStati
                 <span key={index} className={`${column.width} text-xs text-center`}>{column.label}</span>
               ))}
             </div>
-            {Object.entries(mostActiveSpecs).sort(([, a], [, b]) => b.played - a.played).map(([name, spec]) => (
+            {Object.entries(mostActiveSpecs)
+            .sort(([, a], [, b]) => b.played - a.played)
+            .slice(0, 5)
+            .map(([name, spec]) => (
               <MostActiveSpecs
                 key={name}
                 name={name}

@@ -1,35 +1,14 @@
 'use client'
 
-import axios from 'axios';
-import { useEffect, useState } from 'react';
-import { Line } from 'react-chartjs-2';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  TimeScale,
-} from 'chart.js';
-
-import type { ChartData } from 'chart.js';
 import 'chartjs-adapter-date-fns';
 import { SearchProvider } from '~/components/Context/SearchContext';
 import RegionSearch from '~/components/SearchTab/OtherSearch/RegionSearch';
 import VersionSearch from '~/components/SearchTab/VersionSearch';
 import BracketSearch from '~/components/SearchTab/OtherSearch/BracketSearch';
-import useURLChange from '~/utils/hooks/useURLChange';
-import { FiLoader } from 'react-icons/fi';
+
 import MostActivePlayers from '~/app/activity/Components/MostActivePlayers';
 import RecentActivity from './Components/RecentActivity';
 import ActivityByRating from './Components/ActivityByRating';
-
-
-
-
 
 
 const Activity = () => {

@@ -10,6 +10,7 @@ const TopNavLinks = [
   { href: '/shuffle', label: 'Shuffle' },
   { href: '/legacy', label: 'Legacy' },
   { href: '/activity', label: 'Activity' },
+  { href: '/statistics', label: 'Statistics' },
   { href: '/cutoffs', label: 'Cutoffs' },
   { href: '/about', label: 'About' },
   ];

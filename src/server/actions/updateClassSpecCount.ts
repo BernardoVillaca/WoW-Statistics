@@ -15,7 +15,7 @@ export const updateClassSpecCount = async () => {
     };
     console.log('Updating class spec statistics');
 
-    for (const { column, table } of Object.values(leaderboardTablesMap)) {
+    for (const { column, table, version } of Object.values(leaderboardTablesMap)) {
         const currentClassStatisticsMap: ClassStatisticsMap = {};
 
         const classes = Object.keys(classStatisticsMap);
@@ -55,8 +55,11 @@ export const updateClassSpecCount = async () => {
                 allSpecsData.countAbove1600 = response.filter(character => character.rating !== null && character.rating >= 1600).length;
             }
 
-            for (const spec in classStatisticsMap[character_class]) {
+            for (let spec in classStatisticsMap[character_class]) {
                 if (spec === 'AllSpecs') continue;
+                if (version === 'classic' && spec === 'Feral') {
+                    spec = 'Feral Combat';
+                }               
 
                 if (!currentClassStatisticsMap[character_class][spec]) {
                     currentClassStatisticsMap[character_class][spec] = {

@@ -223,9 +223,9 @@ export const updateActivityStatistics = async () => {
             mostActivePlayers48h: getTop5(playerActivity48h),
             mostActivePlayers72h: getTop5(playerActivity72h),
 
-            mostActiveSpecs24h: getTop5(specActivity24h),
-            mostActiveSpecs48h: getTop5(specActivity48h),
-            mostActiveSpecs72h: getTop5(specActivity72h),
+            mostActiveSpecs24h: Object.fromEntries(specActivity24h),
+            mostActiveSpecs48h: Object.fromEntries(specActivity48h),
+            mostActiveSpecs72h: Object.fromEntries(specActivity72h),
 
             
 
