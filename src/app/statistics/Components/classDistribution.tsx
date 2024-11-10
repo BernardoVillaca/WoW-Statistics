@@ -34,7 +34,7 @@ const ClassDistribution = ({ classSpecData, params, ratingFilter, loading }: { c
           {entry && Object.entries(entry)
             .filter(([key]) => {
               // Exclude Evoker, Death Knight, and Demon Hunter if version is classic
-              return version !== 'classic' || !['Evoker', 'Death Knight', 'Demon Hunter', 'Monks'].includes(key);
+              return version !== 'classic' || !['Evoker', 'Death Knight', 'Demon Hunter', 'Monk'].includes(key);
             })
             .sort(([, a], [, b]) => {
               const aSpecs = (a as { AllSpecs: Record<string, number> }).AllSpecs;

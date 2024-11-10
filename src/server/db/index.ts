@@ -16,6 +16,5 @@ export const db = drizzle(sql, { schema });
 
 //     await updateClassSpecCount()
 
-
 //     first = false
 // }
