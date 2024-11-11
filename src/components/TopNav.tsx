@@ -8,10 +8,10 @@ const TopNavLinks = [
   { href: '/', label: 'Home' },
   { href: '/leaderboard', label: 'Leaderboard' },
   { href: '/shuffle', label: 'Shuffle' },
-  { href: '/legacy', label: 'Legacy' },
   { href: '/activity', label: 'Activity' },
   { href: '/statistics', label: 'Statistics' },
   { href: '/cutoffs', label: 'Cutoffs' },
+  { href: '/legacy', label: 'Legacy' },
   { href: '/about', label: 'About' },
   ];
 

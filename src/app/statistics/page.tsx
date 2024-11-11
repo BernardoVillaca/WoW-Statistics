@@ -36,6 +36,11 @@ type WowStatisticsResponse = {
     classSpecData: ClassSpecEntry[];
 };
 
+
+type EntryType = {
+    AllSpecs: Record<string, number>;
+};
+
 const Statistics = () => {
     const [loading, setLoading] = useState(true);
     const [classSpecData, setClassSpecData] = useState<ClassSpecEntry[]>([]);
@@ -71,10 +76,7 @@ const Statistics = () => {
         void getData();
     }, []);
 
-    type EntryType = {
-        AllSpecs: Record<string, number>;
-    };
-
+    
     const ratingKeys = entry
         ? Object.keys((Object.values(entry)[0] as EntryType).AllSpecs).filter((key: string) => {
             if (key === "totalCount") return false;
@@ -87,7 +89,6 @@ const Statistics = () => {
             return totalSum > 20;
         })
         : [];
-
 
 
     const handleClick = (filter: string) => {
@@ -103,14 +104,15 @@ const Statistics = () => {
                     <VersionSearch />
                     <BracketSearch partofLeadeboard={false} />
                 </div>
-                <div className='flex w-full justify-between bg-secondary-light_black h-12 p-2 rounded-lg'>
+                <div className='flex w-full justify-left gap-2 items-center bg-secondary-light_black h-12 p-2 rounded-lg'>
+                    <span>Filter by rating :</span>
                     {ratingKeys.map((filter) => (
                         <button
                             key={filter}
                             onClick={() => handleClick(filter)}
                             className={`w-16 h-8 text-white rounded-lg ${ratingFilter === filter ? 'bg-secondary-navy' : 'border-[1px] border-secondary-gray border-opacity-30'}`}
                         >
-                            {filter.replace("countAbove", "")}
+                            {filter.replace("countAbove", "") + "+"}
                         </button>
                     ))}
                 </div>

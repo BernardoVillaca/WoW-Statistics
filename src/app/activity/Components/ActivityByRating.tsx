@@ -232,49 +232,60 @@ const ActivityByRating = () => {
             <div className='text-s w-full h-6'>
                 {lastActivityText}
             </div>
-            <div className='flex w-full items-center place-content-center'>
-                <div className='flex flex-col rounded-xl  h-full w-full bg-secondary-light_black'>
-                    <div className='flex h-12 w-full justify-between items-center px-4 bg-secondary-light_black rounded-xl'>
-                        {sortedRatings.length > 0 && sortedRatings.map((rating, index) =>
-                            <button
-                                key={index}
-                                onClick={() => handleClick(rating)}
-                                className={`flex w-16 h-8 rounded-xl place-content-center items-center  
+            <div className='flex flex-col gap-8 w-full rounded-xl items-center place-content-center border-[1px] border-secondary-gray border-opacity-30'>
+                <div className='flex h-12 w-full justify-left gap-2 items-center px-2 bg-secondary-light_black rounded-xl '>
+                    <span>Filter by rating :</span>
+                    {sortedRatings.length > 0 && sortedRatings.map((rating, index) =>
+                        <button
+                            key={index}
+                            onClick={() => handleClick(rating)}
+                            className={`flex w-16 h-8 rounded-xl place-content-center items-center  
                             border-opacity-30 border-secondary-gray text-white 
                             ${rating === minValue || rating === maxValue ? 'bg-secondary-navy' : 'bg-secondary-light_black border-[1px]'}
                             
                             `}>
-                                {rating}
-                            </button>
-                        )}
-                    </div>
-                    {graphLoading ? (
-                        <div className='flex items-center place-content-center w-full h-[300px]'>
-                            <FiLoader className="animate-spin text-gray-300" size={50} />
-                        </div>
-                    ) : (
-                        chartData && (
-                            <Line data={chartData} options={{
-                                scales: {
-                                    x: {
-                                        type: 'time',
-                                        time: {
-                                            unit: 'day',
-                                        },
-                                    },
-                                    y: {
-                                        beginAtZero: false,
-                                    },
-                                },
-                                plugins: {
-                                    legend: {
-                                        display: false,
-                                    },
-                                },
-                            }} />
-                        )
+                            {rating}
+                        </button>
                     )}
                 </div>
+                <div className='flex h-96 w-full place-content-center'>
+                    {graphLoading && (
+                        <div className='flex w-full h-full place-content-center items-center'>
+                            <FiLoader className='animate-spin h-12 w-12' />
+                        </div>
+                    )}
+                    {chartData && (
+                        <Line 
+                        data={chartData} 
+                        options={{
+                            scales: {
+                                x: {
+                                    type: 'time',
+                                    time: {
+                                        unit: 'day',
+                                    },
+                                    grid: {
+                                        color: 'rgba(255, 255, 255, 0.2)', // Set grid color for the x-axis
+                                    },
+                                },
+                                y: {
+                                    beginAtZero: false,
+                                    grid: {
+                                        color: 'rgba(255, 255, 255, 0.2)', // Set grid color for the y-axis
+                                    },
+                                },
+                            },
+                            plugins: {
+                                legend: {
+                                    display: false,
+                                },
+                            },
+                        }} 
+                    />
+                    )}
+                </div>
+
+
             </div>
         </div>
     )
