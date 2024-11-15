@@ -80,7 +80,7 @@ const LeaderboardCell = ({ str, height, index, cell, characterClass, characterSp
           <div className='w-4 flex items-end'>
             {classSearch?.length !== 1 && path === '/shuffle' && (
               <div className=''>
-                <span style={{ color: classColor }} className='text-xs text-gray-500'>{characterData.rank < 99 ? characterData.rank : ''}</span>
+                <span style={{ color: classColor }} className='text-xs '>{characterData.rank < 99 ? characterData.rank : ''}</span>
               </div>
             )}
           </div>
@@ -93,10 +93,9 @@ const LeaderboardCell = ({ str, height, index, cell, characterClass, characterSp
             )}
           </div>
         </div>
-
-      ) : cell === 'rank' || cell === 'played' ? (
+      ) : cell === 'played' ? (
         <div className='flex justify-between items-center  w-full px-2'>
-         <div className='w-7'></div>
+          <div className='w-7'></div>
           <span>{str}</span>
           <div className='w-7'>
             {showDifference && (
@@ -105,6 +104,10 @@ const LeaderboardCell = ({ str, height, index, cell, characterClass, characterSp
               </div>
             )}
           </div>
+        </div>
+      ) : cell === 'rank' && path === '/shuffle' ? (
+        <div className='flex place-content-center items-center  w-full px-2'>
+          <span>{overallRank}</span>
         </div>
       ) : cell === 'character_spec' ? (
         <Image src={specIcon} alt={str} height={height / 1.8} width={height / 1.8} className='rounded-lg overflow-none' />
@@ -118,7 +121,7 @@ const LeaderboardCell = ({ str, height, index, cell, characterClass, characterSp
       ) : cell === 'win_ratio' ? (
         <span className={` ${Number(str) >= 70 ? 'text-green-300' : Number(str) >= 55 ? 'text-yellow-300' : 'text-secondary-red'} `}>
           {str}%
-        </span>      
+        </span>
       ) : cell === 'realm_slug' ? (
         <span className='text-xs 2xl:text-base'>{formatRealmName(str)}</span>
       ) : cell === 'updated_at' ? (
