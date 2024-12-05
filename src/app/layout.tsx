@@ -9,7 +9,7 @@ import logo from '../assets/logos/darkLogo.png';
 export const metadata = {
   title: "Innate Gaming",
   description: "A hub for your wow statistics",
-  icons: [{ rel: "icon", url: "/assets/logos/icon.png" }],
+  icons: [{ rel: "icon", url: "/icon.png" }],
 };
 
 export default function RootLayout({
